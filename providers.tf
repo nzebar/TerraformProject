@@ -23,7 +23,3 @@ provider "github" {
   owner = "nzebar"
   token = "44b06c41373f2007784de6ba5254a34ba51d3907"
 }
-
-module "All_Users" {
-  source    = "./AWS-IAM/Users"
-}
