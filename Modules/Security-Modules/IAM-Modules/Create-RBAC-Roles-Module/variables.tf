@@ -83,23 +83,59 @@ variable "number_of_custom_role_policy_arns" {
 }
 
 # Pre-defined policies
-variable "admin_role_policy_arn" {
-  description = "Policy ARN to use for admin role"
+variable "admin_role_policy_local_path" {
+  description = "Local path of admin policy to use for admin role"
   type        = string
-  default     = "arn:aws:iam::aws:policy/AdministratorAccess"
+  default     = ""
 }
 
-variable "poweruser_role_policy_arn" {
-  description = "Policy ARN to use for poweruser role"
+    variable "admin_policy_name" {
+      description = "Admin policy name to use for admin role"
+      type        = string
+      default     = ""
+    }
+
+    variable "admin_policy_description" {
+      description = "Admin policy description to use for admin role"
+      type        = string
+      default     = ""
+    }
+
+variable "poweruser_role_policy_local_path" {
+  description = "Local path of poweruser policy to use for poweruser role"
   type        = string
-  default     = "arn:aws:iam::aws:policy/PowerUserAccess"
+  default     = ""
 }
+
+    variable "poweruser_policy_name" {
+      description = "Poweruser policy name to use for poweruser role"
+      type        = string
+      default     = ""
+    }
+
+    variable "poweruser_policy_description" {
+      description = "Poweruser policy description to use for poweruser role"
+      type        = string
+      default     = ""
+    }
 
 variable "readonly_role_policy_arn" {
   description = "Policy ARN to use for readonly role"
   type        = string
   default     = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
+
+    variable "readonly_policy_name" {
+      description = "Readnly policy name to use for readonly role"
+      type        = string
+      default     = ""
+    }
+
+    variable "readonly_policy_description" {
+      description = "Readonly policy description to use for readonly role"
+      type        = string
+      default     = ""
+    }
 
 variable "attach_admin_policy" {
   description = "Whether to attach an admin policy to a role"

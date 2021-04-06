@@ -9,7 +9,13 @@ variable "assumable_roles_aws" {
   default     = []
 }
 
-variable "assumable_roles_create_users_module" {
+variable "assumable_roles_local" {
+  description = "List of IAM roles ARNs created in the Create-Multiple-Roles.tf file  which can be assumed"
+  type        = list(string)
+  default     = []
+}
+
+variable "assumable_roles_create_local_module" {
   description = "List of IAM roles ARNs from the create users module which can be assumed by the group"
   type        = list(string)
   default     = []

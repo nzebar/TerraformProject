@@ -6,26 +6,10 @@ data "aws_iam_policy_document" "assume_role_aws" {
   }
 }
 
-resource "aws_iam_policy_document" "assume_role_create_roles_module" {
-  statement {
-    effect    = "Allow"
-    actions   = ["sts:AssumeRole"]
-    resources = var.assumable_roles_create_roles_module
-  }
-}
-
 resource "aws_iam_policy" "this_aws_policy" {
   name        = var.Group_Name_Policy_Name
   description = "Allows to assume role in another AWS account"
   policy      = data.aws_iam_policy_document.assume_role.json
-}
-
-resource "aws_iam_policy" "this_create_role_module_policy" {
-  for_each = module.Create_Role_module.this_iam_role_arn
-
-  name        = var.Group_Name_Policy_Name
-  description = "Allows to assume role created through Create_Role Module"
-  policy      = each.key.json
 }
 
 resource "aws_iam_group" "this" {
@@ -33,8 +17,10 @@ resource "aws_iam_group" "this" {
 }
 
 resource "aws_iam_group_policy_attachment" "this" {
+  for_each = var.assumable_roles_aws && var.assumable_roles_local 
+
   group      = aws_iam_group.this.id
-  policy_arn = aws_iam_policy.this.id
+  policy_arn = each.key
 }
 
 resource "aws_iam_group_membership" "this" {
