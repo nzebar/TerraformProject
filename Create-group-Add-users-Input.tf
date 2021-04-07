@@ -9,8 +9,8 @@ variable "Create_Group_Users_AssumableRoles" {
         Group_Name_Policy_Name = "" 
         group_users = [
             "EampleUser1",
-            "ExampleUser2,"
-            "ExampleUser3",
+            "ExampleUser2",
+            "ExampleUser3"
             #uncomment line below to add the created users from Create_Users_Module below to the group.
             # module.Create_Users_module.created_users_output
         ]
@@ -27,24 +27,24 @@ for_each = var.Create_Group_Users_AssumableRoles
 
     # Name of IAM Group & IAM Group Policy
 
-        #Group_Name_Policy_Name = each.value[0]
-        each.key[0] = each.value
+        Group_Name_Policy_Name = each.value[0]
+        #each.key[0] = each.value
 
     # List of IAM users to have in an IAM group which can assume the role
     # Can specify users in the AWS console or users created through the "Create-User" module.
 
-        #group_users = each.value[1]
-        each.key[1] = each.value
+        group_users = each.value[1]
+        #each.key[1] = each.value
 
     # List of IAM role ARNs which can be assumed by the group 
 
         # Can specify role ARNs from the AWS console 
-        #assumable_roles_aws = each.value[2] 
-        each.key[2] = each.value
+        assumable_roles_aws = each.value[2] 
+        #each.key[2] = each.value
 
         # Can specify roles created through the Create-Multiple-Roles.tf file
-        #assumable_roles_local = each.value[3]
-        each.key[3] = each.value
+        assumable_roles_local = each.value[3]
+        #each.key[3] = each.value
 
 
 

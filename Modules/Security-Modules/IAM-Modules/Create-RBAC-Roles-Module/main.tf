@@ -87,7 +87,7 @@ resource "aws_iam_policy" "admin_policy" {
   description = var.admin_policy_description
   for_each = var.create_role && var.admin_role_policy_local_path ? 1 : 0
 
-  policy = file(each.key)
+  policy = file(var.admin_role_policy_local_path)
 }
 
     resource "aws_iam_role_policy_attachment" "admin_policy_attachment" {
@@ -102,22 +102,30 @@ resource "aws_iam_policy" "poweruser_policy" {
   description = var.poweruser_policy_description
   for_each = var.create_role && poweruser_role_policy_local_path ? 1 : 0
 
-  policy = file(each.key)
+  policy = file(var.poweruser_role_policy_local_path)
 }
 
-    resource "aws_iam_role_policy_attachment" "poweruser" {
+    resource "aws_iam_role_policy_attachment" "poweruser_policy_attachment" {
       count = var.create_role && var.attach_poweruser_policy ? 1 : 0
 
       role       = aws_iam_role.this[0].name
       policy_arn = var.poweruser_role_policy_arn
     }
 
-resource "aws_iam_role_policy_attachment" "readonly" {
-  count = var.create_role && var.attach_readonly_policy ? 1 : 0
+resource "aws_iam_policy" "readonly_policy" {
+  name        = var.readonly_policy_name
+  description = var.readonly_policy_description
+  for_each = var.create_role && readonly_role_policy_local_path ? 1 : 0
 
-  role       = aws_iam_role.this[0].name
-  policy_arn = var.readonly_role_policy_arn
+  policy = file(var.readonly_role_policy_local_path)
 }
+
+    resource "aws_iam_role_policy_attachment" "readonly_policy_attachment" {
+      count = var.create_role && var.attach_readonly_policy ? 1 : 0
+
+      role       = aws_iam_role.this[0].name
+      policy_arn = var.readonly_role_policy_arn
+    }
 
 resource "aws_iam_instance_profile" "this" {
   count = var.create_role && var.create_instance_profile ? 1 : 0
