@@ -1,6 +1,13 @@
-variable "Group_Name_Policy_Name" {
+variable "group_name" {
   description = "Name of IAM Group & IAM Group Policy"
   type        = string
+  default = ""
+}
+
+variable "group_policy_name" {
+  description = "Name of IAM Group"
+  type        = string
+  default = ""
 }
 
 variable "assumable_roles_aws" {
@@ -25,6 +32,12 @@ variable "group_users" {
   description = "List of IAM users to have in an IAM group which can assume the role"
   type        = list(string)
   default     = []
+}
+
+variable "group_membership_name" {
+  description = "Membership name to assign to users added to the group."
+  type        = string
+  default     = ""
 }
 
 
