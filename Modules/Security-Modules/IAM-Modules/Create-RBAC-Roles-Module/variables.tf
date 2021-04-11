@@ -39,8 +39,8 @@ variable "force_detach_policies" {
 
 variable "role_requires_mfa" {
   description = "Whether role requires MFA"
-  type        = bool
-  default     = true
+  type        = string
+  default     = "true"
 }
 
 variable "mfa_age" {
@@ -71,7 +71,7 @@ variable "trusted_role_actions" {
 
 variable "role_sts_externalid" {
   description = "STS ExternalId condition values to use with a role (when MFA is not required)"
-  type        = any
+  type        = list(string)
   default     = []
 }
 

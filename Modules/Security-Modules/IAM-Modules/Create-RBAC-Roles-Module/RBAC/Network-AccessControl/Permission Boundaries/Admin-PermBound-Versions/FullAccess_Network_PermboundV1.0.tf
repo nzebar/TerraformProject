@@ -402,7 +402,9 @@
         {
             "Effect": "Allow",
             "Action": [
-                "iam:CreateServiceLinkedRole"
+                "iam:CreateServiceLinkedRole",
+                "iam:TagRole",
+                "iam:UntagRole"
             ],
             "Resource": "*",
             "Condition": {
@@ -454,7 +456,7 @@
             ],
             "Condition": {
                 "StringEquals": {
-                    "iam:PermissionsBoundary": "arn:aws:iam::YourAccount_ID:policy/ScopePermissions"
+                    "iam:PermissionsBoundary": "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
                 }
             }
         },
@@ -471,7 +473,7 @@
             ],
             "Condition": {
                 "StringNotEquals": {
-                    "iam:PermissionsBoundary": "arn:aws:iam::YourAccount_ID:policy/ScopePermissions"
+                    "iam:PermissionsBoundary": "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
                 }
             }
         },
@@ -488,9 +490,162 @@
             ],
             "Condition": {
                 "StringNotEquals": {
-                    "iam:PermissionsBoundary": "arn:aws:iam::YourAccount_ID:policy/ScopePermissions"
+                    "iam:PermissionsBoundary": "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
                 }
             }
+        },
+        {
+          "Sid": "AllowListReadForIAM",
+          "Effect": "Allow",
+          "Action": [
+            "iam:List*",
+            "iam:Get*"
+          ],
+          "Resource": [
+            "*"
+          ] 
+        },
+        {
+          "Sid": "AllowUserGroupManagementOnlyInTheSpecifiedLocation",
+          "Effect": "Allow",
+          "Action": [
+            "iam:CreateGroup",
+            "iam:UpdateGroup",
+            "iam:DeleteGroup",
+            "iam:AddUserToGroup",
+            "iam:RemoveUserFromGroup",
+            "iam:ChangePassword",
+            "iam:CreateUser",
+            "iam:UpdateUser",
+            "iam:DeleteUser",
+            "iam:CreateLoginProfile",
+            "iam:UpdateLoginProfile",
+            "iam:DeleteLoginProfile",
+            "iam:CreateAccountAlias",
+            "iam:DeleteAccountAlias",
+            "iam:CreateAccessKey",
+            "iam:UpdateAccessKey",
+            "iam:DeleteAccessKey",
+            "iam:CreateVirtualMFADevice",
+            "iam:ResyncMFADevice",
+            "iam:DeactivateMFADevice",
+            "iam:DeleteVirtualMFADevice"
+          ],
+          "Resource": [
+            "${module.Create_Group_Add_Users_Module.group_arn}"
+          ],
+          "condition" : {
+            "StringEquals": {
+              "iam:PermissionBoundary": [
+                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+              ]
+            }
+          }
+        },
+        {
+          "Sid": "AllowUserGroupManagementOnlyInTheSpecifiedLocation",
+          "Effect": "Allow",
+          "Action": [
+            "iam:ChangePassword",
+            "iam:UpdateLoginProfile",
+            "iam:CreateAccountAlias",
+            "iam:DeleteAccountAlias"
+          ],
+          "Resource": [
+            "${module.Create_Group_Add_Users_Module.group_arn}"
+          ],
+          "condition" : {
+            "StringEquals": {
+              "iam:PermissionBoundary": [
+                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+              ]
+            }
+          }
+        },
+        {
+          "Sid": "AllowManageOwnVirtualMFADevice",
+          "Effect": "Allow",
+          "Action": [
+              "iam:CreateVirtualMFADevice",
+              "iam:DeleteVirtualMFADevice"
+          ],
+          "Resource": "${module.Create_Group_Add_Users_Module.group_arn}",
+          "condition" : {
+            "StringEquals": {
+              "iam:PermissionBoundary": [
+                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+              ]
+            }
+          }
+        },
+        {
+          "Sid": "AllowManageOwnUserMFA",
+          "Effect": "Allow",
+          "Action": [
+              "iam:DeactivateMFADevice",
+              "iam:EnableMFADevice",
+              "iam:ResyncMFADevice"
+          ],
+          "Resource": "${module.Create_Group_Add_Users_Module.group_arn}",
+          "condition" : {
+            "StringEquals": {
+              "iam:PermissionBoundary": [
+                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+              ]
+            }
+          }
+        },
+        {
+            "Sid": "DenyAllExceptListedIfNoMFA",
+            "Effect": "Deny",
+            "NotAction": [
+                "iam:CreateVirtualMFADevice",
+                "iam:EnableMFADevice",
+                "iam:GetUser",
+                "iam:ListMFADevices",
+                "iam:ListVirtualMFADevices",
+                "iam:ResyncMFADevice",
+                "sts:GetSessionToken"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "BoolIfExists": {"aws:MultiFactorAuthPresent": "false"}
+            }
+        },
+        {
+        "Sid": "AllowPolicyManagementOnlyInSpecifiedLocation",
+        "Effect": "Allow",
+        "Action": [
+          "iam:AttachGroupPolicy",
+          "iam:AttachRolePolicy",
+          "iam:AttachUserPolicy",
+          "iam:CreatePolicy",
+          "iam:CreatePolicyVersion",
+          "iam:DeletePolicy",
+          "iam:DeletePolicyVersion",
+          "iam:DeleteRolePolicy",
+          "iam:DeleteUserPolicy",
+          "iam:DetachRolePolicy",
+          "iam:DetachUserPolicy",
+          "iam:PutGroupPolicy",
+          "iam:PutRolePermissionBoundary",
+          "iam:PutRolePolicy",
+          "iam:PutUserPermissionBoundary",
+          "iam:UpdateAssumeRolePolicy",
+          "iam:TagPolicy",
+          "iam:UntagPolicy"
+        ],
+        "Resource": [
+            "arn:aws:iam::092968731555:role/IAM-Roles/Worker-Roles/*",
+            "arn:aws:iam::092968731555:policy/IAM-Policies/Worker-Policies/*"
+        ],
+        "condition" : {
+          "StringEquals": {
+            "iam:PermissionBoundary": [
+              "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+              ]
+            }
+          }
         }
     ]
 }

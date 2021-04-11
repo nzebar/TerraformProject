@@ -2,6 +2,34 @@
     "Version": "2012-10-17",
     "Statement": [
         {
+            "Effect": "Deny",
+            "Action": [
+                "*"
+            ],
+            "Resource": [
+                "*"
+            ],
+            "Condition" : {
+                "StringNotEquals" : {
+                     "iam:PermissionsBoundary" : "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:*"
+            ],
+            "Resource": [
+                "*"
+            ],
+            "Condition" : {
+                 "StringNotEquals" : {
+                     "iam:PermissionsBoundary" : "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+                }
+            }
+        },
+        {
             "Effect": "Allow",
             "Action": [
                 "ec2:DescribeAccountAttributes",

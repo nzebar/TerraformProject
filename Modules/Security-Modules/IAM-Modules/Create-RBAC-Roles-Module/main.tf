@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "assume_role" {
       content {
         test     = "StringEquals"
         variable = "sts:ExternalId"
-        values   = var.role_sts_externalid
+        values   = each.key
       }
     }
   }
@@ -37,12 +37,12 @@ data "aws_iam_policy_document" "assume_role_with_mfa" {
 
     principals {
       type        = "AWS"
-      identifiers = var.trusted_role_arns # == [] ? ["*"] : var.trusted_role_arns
+      identifiers = var.trusted_role_arns  == [] ? ["*"] : var.trusted_role_arns
     }
 
     principals {
       type        = "Service"
-      identifiers = var.trusted_role_services # == [] ? ["*"] : var.trusted_role_services
+      identifiers = var.trusted_role_services  == [] ? ["*"] : var.trusted_role_services
     }
 
     condition {
@@ -60,7 +60,6 @@ data "aws_iam_policy_document" "assume_role_with_mfa" {
 }
 
 resource "aws_iam_role" "this" {
-
   name                 = length(var.role_name) > 1 && length(var.role_name) < 64 ? var.role_name : null 
   path                 = var.role_path
   max_session_duration = var.max_session_duration
@@ -84,11 +83,6 @@ resource "aws_iam_role_policy" "admin_policy" {
   policy = each.key == [""] ? null : file(tostring(each.key))
 }
 
-    # resource "aws_iam_role_policy_attachment" "admin_policy_attachment" {
-    #   role       = var.role_name
-    #   policy_arn = aws_iam_policy.admin_policy.
-    # }
-
 resource "aws_iam_role_policy" "poweruser_policy" {
   name        = var.poweruser_policy_name
   #description = var.poweruser_policy_description
@@ -97,14 +91,6 @@ resource "aws_iam_role_policy" "poweruser_policy" {
 
   policy = each.key == [""] ? null : file(tostring(each.key))
 }
-
-    # resource "aws_iam_role_policy_attachment" "poweruser_policy_attachment" {
-    #   #count = var.create_role 
-    #   for_each = var.role_name
-
-    #   role       = each.key
-    #   policy_arn = aws_iam_policy.poweruser_policy[*]
-    # }
 
 resource "aws_iam_role_policy" "readonly_policy" {
   name        = var.readonly_policy_name
@@ -115,14 +101,6 @@ resource "aws_iam_role_policy" "readonly_policy" {
   policy = each.key == [""] ? null : file(tostring(each.key))
 }
 
-    # resource "aws_iam_role_policy_attachment" "readonly_policy_attachment" {
-    #   #count = var.create_role && var.attach_readonly_policy ? 1 : 0
-    #   for_each = var.role_name
-
-    #   role       = each.key
-    #   policy_arn = aws_iam_policy.readonly_policy[*]
-    # }
-
 resource "aws_iam_role_policy" "custom_policy" {
   name        = var.custom_policy_name
   #description = var.custom_policy_description
@@ -131,14 +109,6 @@ resource "aws_iam_role_policy" "custom_policy" {
 
   policy = each.key == [""] ? null : file(tostring(each.key))
 }
-
-    # resource "aws_iam_role_policy_attachment" "custom_policy_attachment" {
-    #   #count = var.create_role && number_of_custom_policy_local_path >= 1 ? 1 : 0
-    #   for_each = var.role_name
-
-    #   role       = each.key
-    #   policy_arn = aws_iam_policy.custom_policy[*]
-    # }
 
 resource "aws_iam_policy" "permission_boundary_policy" {
   name        = var.permission_boundary_policy_name
