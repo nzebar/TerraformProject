@@ -1,3 +1,6 @@
+
+# Role Variables
+
 variable "create_role" {
   description = "Whether to create a role"
   type        = bool
@@ -28,6 +31,38 @@ variable "role_path" {
   default     = "/"
 }
 
+variable "force_detach_policies" {
+  description = "Whether policies should be detached from this role when destroying"
+  type        = bool
+  default     = false
+}
+
+variable "role_requires_mfa" {
+  description = "Whether role requires MFA"
+  type        = bool
+  default     = true
+}
+
+variable "mfa_age" {
+  description = "Max age of valid MFA (in seconds) for roles which require MFA"
+  type        = number
+  default     = 86400
+}
+
+variable "max_session_duration" {
+  description = "Maximum CLI/API session duration in seconds between 3600 and 43200"
+  type        = number
+  default     = 3600
+}
+
+variable "tags" {
+  description = "A map of tags to add to IAM role resources"
+  type        = map(string)
+  default     = {}
+}
+
+# Trusted Role Variables
+
 variable "trusted_role_actions" {
   description = "Actions of STS"
   type        = list(string)
@@ -52,10 +87,30 @@ variable "trusted_role_services" {
   default     = []
 }
 
+# Permission Boundary Variables
+
+variable "permission_boundary_policy_name" {
+  description = "Permission boundary applied to the role"
+  type        = string
+  default     = ""
+}
+
+variable "permission_boundary_policy_description" {
+  description = "Permission boundary applied to the role"
+  type        = string
+  default     = ""
+}
+
+variable "var.permission_boundary_path" {
+  description = "Permission boundary applied to the role"
+  type        = string
+  default     = ""
+}
+
 variable "role_permission_boundary_local_path" {
   description = "Permission boundary applied to the role"
   type        = string
-  default     = null
+  default     = ""
 }
 
 # Local policies to attach to the role
@@ -133,35 +188,7 @@ variable "attach_readonly_policy" {
       default     = ""
     }
 
-variable "force_detach_policies" {
-  description = "Whether policies should be detached from this role when destroying"
-  type        = bool
-  default     = false
-}
 
-variable "role_requires_mfa" {
-  description = "Whether role requires MFA"
-  type        = bool
-  default     = true
-}
-
-variable "mfa_age" {
-  description = "Max age of valid MFA (in seconds) for roles which require MFA"
-  type        = number
-  default     = 86400
-}
-
-variable "max_session_duration" {
-  description = "Maximum CLI/API session duration in seconds between 3600 and 43200"
-  type        = number
-  default     = 3600
-}
-
-variable "tags" {
-  description = "A map of tags to add to IAM role resources"
-  type        = map(string)
-  default     = {}
-}
 
 variable "custom_policy_name" {
   description = "Custom policy name to use for the role"
@@ -186,7 +213,6 @@ variable "number_of_custom_policy_local_path" {
   type        = number
   default     = null
 }
-
 
 
 

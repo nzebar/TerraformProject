@@ -16,9 +16,16 @@ variable "assumable_roles_aws" {
   default     = []
 }
 
-variable "assumable_roles_local" {
+variable "attach_roles_local" {
+  description = "List of IAM roles ARNs created in the Create-Multiple-Roles.tf file  which can be assumed"
+  type        = bool
+  default     = false
+}
+
+variable "use_roles_local" {
   description = "List of IAM roles ARNs created in the Create-Multiple-Roles.tf file  which can be assumed"
   type        = list(string)
+  # map(object({resources = list(string)}))
   default     = []
 }
 

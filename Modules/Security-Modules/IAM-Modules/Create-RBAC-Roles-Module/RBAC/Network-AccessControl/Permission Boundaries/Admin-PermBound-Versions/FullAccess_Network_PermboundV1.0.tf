@@ -415,6 +415,82 @@
                     ]
                 }
             }
+        },
+        {
+            "Sid": "DenyAccessToCostAndBilling",
+            "Effect": "Deny",
+            "Action": [
+                "account:*",
+                "aws-portal:*",
+                "savingsplans:*",
+                "cur:*",
+                "ce:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "DenyPermBoundaryIAMPolicyAlteration",
+            "Effect": "Deny",
+            "Action": [
+                "iam:DeletePolicy",
+                "iam:DeletePolicyVersion",
+                "iam:CreatePolicyVersion",
+                "iam:SetDefaultPolicyVersion"
+            ],
+            "Resource": [
+                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+            ]
+        },
+        {
+            "Sid": "DenyRemovalOfPermBoundaryFromAnyUserOrRole",
+            "Effect": "Deny",
+            "Action": [
+                "iam:DeleteUserPermissionsBoundary",
+                "iam:DeleteRolePermissionsBoundary"
+            ],
+            "Resource": [
+                "arn:aws:iam::YourAccount_ID:user/*",
+                "arn:aws:iam::YourAccount_ID:role/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "iam:PermissionsBoundary": "arn:aws:iam::YourAccount_ID:policy/ScopePermissions"
+                }
+            }
+        },
+        {
+            "Sid": "DenyAccessIfRequiredPermBoundaryIsNotBeingApplied",
+            "Effect": "Deny",
+            "Action": [
+                "iam:PutUserPermissionsBoundary",
+                "iam:PutRolePermissionsBoundary"
+            ],
+            "Resource": [
+                "arn:aws:iam::YourAccount_ID:user/*",
+                "arn:aws:iam::YourAccount_ID:role/*"
+            ],
+            "Condition": {
+                "StringNotEquals": {
+                    "iam:PermissionsBoundary": "arn:aws:iam::YourAccount_ID:policy/ScopePermissions"
+                }
+            }
+        },
+        {
+            "Sid": "DenyUserAndRoleCreationWithOutPermBoundary",
+            "Effect": "Deny",
+            "Action": [
+                "iam:CreateUser",
+                "iam:CreateRole"
+            ],
+            "Resource": [
+                "arn:aws:iam::YourAccount_ID:user/*",
+                "arn:aws:iam::YourAccount_ID:role/*"
+            ],
+            "Condition": {
+                "StringNotEquals": {
+                    "iam:PermissionsBoundary": "arn:aws:iam::YourAccount_ID:policy/ScopePermissions"
+                }
+            }
         }
     ]
 }

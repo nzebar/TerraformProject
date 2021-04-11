@@ -1,6 +1,11 @@
 output "this_iam_role_arn" {
   description = "ARN of IAM role"
-  value       = element(concat(aws_iam_role.this.*.arn, [""]), 0)
+  value       = element(concat(aws_iam_role.this.*.arn, [""]), 0) 
+}
+
+output "this_iam_policy_permissions_boundary" {
+  description = "ARN of permission boundary"
+  value       = aws_iam_policy.permission_boundary_policy.arn
 }
 
 output "this_iam_role_name" {

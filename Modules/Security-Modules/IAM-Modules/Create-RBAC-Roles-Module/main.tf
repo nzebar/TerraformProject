@@ -37,12 +37,12 @@ data "aws_iam_policy_document" "assume_role_with_mfa" {
 
     principals {
       type        = "AWS"
-      identifiers = var.trusted_role_arns
+      identifiers = var.trusted_role_arns # == [] ? ["*"] : var.trusted_role_arns
     }
 
     principals {
       type        = "Service"
-      identifiers = var.trusted_role_services
+      identifiers = var.trusted_role_services # == [] ? ["*"] : var.trusted_role_services
     }
 
     condition {
@@ -67,7 +67,8 @@ resource "aws_iam_role" "this" {
   description          = var.role_description
 
   force_detach_policies = var.force_detach_policies
-  permissions_boundary  = var.role_permission_boundary_local_path == "" ? null : file(var.role_permission_boundary_local_path)
+ 
+  permissions_boundary = aws_iam_policy.permission_boundary_policy.arn == "" ? "" : aws_iam_policy.permission_boundary_policy.arn
 
   assume_role_policy = var.role_requires_mfa ? data.aws_iam_policy_document.assume_role_with_mfa.json : data.aws_iam_policy_document.assume_role.json
 
@@ -138,6 +139,15 @@ resource "aws_iam_role_policy" "custom_policy" {
     #   role       = each.key
     #   policy_arn = aws_iam_policy.custom_policy[*]
     # }
+
+resource "aws_iam_policy" "permission_boundary_policy" {
+  name        = var.permission_boundary_policy_name
+  description = var.permission_boundary_policy_description
+  path = var.permission_boundary_path == "" ? "" : var.permission_boundary_path
+  for_each = var.custom_role_policy_local_path 
+
+  policy = each.key == [""] ? null : file(tostring(each.key))
+}
 
 resource "aws_iam_instance_profile" "this" {
   count = var.create_role && var.create_instance_profile ? 1 : 0

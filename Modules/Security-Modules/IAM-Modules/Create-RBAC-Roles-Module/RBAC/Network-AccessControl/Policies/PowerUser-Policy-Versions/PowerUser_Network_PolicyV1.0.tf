@@ -8,13 +8,10 @@
                 "ec2:DescribeVpcAttribute",
                 "ec2:DescribeVpcs",
                 "ec2:AssociateVpcCidrBlock",
-                "ec2:CreateDefaultVpc",
-                "ec2:CreateVpc",
                 "ec2:ModifyVpcAttribute",
                 "ec2:ModifyVpcTenancy",
                 "ec2:MoveAddressToVpc",
-                "ec2:DisassociateVpcCidrBlock",
-                "ec2:DeleteVpc"
+                "ec2:DisassociateVpcCidrBlock"
             ],
             "Resource": [
                 "*"
@@ -179,7 +176,9 @@
         {
             "Effect": "Allow",
             "Action": [      
-                "directconnect:*"
+                "directconnect:*",
+                "ec2:DescribeVpnGateways",
+                "ec2:DescribeTransitGateways"
             ],
             "Resource": [
                 "*"
@@ -188,7 +187,7 @@
         {
             "Effect": "Allow",
             "Action": [      
-                "cloudfront:ListDistributions"
+                "cloudfront:*"
             ],
             "Resource": [
                 "*"
@@ -198,7 +197,6 @@
             "Effect": "Allow",
             "Action": [
                 "ec2:DescribeRouteTables",
-                "ec2:CreateRouteTable",
                 "ec2:CreateRoute",
                 "ec2:EnableVgwRoutePropagation",
                 "ec2:AssociateRouteTable",
@@ -206,8 +204,7 @@
                 "ec2:ReplaceRouteTableAssociation",
                 "ec2:DisassociateRouteTable",
                 "ec2:DisableVgwRoutePropagation",
-                "ec2:DeleteRoute",
-                "ec2:DeleteRouteTable"
+                "ec2:DeleteRoute"
             ],
             "Resource": [
                 "*"
@@ -218,7 +215,6 @@
             "Action": [
                 "ec2:DescribeAvailabilityZones",
                 "ec2:DescribeSubnets",
-                "ec2:CreateDefaultSubnet",
                 "ec2:CreateSubnet",
                 "ec2:AssociateSubnetCidrBlock",
                 "ec2:ModifySubnetAttribute",
@@ -250,9 +246,7 @@
             "Action": [
                 "ec2:DescribeInstances",
                 "ec2:DescribeKeyPairs",
-                "ec2:DescribePlacementGroups",
-                "ec2:CreatePlacementGroup",
-                "ec2:DeletePlacementGroup"
+                "ec2:DescribePlacementGroups"
             ],
             "Resource": [
                 "*"
@@ -309,13 +303,25 @@
         {
             "Effect": "Allow",
             "Action": [
-                "route53:*",
-                "route53domains:*",
-                "ec2:CreateDhcpOptions", 
+                "route53domains:List*",
+                "route53domains:GetDomainDetail",
+                "route53domains:GetOperationDetail",
+                "route53:List*",
+                "route53:Read*",
+                "route53domains:Write*",
                 "ec2:DescribeDhcpOptions",
                 "ec2:AssociateDhcpOptions", 
-                "ec2:CreateTags",
-                "ec2:DeleteDhcpOptions"
+                "ec2:CreateTags"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Deny",
+            "Action": [
+                "route53:CreateHostedZone",
+                "route53:DeleteHostedZone"
             ],
             "Resource": [
                 "*"
@@ -396,6 +402,14 @@
             "Effect": "Allow",
             "Action": [
                 "networkmanager:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Deny",
+            "Action": [
+                "networkmanager:CreateGlobalNetwork",
+                "networkmanager:DeleteGlobalNetwork"
             ],
             "Resource": "*"
         },

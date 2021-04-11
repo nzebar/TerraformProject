@@ -2,7 +2,8 @@ data "aws_iam_policy_document" "assume_roles" {
   statement {
     effect    = "Allow"
     actions   = ["sts:AssumeRole"]
-    resources = concat(var.assumable_roles_aws, var.assumable_roles_local)
+    resources = concat(var.assumable_roles_aws, var.attach_roles_local == true ? var.use_roles_local : null)
+
   }
 }
 
