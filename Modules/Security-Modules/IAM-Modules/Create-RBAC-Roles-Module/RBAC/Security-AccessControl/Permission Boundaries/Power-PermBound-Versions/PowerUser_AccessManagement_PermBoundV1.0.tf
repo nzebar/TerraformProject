@@ -104,7 +104,7 @@
             "iam:DeleteVirtualMFADevice"
           ],
           "Resource": [
-            "${module.Create_Group_Add_Users_Module.group_arn}"
+            "*"
           ],
           "condition" : {
             "StringEquals": {
@@ -124,7 +124,7 @@
             "iam:DeleteAccountAlias"
           ],
           "Resource": [
-            "@{aws:username}"
+            "*"
           ],
           "condition" : {
             "StringEquals": {
@@ -141,11 +141,11 @@
               "iam:CreateVirtualMFADevice",
               "iam:DeleteVirtualMFADevice"
           ],
-          "Resource": "@{aws:username}",
+          "Resource": "${module.Create_Group_Add_Users_Module.group_arn}",
           "condition" : {
             "StringEquals": {
               "iam:PermissionBoundary": [
-                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+                "*"
               ]
             }
           }
@@ -158,7 +158,7 @@
               "iam:EnableMFADevice",
               "iam:ResyncMFADevice"
           ],
-          "Resource": "@{aws:username}",
+          "Resource": "*",
           "condition" : {
             "StringEquals": {
               "iam:PermissionBoundary": [
@@ -208,7 +208,8 @@
           "iam:UntagPolicy"
         ],
         "Resource": [
-            "${module.Create_Group_Add_Users_Module.group_arn}"
+            "arn:aws:iam::092968731555:role/*",
+            "arn:aws:iam::092968731555:policy/*"
         ],
         "condition" : {
           "StringEquals": {
@@ -219,89 +220,41 @@
           }
         },
         {
-            "Action": [
-                "secretsmanager:*",
-                "ec2:DescribeSecurityGroups",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeVpcs",
-                "kms:DescribeKey",
-                "kms:ListAliases",
-                "kms:ListKeys",
-                "lambda:ListFunctions",
-                "rds:DescribeDBClusters",
-                "rds:DescribeDBInstances",
-                "tag:GetResources"
-            ],
-            "Effect": "Allow",
-            "Resource": "*"
-        },
-        {
-            "Action": [
-                "lambda:AddPermission",
-                "lambda:CreateFunction",
-                "lambda:GetFunction",
-                "lambda:InvokeFunction",
-                "lambda:UpdateFunctionConfiguration"
-            ],
-            "Effect": "Allow",
-            "Resource": "arn:aws:lambda:*:*:function:SecretsManager*"
-        },
-        {
-            "Action": [
-                "s3:GetObject"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:s3:::awsserverlessrepo-changesets*",
-                "arn:aws:s3:::secrets-manager-rotation-apps-*/*"
-            ]
-        },
-        {
             "Effect": "Allow",
             "Action": [
-                "kms:*"
+                "iam:*",
+                "access-analyzer:*"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
             "Action": [
-                "acm:*"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "iam:CreateServiceLinkedRole",
-            "Resource": "arn:aws:iam::*:role/aws-service-role/acm.amazonaws.com/AWSServiceRoleForCertificateManager*",
-            "Condition": {
-                "StringEquals": {
-                    "iam:AWSServiceName": "acm.amazonaws.com"
-                }
-            }
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "iam:DeleteServiceLinkedRole",
-                "iam:GetServiceLinkedRoleDeletionStatus",
-                "iam:GetRole"
-            ],
-            "Resource": "arn:aws:iam::*:role/aws-service-role/acm.amazonaws.com/AWSServiceRoleForCertificateManager*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ram:*"
+                "organizations:DescribeAccount",
+                "organizations:DescribeOrganization",
+                "organizations:DescribeOrganizationalUnit",
+                "organizations:DescribePolicy",
+                "organizations:ListChildren",
+                "organizations:ListParents",
+                "organizations:ListPoliciesForTarget",
+                "organizations:ListRoots",
+                "organizations:ListPolicies",
+                "organizations:ListTargetsForPolicy"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
             "Action": [
-                "waf:*",
-                "wafv2:*",
-                "waf-regional:*"
+                "sso:*",
+                "sso-directory:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cognito:*"
             ],
             "Resource": "*"
         }

@@ -1,6 +1,6 @@
-locals {
-  role_sts_externalid = flatten(list(var.role_sts_externalid))
-}
+# locals {
+#   role_sts_externalid = flatten(list(var.role_sts_externalid))
+# }
 
 data "aws_iam_policy_document" "assume_role" {
   statement {
@@ -18,13 +18,10 @@ data "aws_iam_policy_document" "assume_role" {
       identifiers = var.trusted_role_services
     }
 
-    dynamic "condition" {
-      for_each = length(local.role_sts_externalid) != 0 ? [true] : []
-      content {
+    condition {
         test     = "StringEquals"
         variable = "sts:ExternalId"
-        values   = each.key
-      }
+        values   = var.role_sts_externalid
     }
   }
 }
@@ -54,75 +51,78 @@ data "aws_iam_policy_document" "assume_role_with_mfa" {
     condition {
       test     = "NumericLessThan"
       variable = "aws:MultiFactorAuthAge"
-      values   = [var.mfa_age]
+      values   = var.mfa_age
     }
   }
 }
 
 resource "aws_iam_role" "this" {
-  name                 = length(var.role_name) > 1 && length(var.role_name) < 64 ? var.role_name : null 
-  path                 = var.role_path
-  max_session_duration = var.max_session_duration
-  description          = var.role_description
+  name                 = element(var.role_name, 0)
+  path                 = element(var.role_path, 0)
+  max_session_duration = element(var.max_session_duration, 0)
+  description          = element(var.role_description, 0)
 
-  force_detach_policies = var.force_detach_policies
+  force_detach_policies = tobool(var.force_detach_policies[0])
  
   permissions_boundary = aws_iam_policy.permission_boundary_policy.arn == "" ? "" : aws_iam_policy.permission_boundary_policy.arn
 
-  assume_role_policy = var.role_requires_mfa ? data.aws_iam_policy_document.assume_role_with_mfa.json : data.aws_iam_policy_document.assume_role.json
+  assume_role_policy = element(var.role_requires_mfa, 0) == "true" ? data.aws_iam_policy_document.assume_role_with_mfa.json : data.aws_iam_policy_document.assume_role.json
 
   tags = var.tags
 }
 
 resource "aws_iam_role_policy" "admin_policy" {
-  name        = var.admin_policy_name
-  #description = var.admin_policy_description
-  role = aws_iam_role.this.arn
-  for_each = var.admin_role_policy_local_path
+  name        = element(var.attach_admin_policy, 0) == "true" ? element(var.admin_policy_name, 0) : ""
+  #description = element(var.admin_policy_description, 0)
+  role = element(var.attach_admin_policy, 0) == "true" ? aws_iam_role.this.name : ""
+  for_each = toset([ for k in var.admin_role_policy_local_path: k if k != [""] ])
 
-  policy = each.key == [""] ? null : file(tostring(each.key))
+  policy = file(each.value)
+
 }
 
 resource "aws_iam_role_policy" "poweruser_policy" {
-  name        = var.poweruser_policy_name
-  #description = var.poweruser_policy_description
-  role = aws_iam_role.this.arn
-  for_each = var.poweruser_role_policy_local_path 
+  name        = element(var.attach_poweruser_policy, 0) == "true" ? element(var.poweruser_policy_name, 0) : ""
+  #description = element(var.poweruser_policy_description, 0)
+  role = var.attach_admin_policy == ["true"] ? aws_iam_role.this.name : ""
+  for_each = toset([ for k in var.poweruser_role_policy_local_path: k if k != "" ])
 
-  policy = each.key == [""] ? null : file(tostring(each.key))
+  policy = file(each.value)
 }
 
 resource "aws_iam_role_policy" "readonly_policy" {
-  name        = var.readonly_policy_name
-  #description = var.readonly_policy_description
-  role = aws_iam_role.this.arn
-  for_each = var.readonly_role_policy_local_path 
+  name        = element(var.readonly_policy_name, 0)
+  #description = element(var.readonly_policy_description, 0)
+  role = aws_iam_role.this.name
+  for_each =  toset([ for k in var.readonly_role_policy_local_path: k if k != "" ])
 
-  policy = each.key == [""] ? null : file(tostring(each.key))
+  policy = file(each.value)
 }
 
 resource "aws_iam_role_policy" "custom_policy" {
-  name        = var.custom_policy_name
-  #description = var.custom_policy_description
-  role = aws_iam_role.this.arn
-  for_each = var.custom_role_policy_local_path 
+  name        = length(var.custom_role_policy_local_path) != 0 ? element(var.custom_policy_name, 0) : ""
+  #description = length(var.custom_policy_name) element(var.custom_policy_description, 0) 
+  role = length(var.custom_role_policy_local_path) != 0 ? aws_iam_role.this.name : ""
+  for_each = toset([ for k in var.custom_role_policy_local_path: k if k != "" ])
 
-  policy = each.key == [""] ? null : file(tostring(each.key))
-}
+  policy = file(each.value)
+    
+  }
+
 
 resource "aws_iam_policy" "permission_boundary_policy" {
-  name        = var.permission_boundary_policy_name
-  description = var.permission_boundary_policy_description
-  path = var.permission_boundary_path == "" ? "" : var.permission_boundary_path
-  for_each = var.custom_role_policy_local_path 
+  name        = length(element(var.permission_boundary_policy_name, 0)) == 0 ? null : element(var.permission_boundary_policy_name, 0)
+  description = element(var.permission_boundary_policy_description, 0)
+  path = element(var.permission_boundary_path, 0) == "" ? null : element(var.permission_boundary_path, 0)
 
-  policy = each.key == [""] ? null : file(tostring(each.key))
+  policy = file(element(var.role_permission_boundary_local_path, 0))
+
 }
 
 resource "aws_iam_instance_profile" "this" {
-  count = var.create_role && var.create_instance_profile ? 1 : 0
-  name  = var.role_name
-  path  = var.role_path
+  count = tobool(element(var.create_role, 0)) && tobool(element(var.create_instance_profile,0)) ? 1 : 0
+  name  = element(var.role_name, 0)
+  path  = element(var.role_path, 0)
   role  = aws_iam_role.this.name
 }
 

@@ -81,43 +81,6 @@
           "Sid": "AllowUserGroupManagementOnlyInTheSpecifiedLocation",
           "Effect": "Allow",
           "Action": [
-            "iam:CreateGroup",
-            "iam:UpdateGroup",
-            "iam:DeleteGroup",
-            "iam:AddUserToGroup",
-            "iam:RemoveUserFromGroup",
-            "iam:ChangePassword",
-            "iam:CreateUser",
-            "iam:UpdateUser",
-            "iam:DeleteUser",
-            "iam:CreateLoginProfile",
-            "iam:UpdateLoginProfile",
-            "iam:DeleteLoginProfile",
-            "iam:CreateAccountAlias",
-            "iam:DeleteAccountAlias",
-            "iam:CreateAccessKey",
-            "iam:UpdateAccessKey",
-            "iam:DeleteAccessKey",
-            "iam:CreateVirtualMFADevice",
-            "iam:ResyncMFADevice",
-            "iam:DeactivateMFADevice",
-            "iam:DeleteVirtualMFADevice"
-          ],
-          "Resource": [
-            "${module.Create_Group_Add_Users_Module.group_arn}"
-          ],
-          "condition" : {
-            "StringEquals": {
-              "iam:PermissionBoundary": [
-                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
-              ]
-            }
-          }
-        },
-        {
-          "Sid": "AllowUserGroupManagementOnlyInTheSpecifiedLocation",
-          "Effect": "Allow",
-          "Action": [
             "iam:ChangePassword",
             "iam:UpdateLoginProfile",
             "iam:CreateAccountAlias",
@@ -185,48 +148,7 @@
             }
         },
         {
-        "Sid": "AllowPolicyManagementOnlyInSpecifiedLocation",
-        "Effect": "Allow",
-        "Action": [
-          "iam:AttachGroupPolicy",
-          "iam:AttachRolePolicy",
-          "iam:AttachUserPolicy",
-          "iam:CreatePolicy",
-          "iam:CreatePolicyVersion",
-          "iam:DeletePolicy",
-          "iam:DeletePolicyVersion",
-          "iam:DeleteRolePolicy",
-          "iam:DeleteUserPolicy",
-          "iam:DetachRolePolicy",
-          "iam:DetachUserPolicy",
-          "iam:PutGroupPolicy",
-          "iam:PutRolePermissionBoundary",
-          "iam:PutRolePolicy",
-          "iam:PutUserPermissionBoundary",
-          "iam:UpdateAssumeRolePolicy",
-          "iam:TagPolicy",
-          "iam:UntagPolicy"
-        ],
-        "Resource": [
-            "${module.Create_Group_Add_Users_Module.group_arn}"
-        ],
-        "condition" : {
-          "StringEquals": {
-            "iam:PermissionBoundary": [
-              "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
-              ]
-            }
-          }
-        },
-        {
             "Action": [
-                "secretsmanager:*",
-                "ec2:DescribeSecurityGroups",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeVpcs",
-                "kms:DescribeKey",
-                "kms:ListAliases",
-                "kms:ListKeys",
                 "lambda:ListFunctions",
                 "rds:DescribeDBClusters",
                 "rds:DescribeDBInstances",
@@ -237,11 +159,7 @@
         },
         {
             "Action": [
-                "lambda:AddPermission",
-                "lambda:CreateFunction",
-                "lambda:GetFunction",
-                "lambda:InvokeFunction",
-                "lambda:UpdateFunctionConfiguration"
+                "lambda:GetFunction"
             ],
             "Effect": "Allow",
             "Resource": "arn:aws:lambda:*:*:function:SecretsManager*"
@@ -259,49 +177,41 @@
         {
             "Effect": "Allow",
             "Action": [
-                "kms:*"
+                "kms:Describe*",
+                "kms:List*"
+            ],
+            "Resource": "*"
+        },
+       {
+            "Effect": "Allow",
+            "Action": [
+                "acm:DescribeCertificate",
+                "acm:ListCertificates",
+                "acm:GetCertificate",
+                "acm:ListTagsForCertificate",
+                "acm:GetAccountConfiguration"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
             "Action": [
-                "acm:*"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "iam:CreateServiceLinkedRole",
-            "Resource": "arn:aws:iam::*:role/aws-service-role/acm.amazonaws.com/AWSServiceRoleForCertificateManager*",
-            "Condition": {
-                "StringEquals": {
-                    "iam:AWSServiceName": "acm.amazonaws.com"
-                }
-            }
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "iam:DeleteServiceLinkedRole",
-                "iam:GetServiceLinkedRoleDeletionStatus",
-                "iam:GetRole"
-            ],
-            "Resource": "arn:aws:iam::*:role/aws-service-role/acm.amazonaws.com/AWSServiceRoleForCertificateManager*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ram:*"
+                "ram:Get*",
+                "ram:List*"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
             "Action": [
-                "waf:*",
-                "wafv2:*",
-                "waf-regional:*"
+                "waf:Get*",
+                "waf:List*",
+                "waf-regional:Get*",
+                "waf-regional:List*",
+                "wafv2:Get*",
+                "wafv2:List*",
+                "wafv2:Describe*",
+                "wafv2:CheckCapacity"
             ],
             "Resource": "*"
         }

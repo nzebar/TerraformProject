@@ -1,13 +1,13 @@
 variable "group_name" {
   description = "Name of IAM Group & IAM Group Policy"
-  type        = string
-  default = ""
+  type        = list(string)
+  default = []
 }
 
 variable "group_policy_name" {
   description = "Name of IAM Group"
-  type        = string
-  default = ""
+  type        = list(string)
+  default = []
 }
 
 variable "assumable_roles_aws" {
@@ -18,14 +18,13 @@ variable "assumable_roles_aws" {
 
 variable "attach_roles_local" {
   description = "List of IAM roles ARNs created in the Create-Multiple-Roles.tf file  which can be assumed"
-  type        = bool
-  default     = false
+  type        = list(string)
+  default     = []
 }
 
 variable "use_roles_local" {
   description = "List of IAM roles ARNs created in the Create-Multiple-Roles.tf file  which can be assumed"
   type        = list(string)
-  # map(object({resources = list(string)}))
   default     = []
 }
 
@@ -43,8 +42,8 @@ variable "group_users" {
 
 variable "group_membership_name" {
   description = "Membership name to assign to users added to the group."
-  type        = string
-  default     = ""
+  type        = list(string)
+  default     = []
 }
 
 

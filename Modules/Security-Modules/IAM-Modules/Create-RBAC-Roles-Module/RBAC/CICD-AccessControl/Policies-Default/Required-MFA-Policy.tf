@@ -1,6 +1,6 @@
 {
-    Version = "2012-10-17"
-    Statement = [
+    "Version": "2012-10-17",
+    "Statement": [
       {
             "Effect": "Allow",
             "Action": [
@@ -9,8 +9,6 @@
             "Resource": [
                 "arn:aws:iam:us-east-1:092968731555:role/Network/*"
             ]
-      }
-    ]
   },
   {
         "Sid": "AllowUserManagementOnlyInTheSpecifiedLocation",
@@ -78,4 +76,5 @@
               "BoolIfExists": {"aws:MultiFactorAuthPresent": "false"}
           }
       }
+    ]
 }

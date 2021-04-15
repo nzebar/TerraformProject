@@ -2,20 +2,20 @@ data "aws_iam_policy_document" "assume_roles" {
   statement {
     effect    = "Allow"
     actions   = ["sts:AssumeRole"]
-    resources = concat(var.assumable_roles_aws, var.attach_roles_local == true ? var.use_roles_local : null)
+    resources = var.assumable_roles_aws
 
   }
 }
 
 resource "aws_iam_policy" "this_policy" {
-  name        = var.group_policy_name
+  name        = element(var.group_policy_name, 0)
   description = "Allows to assume role in another AWS account" 
 
   policy      = data.aws_iam_policy_document.assume_roles.json
 }
 
 resource "aws_iam_group" "this" {
-  name = var.group_name
+  name = element(var.group_name, 0)
 }
 
 resource "aws_iam_group_policy_attachment" "group_assumable_roles" {
@@ -27,7 +27,7 @@ resource "aws_iam_group_policy_attachment" "group_assumable_roles" {
 resource "aws_iam_group_membership" "this" {
   count = length(var.group_users) > 0 ? 1 : 0
 
-  group = var.group_name
-  name  = var.group_membership_name
+  group = element(var.group_name, 0)
+  name  = element(var.group_membership_name, 0)
   users = var.group_users
 }

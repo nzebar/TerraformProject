@@ -23,7 +23,7 @@
                 "iam:SetDefaultPolicyVersion"
             ],
             "Resource": [
-                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+                "${aws_iam_policy.permission_boundary_policy.arn}"
             ]
         },
         {
@@ -39,7 +39,7 @@
             ],
             "Condition": {
                 "StringEquals": {
-                    "iam:PermissionsBoundary": "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+                    "iam:PermissionsBoundary": "${aws_iam_policy.permission_boundary_policy.arn}"
                 }
             }
         },
@@ -56,7 +56,7 @@
             ],
             "Condition": {
                 "StringNotEquals": {
-                    "iam:PermissionsBoundary": "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+                    "iam:PermissionsBoundary": "${aws_iam_policy.permission_boundary_policy.arn}"
                 }
             }
         },
@@ -73,7 +73,7 @@
             ],
             "Condition": {
                 "StringNotEquals": {
-                    "iam:PermissionsBoundary": "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+                    "iam:PermissionsBoundary": "${aws_iam_policy.permission_boundary_policy.arn}"
                 }
             }
         },
@@ -109,7 +109,7 @@
           "condition" : {
             "StringEquals": {
               "iam:PermissionBoundary": [
-                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+                "${aws_iam_policy.permission_boundary_policy.arn}"
               ]
             }
           }
@@ -129,7 +129,7 @@
           "condition" : {
             "StringEquals": {
               "iam:PermissionBoundary": [
-                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+                "${aws_iam_policy.permission_boundary_policy.arn}"
               ]
             }
           }
@@ -141,11 +141,11 @@
               "iam:CreateVirtualMFADevice",
               "iam:DeleteVirtualMFADevice"
           ],
-          "Resource": "${module.Create_Group_Add_Users_Module.group_arn}",
+          "Resource": "@{aws:username}",
           "condition" : {
             "StringEquals": {
               "iam:PermissionBoundary": [
-                "*"
+                "${aws_iam_policy.permission_boundary_policy.arn}"
               ]
             }
           }
@@ -162,7 +162,7 @@
           "condition" : {
             "StringEquals": {
               "iam:PermissionBoundary": [
-                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+                "${aws_iam_policy.permission_boundary_policy.arn}"
               ]
             }
           }
@@ -170,7 +170,7 @@
         {
             "Sid": "DenyAllExceptListedIfNoMFA",
             "Effect": "Deny",
-            "NotAction": [
+            "Action": [
                 "iam:CreateVirtualMFADevice",
                 "iam:EnableMFADevice",
                 "iam:GetUser",
@@ -214,7 +214,7 @@
         "condition" : {
           "StringEquals": {
             "iam:PermissionBoundary": [
-              "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+              "${aws_iam_policy.permission_boundary_policy.arn}"
               ]
             }
           }
@@ -257,6 +257,6 @@
                 "cognito:*"
             ],
             "Resource": "*"
-        },
+        }
     ]
 }

@@ -81,43 +81,6 @@
           "Sid": "AllowUserGroupManagementOnlyInTheSpecifiedLocation",
           "Effect": "Allow",
           "Action": [
-            "iam:CreateGroup",
-            "iam:UpdateGroup",
-            "iam:DeleteGroup",
-            "iam:AddUserToGroup",
-            "iam:RemoveUserFromGroup",
-            "iam:ChangePassword",
-            "iam:CreateUser",
-            "iam:UpdateUser",
-            "iam:DeleteUser",
-            "iam:CreateLoginProfile",
-            "iam:UpdateLoginProfile",
-            "iam:DeleteLoginProfile",
-            "iam:CreateAccountAlias",
-            "iam:DeleteAccountAlias",
-            "iam:CreateAccessKey",
-            "iam:UpdateAccessKey",
-            "iam:DeleteAccessKey",
-            "iam:CreateVirtualMFADevice",
-            "iam:ResyncMFADevice",
-            "iam:DeactivateMFADevice",
-            "iam:DeleteVirtualMFADevice"
-          ],
-          "Resource": [
-            "${module.Create_Group_Add_Users_Module.group_arn}"
-          ],
-          "condition" : {
-            "StringEquals": {
-              "iam:PermissionBoundary": [
-                "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
-              ]
-            }
-          }
-        },
-        {
-          "Sid": "AllowUserGroupManagementOnlyInTheSpecifiedLocation",
-          "Effect": "Allow",
-          "Action": [
             "iam:ChangePassword",
             "iam:UpdateLoginProfile",
             "iam:CreateAccountAlias",
@@ -237,11 +200,8 @@
         },
         {
             "Action": [
-                "lambda:AddPermission",
-                "lambda:CreateFunction",
                 "lambda:GetFunction",
-                "lambda:InvokeFunction",
-                "lambda:UpdateFunctionConfiguration"
+                "lambda:InvokeFunction"
             ],
             "Effect": "Allow",
             "Resource": "arn:aws:lambda:*:*:function:SecretsManager*"
@@ -259,14 +219,30 @@
         {
             "Effect": "Allow",
             "Action": [
-                "kms:*"
+                "kms:CreateAlias",
+                "kms:CreateKey",
+                "kms:DeleteAlias",
+                "kms:Describe*",
+                "kms:GenerateRandom",
+                "kms:Get*",
+                "kms:List*",
+                "kms:TagResource",
+                "kms:UntagResource"
+            ],
+            "Resource": "*"
+        },
+       {
+            "Effect": "Allow",
+            "Action": [
+                "acm:*"
             ],
             "Resource": "*"
         },
         {
-            "Effect": "Allow",
+            "Effect": "Deny",
             "Action": [
-                "acm:*"
+                "acm:DeleteCertificate",
+                "acm:ExportCertificate"
             ],
             "Resource": "*"
         },
@@ -293,6 +269,16 @@
             "Effect": "Allow",
             "Action": [
                 "ram:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Deny",
+            "Action": [
+                "ram:DeleteResourceShare",
+                "ram:DisassociateResourceShare",
+                "ram:DisassociateResourceSharePermission",
+                "ram:EnableSharingWithAwsOrganization"
             ],
             "Resource": "*"
         },
