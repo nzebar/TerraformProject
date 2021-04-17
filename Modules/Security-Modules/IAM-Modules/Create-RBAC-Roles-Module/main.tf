@@ -77,7 +77,7 @@ resource "aws_iam_role_policy" "admin_policy" {
   role = element(var.attach_admin_policy, 0) == "true" ? aws_iam_role.this.name : ""
   for_each = toset([ for k in var.admin_role_policy_local_path: k if k != [""] ])
 
-  policy = file(each.value)
+  policy = templatefile(each.key, {permission_boundary_path = element(var.permission_boundary_path, 0), permission_boundary_name = element(var.permission_boundary_policy_name, 0)})
 
 }
 
@@ -115,7 +115,7 @@ resource "aws_iam_policy" "permission_boundary_policy" {
   description = element(var.permission_boundary_policy_description, 0)
   path = element(var.permission_boundary_path, 0) == "" ? null : element(var.permission_boundary_path, 0)
 
-  policy = file(element(var.role_permission_boundary_local_path, 0))
+  policy = templatefile(element(var.role_permission_boundary_local_path, 0), {permission_boundary_path = element(var.permission_boundary_path, 0), permission_boundary_name = element(var.permission_boundary_policy_name, 0)})
 
 }
 

@@ -1,50 +1,53 @@
-variable "group_name" {
+variable "name_group" {
   description = "Name of IAM Group & IAM Group Policy"
   type        = list(string)
   default = []
 }
 
-variable "group_policy_name" {
-  description = "Name of IAM Group"
+variable "path_group" {
+  description = "Path to put group policy in the AWS console"
   type        = list(string)
   default = []
 }
 
-variable "assumable_roles_aws" {
-  description = "List of IAM roles ARNs from the AWS console which can be assumed by the group"
+variable "group_memebers" {
+  description = "Group members to add to the newly created group"
   type        = list(string)
-  default     = []
+  default = []
 }
 
-variable "attach_roles_local" {
-  description = "List of IAM roles ARNs created in the Create-Multiple-Roles.tf file  which can be assumed"
+variable "group_policy_name" {
+  description = "Name of IAM Group Policy"
   type        = list(string)
-  default     = []
+  default = []
 }
 
-variable "use_roles_local" {
-  description = "List of IAM roles ARNs created in the Create-Multiple-Roles.tf file  which can be assumed"
+variable "put_path_aws_group_policy" {
+  description = "Path to put IAM group policy on AWS console"
   type        = list(string)
-  default     = []
+  default = []
 }
 
-variable "assumable_roles_create_local_module" {
-  description = "List of IAM roles ARNs from the create users module which can be assumed by the group"
+variable "group_policy_local_path" {
+  description = "Local path of json policy to use for IAM group policy"
   type        = list(string)
-  default     = []
+  default = []
 }
 
-variable "group_users" {
-  description = "List of IAM users to have in an IAM group which can assume the role"
+variable "new_aws_console_users_with_password" {
+  description = "AWS console users and passwords to be created"
   type        = list(string)
-  default     = []
+  default = []
 }
 
-variable "group_membership_name" {
-  description = "Membership name to assign to users added to the group."
+variable "aws_console_user_password_reset" {
+  description = "If the password should be reset when the new user logs in to their account"
   type        = list(string)
-  default     = []
+  default = []
 }
 
-
-
+variable "new_programmatic_users_with_pgp_key" {
+  description = "Programmatic users with passwords to be created"
+  type        = list(string)
+  default = []
+}

@@ -7,10 +7,10 @@
                 "*"
             ],
             "Resource": "*",
-            "condition" : {
+            "Condition" : {
             "StringNotEquals": {
-                "iam:PermissionBoundary": [
-                    "${module.Create_Roles_local_Module.this_iam_policy_permissions_boundary}"
+                "iam:PermissionsBoundary": [
+                    "arn:aws:iam::092968731555:policy${permission_boundary_path}${permission_boundary_name}"
                 ]
             }
           }
@@ -50,7 +50,9 @@
         {
             "Effect": "Allow",
             "Action": [
-                "cognito:*"
+                "cognito-identity:*",
+                "cognito-idp:*",
+                "cognito-sync:*"
             ],
             "Resource": "*"
         }

@@ -2,11 +2,11 @@ variable "Create_Multiple_Roles" {
   description = "Map of Roles and their polices to be attached."
   type = map(any)
   default     = {
-      Template = {
+      Template1 = {
       ##### Role Settings #####
       "create_role" = ["true"]
       "create_instance_profile" = ["false"]
-      "role_name" = ["template"]
+      "role_name" = ["template1"]
       "role_description" = ["This is a template. Copy and paste below."]
       "role_path" = ["/"]
       "force_detach_policies" = ["true"]
@@ -20,13 +20,12 @@ variable "Create_Multiple_Roles" {
       "mfa_age" = ["86400"]
       "max_session_duration" = ["3600"]
       ##### Permission Boundary #####
-      "permission_boundary_policy_name" = ["testpermbound"]
+      "permission_boundary_policy_name" = ["permbound1"]
       "permission_boundary_policy_description" = ["test"]
-      "permission_boundary_path" = [""]
+      "permission_boundary_path" = ["/this/is/a/test/path/"]
       "role_permission_boundary_local_path" = ["Modules\\Security-Modules\\IAM-Modules\\Create-RBAC-Roles-Module\\RBAC\\Security-AccessControl\\Permission Boundaries\\Admin-PermBound-Versions\\FullAccess_AccessManagement_PermBoundV1.0.tf"]
-      ##### Admin Policy #####
       "attach_admin_policy" = ["true"]
-      "admin_policy_name" = ["test1356"]
+      "admin_policy_name" = ["test1"]
       "admin_policy_description" = ["yuh"]
       "admin_role_policy_local_path" = ["Modules\\Security-Modules\\IAM-Modules\\Create-RBAC-Roles-Module\\RBAC\\Security-AccessControl\\Policies\\Admin-Policy-Versions\\FullAccess_AccessManagement_Policy1.0.tf"]
       ##### PowerUser Policy #####
@@ -46,9 +45,126 @@ variable "Create_Multiple_Roles" {
     #   tags = [tomap({
     #       "test" = "test"
     #       })]
-     } 
+     }  
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

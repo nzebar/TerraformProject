@@ -4,28 +4,33 @@ variable "Create_Group_Users_AssumableRoles" {
   type        = map(any)
   default     = {
     tempalate = {
-    #This is a template used to create the Group, Users, and Apply Assumable Roles.
-    #Copy and paste below template for your own input.
-        "group_name" = ["TestGroup"]
-        "group_policy_name" = ["TestGroupPolicyName"] 
-        "group_users" = [
-            ""
+        "name_group" = ["TestGroup"]
+        "path_group" = ["/this/is/a test/group/path/"]
+        "group_members" = ["TestMembership"]
+        "group_policy_name" = ["TestGroupPolicyName"]
+        "put_path_aws_group_policy" = [""]
+        "group_policy_local_path" = [""] 
+
+        "new_aws_console_users_with_password" = [
+            "user1" = "password1",
+            "user2" = "password2",
+            "user3" = "password3"
         ]
-        "group_membership_name" = ["TestMembership"]
-        "assumable_roles_aws" = ["*"]
-        # Uncomment line below to enable this group to assume the roles created in Create-Multiple-Roles.tf file
-        "attach_roles_local" = ["true"]
+        "aws_console_user_password_reset" = ["true"]
+
+        "new_programmatic_users_with_pgp_key" = [
+            "user1" = "pgpkey1",
+            "user2" = "pgpkey2",
+            "user3" = "pgpkey3"
+        ]
     },
   }
+
+
+
+
+  
 }
-
-
-
-
-
-
-
-
 
 
 module "Create_Group_Add_Users_Module" {
@@ -34,27 +39,25 @@ for_each = var.Create_Group_Users_AssumableRoles
 
     # Name of IAM Group & IAM Group Policy
 
-        group_name = lookup(var.Create_Group_Users_AssumableRoles[each.key], "group_name", null)
+        name_group = lookup(var.Create_Group_Users_AssumableRoles[each.key], "name_group" == [""] ? null : "name_group", null)
 
-        group_policy_name = lookup(var.Create_Group_Users_AssumableRoles[each.key], "group_policy_name", null)
+        path_group = lookup(var.Create_Group_Users_AssumableRoles[each.key], "path_group", [""])
+
+        group_members = lookup(var.Create_Group_Users_AssumableRoles[each.key], "group_members", [""])
+
+        group_policy_name = lookup(var.Create_Group_Users_AssumableRoles[each.key], "group_policy_name", [""])
+
+        put_path_aws_group_policy = lookup(var.Create_Group_Users_AssumableRoles[each.key], "put_path_aws_group_policy", [""])
+
+        group_policy_local_path = lookup(var.Create_Group_Users_AssumableRoles[each.key], "group_policy_local_path", [""])
 
     # List of IAM users to have in an IAM group which can assume the role
     # Can specify users in the AWS console or users created through the "Create-User" module.
 
-        group_users = lookup(var.Create_Group_Users_AssumableRoles[each.key], "group_users", null)
+        new_aws_console_users_with_password = lookup(var.Create_Group_Users_AssumableRoles[each.key], for k in "new_aws_console_users_with_password": k => tomap(k) if k != ""
 
-        group_membership_name = lookup(var.Create_Group_Users_AssumableRoles[each.key], "group_membership_name", null)
+        aws_console_user_password_reset = lookup(var.Create_Group_Users_AssumableRoles[each.key], "aws_console_user_password_reset", ["false"])
 
-    # List of IAM role ARNs which can be assumed by the group 
-
-        # Can specify role ARNs from the AWS console 
-        assumable_roles_aws = lookup(var.Create_Group_Users_AssumableRoles[each.key], "assumable_roles_aws", null)
-
-        # Can specify roles created through the Create-Multiple-Roles.tf file
-        attach_roles_local = lookup(var.Create_Group_Users_AssumableRoles[each.key], "attach_roles_local", null)
-        #attach_roles_local = lookup(var.Create_Group_Users_AssumableRoles, "attach_roles_local" == true ? "use_roles_local" : false, false)
-
-        #use_roles_local = module.Create_Roles_local_Module.this_iam_role_arn[*]
-        #use_roles_local = lookup(var.Create_Group_Users_AssumableRoles, "attach_local_roles" == true ? "use_roles_local" == module.Create_Roles_local_Module.this_iam_role_arn : false, ["*"])
+        new_programmatic_users_with_pgp_key = lookup(var.Create_Group_Users_AssumableRoles[each.key], for k in "new_programmatic_users_with_pgp_key": k => tomap(k) if k != ""
     } 
 

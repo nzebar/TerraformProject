@@ -23,7 +23,7 @@
                 "iam:SetDefaultPolicyVersion"
             ],
             "Resource": [
-                "${aws_iam_policy.permission_boundary_policy.arn}"
+                "arn:aws:iam::092968731555:policy${permission_boundary_path}${permission_boundary_name}"
             ]
         },
         {
@@ -34,12 +34,12 @@
                 "iam:DeleteRolePermissionsBoundary"
             ],
             "Resource": [
-                "arn:aws:iam::YourAccount_ID:user/*",
-                "arn:aws:iam::YourAccount_ID:role/*"
+                "arn:aws:iam::092968731555:user/*",
+                "arn:aws:iam::092968731555:role/*"
             ],
             "Condition": {
                 "StringEquals": {
-                    "iam:PermissionsBoundary": "${aws_iam_policy.permission_boundary_policy.arn}"
+                    "iam:PermissionsBoundary": "arn:aws:iam::092968731555:policy${permission_boundary_path}${permission_boundary_name}"
                 }
             }
         },
@@ -51,12 +51,12 @@
                 "iam:PutRolePermissionsBoundary"
             ],
             "Resource": [
-                "arn:aws:iam::YourAccount_ID:user/*",
-                "arn:aws:iam::YourAccount_ID:role/*"
+                "arn:aws:iam::092968731555:user/*",
+                "arn:aws:iam::092968731555:role/*"
             ],
             "Condition": {
                 "StringNotEquals": {
-                    "iam:PermissionsBoundary": "${aws_iam_policy.permission_boundary_policy.arn}"
+                    "iam:PermissionsBoundary": "arn:aws:iam::092968731555:policy${permission_boundary_path}${permission_boundary_name}"
                 }
             }
         },
@@ -68,17 +68,17 @@
                 "iam:CreateRole"
             ],
             "Resource": [
-                "arn:aws:iam::YourAccount_ID:user/*",
-                "arn:aws:iam::YourAccount_ID:role/*"
+                "arn:aws:iam::092968731555:user/*",
+                "arn:aws:iam::092968731555:role/*"
             ],
             "Condition": {
                 "StringNotEquals": {
-                    "iam:PermissionsBoundary": "${aws_iam_policy.permission_boundary_policy.arn}"
+                    "iam:PermissionsBoundary": "arn:aws:iam::092968731555:policy${permission_boundary_path}${permission_boundary_name}"
                 }
             }
         },
         {
-          "Sid": "AllowUserGroupManagementOnlyInTheSpecifiedLocation",
+          "Sid": "CroupUserMngmntIfPermBoundIsSet",
           "Effect": "Allow",
           "Action": [
             "iam:CreateGroup",
@@ -106,10 +106,10 @@
           "Resource": [
             "*"
           ],
-          "condition" : {
+          "Condition" : {
             "StringEquals": {
               "iam:PermissionBoundary": [
-                "${aws_iam_policy.permission_boundary_policy.arn}"
+                "arn:aws:iam::092968731555:policy${permission_boundary_path}${permission_boundary_name}"
               ]
             }
           }
@@ -126,10 +126,10 @@
           "Resource": [
             "*"
           ],
-          "condition" : {
+          "Condition" : {
             "StringEquals": {
               "iam:PermissionBoundary": [
-                "${aws_iam_policy.permission_boundary_policy.arn}"
+                "arn:aws:iam::092968731555:policy${permission_boundary_path}${permission_boundary_name}"
               ]
             }
           }
@@ -141,11 +141,11 @@
               "iam:CreateVirtualMFADevice",
               "iam:DeleteVirtualMFADevice"
           ],
-          "Resource": "@{aws:username}",
-          "condition" : {
+          "Resource": "arn:aws:iam::092968731555:user/@{aws:username}",
+          "Condition" : {
             "StringEquals": {
               "iam:PermissionBoundary": [
-                "${aws_iam_policy.permission_boundary_policy.arn}"
+                "arn:aws:iam::092968731555:policy${permission_boundary_path}${permission_boundary_name}"
               ]
             }
           }
@@ -159,10 +159,10 @@
               "iam:ResyncMFADevice"
           ],
           "Resource": "*",
-          "condition" : {
+          "Condition" : {
             "StringEquals": {
               "iam:PermissionBoundary": [
-                "${aws_iam_policy.permission_boundary_policy.arn}"
+                "arn:aws:iam::092968731555:policy${permission_boundary_path}${permission_boundary_name}"
               ]
             }
           }
@@ -200,9 +200,9 @@
           "iam:DetachRolePolicy",
           "iam:DetachUserPolicy",
           "iam:PutGroupPolicy",
-          "iam:PutRolePermissionBoundary",
+          "iam:PutRolePermissionsBoundary",
           "iam:PutRolePolicy",
-          "iam:PutUserPermissionBoundary",
+          "iam:PutUserPermissionsBoundary",
           "iam:UpdateAssumeRolePolicy",
           "iam:TagPolicy",
           "iam:UntagPolicy"
@@ -211,10 +211,10 @@
             "arn:aws:iam::092968731555:role/*",
             "arn:aws:iam::092968731555:policy/*"
         ],
-        "condition" : {
+        "Condition" : {
           "StringEquals": {
             "iam:PermissionBoundary": [
-              "${aws_iam_policy.permission_boundary_policy.arn}"
+              "arn:aws:iam::092968731555:policy${permission_boundary_path}${permission_boundary_name}"
               ]
             }
           }
@@ -254,7 +254,9 @@
         {
             "Effect": "Allow",
             "Action": [
-                "cognito:*"
+                "cognito-identity:*",
+                "cognito-idp:*",
+                "cognito-sync:*"
             ],
             "Resource": "*"
         }
