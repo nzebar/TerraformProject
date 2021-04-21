@@ -34,14 +34,9 @@ resource "aws_iam_user_login_profile" "console_users_login_profile" {
 
   pgp_key = element(matchkeys( values(var.create_access_keys), keys(var.create_access_keys), [each.key]), 0)
   #pgp_key = contains(keys(var.create_access_keys), each.key) == true ? element(matchkeys( values(var.create_access_keys), [each.key], keys(var.create_access_keys)),0) : ""
+
+  depends_on = [aws_iam_user.console_users]
 }
-
-# resource "aws_iam_access_key" "programmatic_access_users" {
-#   for_each = var.
-
-#   user    = keys(each.value)
-#   pgp_key = values(each.value)
-# }
 
 resource "aws_iam_policy" "this_policy" {
   name        = length(var.group_policy_local_path) != 0 ? element(var.group_policy_name, 0) : ""
