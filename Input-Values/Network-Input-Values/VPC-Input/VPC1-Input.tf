@@ -68,6 +68,7 @@ source = "../../../Modules/Network-Modules/VPC-Modules/Create-VPC"
 #################################
 ## Default Routes Config. ##
 #################################
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_route_table
 # Ref lines 98 - 132 of main.tf file.
 
     manage_default_route_table = true
@@ -87,6 +88,7 @@ tags = {
 ################################
 ## Public Route Table Config. ##
 ################################
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table
 # Ref lines 134 - 170 of main.tf file.
 
     manage_public_route_table = true
@@ -104,6 +106,7 @@ tags = {
 ################################
 ## Private Route Table Config. ##
 ################################
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table
 # Ref lines 172 - 208 of main.tf file.
 
     manage_private_route_table = true
@@ -120,6 +123,7 @@ tags = {
 ##################################
 ## Database Route Table Config. ##
 ##################################
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table
 # Ref lines 209 - 244 of main.tf file.
 
     manage_database_route_table = true
@@ -136,6 +140,8 @@ tags = {
 ########################
 ## Availability Zones ##
 ########################
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones
+# Ref lines 243 - 262 of main.tf file.
 
     include_all_availability_zones = true
     filter_az_by_state = ""
@@ -146,8 +152,9 @@ tags = {
 #############################
 ## Declared Public Subnets ##
 #############################
-
-manage_public_subnets = false
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
+# Ref lines 265 - 305 of main.tf file.
+# If you would like to not create these resources, comment out the lines referenced above.
 
 public_subnets = {
     subnet1 = {
@@ -160,11 +167,11 @@ public_subnets = {
         "map_public_ip_on_launch" = ["false"]
         "outpost_arn" = [""]
         "public_subnet_name" = [""]
-        # "tags" = [{
-        #     "key" = "value"
-        # }]
+        "tags" = [{
+            "key" = "value",
+        }]
 
-        "public_route_table_association" = []
+        "public_route_table_association" = ["id"]
 
     }
 
@@ -179,18 +186,125 @@ public_subnets = {
         "map_public_ip_on_launch" = ["false"]
         "outpost_arn" = [""]
         "public_subnet_name" = [""]
-        # "tags" = [{
-        #     "key" = "value"
-        # }]
+        "tags" = [{
+            "key" = "value",
+        }]
 
-        public_route_table_association = []
+        public_route_table_association = ["id"]
 
     }
 }
 
+##############################
+## Declared Private Subnets ##
+##############################
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
+# Ref lines 307 - 347 of main.tf file.
+# If you would like to not create these resources, comment out the lines referenced above.
 
+private_subnets = {
+    subnet1 = {
+        "cidr_block" = ["192.168.3.0/24"]
+        "availability_zone" = ["us-east-1a"]
+        "customer_owned_ipv4_pool" = [""] 
+        "assign_ipv6_address_on_creation" = ["false"]
+        "ipv6_cidr_block" = [""]
+        "map_customer_owned_ip_on_launch" = ["false"]
+        "map_public_ip_on_launch" = ["false"]
+        "outpost_arn" = [""]
+        "private_subnet_name" = [""]
+        "tags" = [{
+            "key" = "value",
+        }]
 
+        "public_route_table_association" = ["id"]
 
+    }
+
+    subnet2 = {
+        "cidr_block" = ["192.168.4.0/24"]
+        "availability_zone" = ["us-east-1b"]
+        "availability_zone_id" = [""]
+        "customer_owned_ipv4_pool" = [""] 
+        "assign_ipv6_address_on_creation" = ["false"]
+        "ipv6_cidr_block" = [""]
+        "map_customer_owned_ip_on_launch" = ["false"]
+        "map_public_ip_on_launch" = ["false"]
+        "outpost_arn" = [""]
+        "private_subnet_name" = [""]
+        "tags" = [{
+            "key" = "value",
+        }]
+
+        public_route_table_association = ["id"]
+
+    }
+}
+
+##############################
+## Declared Database Subnets ##
+##############################
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
+# Ref lines 265 - 305 of main.tf file.
+# If you would like to not create these resources, comment out the lines referenced above.
+
+database_subnets = {
+    subnet1 = {
+        "cidr_block" = ["192.168.5.0/24"]
+        "availability_zone" = ["us-east-1a"]
+        "customer_owned_ipv4_pool" = [""] 
+        "assign_ipv6_address_on_creation" = ["false"]
+        "ipv6_cidr_block" = [""]
+        "map_customer_owned_ip_on_launch" = ["false"]
+        "map_public_ip_on_launch" = ["false"]
+        "outpost_arn" = [""]
+        "database_subnet_name" = [""]
+        "tags" = [{
+            "key" = "value",
+        }]
+
+        "public_route_table_association" = ["id"]
+
+    }
+
+    subnet2 = {
+        "cidr_block" = ["192.168.6.0/24"]
+        "availability_zone" = ["us-east-1b"]
+        "availability_zone_id" = [""]
+        "customer_owned_ipv4_pool" = [""] 
+        "assign_ipv6_address_on_creation" = ["false"]
+        "ipv6_cidr_block" = [""]
+        "map_customer_owned_ip_on_launch" = ["false"]
+        "map_public_ip_on_launch" = ["false"]
+        "outpost_arn" = [""]
+        "database_subnet_name" = [""]
+        "tags" = [{
+            "key" = "value",
+        }]
+
+        public_route_table_association = ["id"]
+
+    }
+
+    subnet3 = {
+        "cidr_block" = ["192.168.7.0/24"]
+        "availability_zone" = ["us-east-1c"]
+        "availability_zone_id" = [""]
+        "customer_owned_ipv4_pool" = [""] 
+        "assign_ipv6_address_on_creation" = ["false"]
+        "ipv6_cidr_block" = [""]
+        "map_customer_owned_ip_on_launch" = ["false"]
+        "map_public_ip_on_launch" = ["false"]
+        "outpost_arn" = [""]
+        "public_subnet_name" = [""]
+        "tags" = [{
+            "key" = "value",
+        }]
+
+        public_route_table_association = ["id"]
+
+    }
+}
 
 }
 

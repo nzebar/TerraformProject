@@ -285,12 +285,25 @@ variable "excluded_zone_ids" {
 ## Public Subnets Variables ##
 ##############################
 
-variable "manage_public_subnets" {
-    type = bool
-    default = false
+variable "public_subnets" {
+    type = any
+    default = {}
 }
 
-variable "public_subnets" {
-    type = map(any)
+##############################
+## Private Subnets Variables ##
+##############################
+
+variable "private_subnets" {
+    type = any
+    default = {}
+}
+
+##############################
+## Database Subnets Variables ##
+##############################
+
+variable "database_subnets" {
+    type = any
     default = {}
 }

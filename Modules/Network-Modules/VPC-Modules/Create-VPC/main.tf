@@ -266,9 +266,9 @@ data "aws_availability_zones" "available" {
 ## Public subnet ##
 ###################
 
-resource "aws_subnet" "main" {
+resource "aws_subnet" "public_subnets" {
   vpc_id = aws_vpc.this[0].id
-  for_each = var.manage_public_subnets == true ? var.public_subnets : {}
+  for_each = var.public_subnets 
 
   cidr_block = element(lookup(var.public_subnets[each.key], "cidr_block", [""]), 0)
 
@@ -291,15 +291,99 @@ resource "aws_subnet" "main" {
       "Name" = element(lookup(var.public_subnets[each.key], "public_subnet_name", [""]), 0)
     },
     var.tags,
-    element(lookup(var.public_subnets[each.key], "tags", [{}]), 0),
+    element(lookup(var.public_subnets[each.key], "tags", {}), 0 ),
   )
 }
 
-resource "aws_route_table_association" "a" {
-  for_each = var.manage_public_subnets == true ? var.public_subnets : {}
+resource "aws_route_table_association" "public_subent_route_table_association" {
+  for_each =  var.public_subnets 
 
-  subnet_id      = aws_subnet.main[each.key].id
-  route_table_id = element(lookup(var.public_subnets[each.key], "public_route_table_association", null), 0)
+  subnet_id      = aws_subnet.public_subnets[each.key].id
+  route_table_id = element(lookup(var.public_subnets[each.key], "public_route_table_association", ["thx"]), 0)
 
-  depends_on = [aws_subnet.main]
+  depends_on = [aws_subnet.public_subnets]
+}
+
+#####################
+## Private subnets ##
+#####################
+
+resource "aws_subnet" "private_subnets" {
+  vpc_id = aws_vpc.this[0].id
+  for_each = var.private_subnets 
+
+  cidr_block = element(lookup(var.private_subnets[each.key], "cidr_block", [""]), 0)
+
+  availability_zone = element(lookup(var.private_subnets[each.key], "availability_zone", [""]), 0)
+
+  customer_owned_ipv4_pool = element(lookup(var.private_subnets[each.key], "customer_owned_ipv4_pool", [""]), 0)
+
+  assign_ipv6_address_on_creation = tobool(element(lookup(var.private_subnets[each.key], "assign_ipv6_address_on_creation", ["false"]), 0))
+
+  ipv6_cidr_block = tobool(element(lookup(var.private_subnets[each.key], "assign_ipv6_address_on_creation", ["false"]), 0)) == true ? element(lookup(var.public_subnets[each.key], "ipv6_cidr_block", [""]), 0) : null
+
+  map_customer_owned_ip_on_launch = element(lookup(var.private_subnets[each.key], "map_customer_owned_ip_on_launch", [""]), 0) 
+
+  map_public_ip_on_launch = tobool(element(lookup(var.private_subnets[each.key], "map_public_ip_on_launch", ["false"]), 0))
+
+  outpost_arn = element(lookup(var.private_subnets[each.key], "outpost_arn", [""]), 0)
+
+  tags = merge(
+    {
+      "Name" = element(lookup(var.private_subnets[each.key], "private_subnet_name", [""]), 0)
+    },
+    var.tags,
+    element(lookup(var.private_subnets[each.key], "tags", {}), 0 ),
+  )
+}
+
+resource "aws_route_table_association" "private_subent_route_table_association" {
+  for_each =  var.private_subnets 
+
+  subnet_id      = aws_subnet.private_subnets[each.key].id
+  route_table_id = element(lookup(var.private_subnets[each.key], "public_route_table_association", ["thx"]), 0)
+
+  depends_on = [aws_subnet.private_subnets]
+}
+
+#####################
+## Database subnets ##
+#####################
+
+resource "aws_subnet" "database_subnets" {
+  vpc_id = aws_vpc.this[0].id
+  for_each = var.database_subnets 
+
+  cidr_block = element(lookup(var.database_subnets[each.key], "cidr_block", [""]), 0)
+
+  availability_zone = element(lookup(var.database_subnets[each.key], "availability_zone", [""]), 0)
+
+  customer_owned_ipv4_pool = element(lookup(var.database_subnets[each.key], "customer_owned_ipv4_pool", [""]), 0)
+
+  assign_ipv6_address_on_creation = tobool(element(lookup(var.database_subnets[each.key], "assign_ipv6_address_on_creation", ["false"]), 0))
+
+  ipv6_cidr_block = tobool(element(lookup(var.database_subnets[each.key], "assign_ipv6_address_on_creation", ["false"]), 0)) == true ? element(lookup(var.public_subnets[each.key], "ipv6_cidr_block", [""]), 0) : null
+
+  map_customer_owned_ip_on_launch = element(lookup(var.database_subnets[each.key], "map_customer_owned_ip_on_launch", [""]), 0) 
+
+  map_public_ip_on_launch = tobool(element(lookup(var.database_subnets[each.key], "map_public_ip_on_launch", ["false"]), 0))
+
+  outpost_arn = element(lookup(var.database_subnets[each.key], "outpost_arn", [""]), 0)
+
+  tags = merge(
+    {
+      "Name" = element(lookup(var.database_subnets[each.key], "database_subnet_name", [""]), 0)
+    },
+    var.tags,
+    element(lookup(var.database_subnets[each.key], "tags", {}), 0 ),
+  )
+}
+
+resource "aws_route_table_association" "database_subent_route_table_association" {
+  for_each =  var.database_subnets 
+
+  subnet_id      = aws_subnet.database_subnets[each.key].id
+  route_table_id = element(lookup(var.database_subnets[each.key], "public_route_table_association", ["thx"]), 0)
+
+  depends_on = [aws_subnet.database_subnets]
 }
