@@ -33,5 +33,9 @@ module "Get_IAM_Roles_Policies_Input_Values" {
 }
 
 module "Get_VPC1_Input" {
-  source = "./Input-Values/Network-Input-Values/VPC-Input"
+  source = "./Input-Values/Network-Input-Values/VPC1-Input"
+}
+
+module "Get_VPC_NACL" {
+  source = "./Input-Values/Network-Input-Values/VPC1-Input"
 }
