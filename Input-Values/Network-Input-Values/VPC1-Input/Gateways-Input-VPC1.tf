@@ -1,5 +1,5 @@
-module "VPC1_Gateways" {
-  source = "../../../Modules/Network-Modules/VPC-Modules/Create-VPC/VPC1-Gateways-Module"
+module "GATEWAYS_VPC1" {
+  source = "../../../Modules/Network-Modules/Default-modules/Gateways-Module-Default"
 
 #############################
 ## Internet Gateway Config ##
@@ -8,7 +8,7 @@ module "VPC1_Gateways" {
 internet_gateways = {
 
     igw1 = {
-        "vpc_id" = [module.VPC1.vpc.id] #default
+        "vpc_id" = [module.VPC_VPC1.vpc.id] #default
         "igw_name" = ["VPC1-igw1"]
         "igw_tags" = [{
             "VPC1" = "igw"
@@ -26,7 +26,7 @@ egress_internet_gateways = {
 # assign_generated_ipv6_cidr_block in VPC1 module must = true
 
     egress_gw1 = {
-        "vpc_id" = [module.VPC1.vpc.id]
+        "vpc_id" = [module.VPC_VPC1.vpc.id]
         "egress_igw_name" = ["egressIGW"] 
         "egress_igw_tags" = [{
             "egress" = "igw"
@@ -43,15 +43,15 @@ nat_gateways = {
 
     natGW-usEast1a = {
         "nat_gateway_name" = ["natGW-usEast1a"]
-        "eip_allocation_id" = [module.VPC1_Gateways.internet_gateway_igw1.id]
-        "subnet_id" = [module.VPC1_Subnets.aws_subnet_public_subnets_subnet1.id]
+        "eip_allocation_id" = [module.GATEWAYS_VPC1.internet_gateway_igw1.id]
+        "subnet_id" = [module.SUBNETS_VPC1.aws_subnet_public_subnets_subnet1.id]
         
         }
 
     natGW-usEast1b = {
         "nat_gateway_name" = ["natGW-usEast1b"]
-        "eip_allocation_id" = [module.VPC1_Gateways.internet_gateway_igw1.id]
-        "subnet_id" = [module.VPC1_Subnets.aws_subnet_public_subnets_subnet2.id]
+        "eip_allocation_id" = [module.GATEWAYS_VPC1.internet_gateway_igw1.id]
+        "subnet_id" = [module.SUBNETS_VPC1.aws_subnet_public_subnets_subnet2.id]
         }
     }
 

@@ -4,8 +4,8 @@
 ##### IF CREATING NEW INSTANCE OF GROUPS AND USERS CHANGE VARIABLE AND MODULE NAME TO SOMETHING UNIQUE #####
 ##### ENSURE THAT BOTH VARAIBLE AND MODULE HAVE THE SAME UNIQUE NAME #####
 
-module "VPC1" {
-source = "../../../Modules/Network-Modules/VPC-Modules/Create-VPC/VPC1-General-Modules"
+module "VPC_VPC1" {
+source = "../../../Modules/Network-Modules/Default-modules/VPC-Modules-Default"
 
 #################
 ## VPC Config. ##
@@ -31,6 +31,7 @@ source = "../../../Modules/Network-Modules/VPC-Modules/Create-VPC/VPC1-General-M
 ## VPC: Secondary CIDR Block ##
 ###############################
 
+    sub_cidr_vpc_id = module.VPC_VPC1.vpc.id
     sub_cidr_blocks = []
 
 ##############################
@@ -49,9 +50,15 @@ source = "../../../Modules/Network-Modules/VPC-Modules/Create-VPC/VPC1-General-M
     dhcp_options_tags = {
         "one" = "dhcp"
     }
+
+
+##################################
+## DHCP Options Set Association ##
+##################################
+
+    vpc_id_dhcp_options = module.VPC_VPC1.vpc.id
+    dhcp_options_id = module.VPC_VPC1.dhcp_options.id
+
+
+
 }
-
-
-
-
-

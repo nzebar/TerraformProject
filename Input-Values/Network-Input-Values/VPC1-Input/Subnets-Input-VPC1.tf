@@ -1,5 +1,5 @@
-module "VPC1_Subnets" {
-  source = "../../../Modules/Network-Modules/VPC-Modules/Create-VPC/VPC1-Subnets-Module"
+module "SUBNETS_VPC1" {
+  source = "../../../Modules/Network-Modules/Default-modules/Subnets-Module-Default"
 
 
 ########################
@@ -22,7 +22,7 @@ module "VPC1_Subnets" {
 public_subnets = {
 
     subnet1 = {
-        "vpc_id" = [module.VPC1.vpc.id]
+        "vpc_id" = [module.VPC_VPC1.vpc.id]
         "public_subnet_name" = ["subnetone"]
         "cidr_block" = ["192.168.1.0/24"]
         "availability_zone" = ["us-east-1a"]
@@ -38,7 +38,7 @@ public_subnets = {
     }
 
     subnet2 = {
-        "vpc_id" = [module.VPC1.vpc.id]
+        "vpc_id" = [module.VPC_VPC1.vpc.id]
         "public_subnet_name" = ["subnettwo"]
         "cidr_block" = ["192.168.2.0/24"]
         "availability_zone" = ["us-east-1b"]
@@ -65,7 +65,7 @@ public_subnets = {
 
 private_subnets = {
     subnet1 = {
-        "vpc_id" = [module.VPC1.vpc.id]
+        "vpc_id" = [module.VPC_VPC1.vpc.id]
         "private_subnet_name" = [""]
         "cidr_block" = ["192.168.3.0/24"]
         "availability_zone" = ["us-east-1a"]
@@ -81,7 +81,7 @@ private_subnets = {
     }
 
     subnet2 = {
-        "vpc_id" = [module.VPC1.vpc.id]
+        "vpc_id" = [module.VPC_VPC1.vpc.id]
         "private_subnet_name" = [""]
         "cidr_block" = ["192.168.4.0/24"]
         "availability_zone" = ["us-east-1b"]
@@ -109,7 +109,7 @@ private_subnets = {
 
 database_subnets = {
     subnet1 = {
-        "vpc_id" = [module.VPC1.vpc.id]
+        "vpc_id" = [module.VPC_VPC1.vpc.id]
         "database_subnet_name" = [""]
         "cidr_block" = ["192.168.5.0/24"]
         "availability_zone" = ["us-east-1a"]
@@ -125,7 +125,7 @@ database_subnets = {
     }
 
     subnet2 = {
-        "vpc_id" = [module.VPC1.vpc.id]
+        "vpc_id" = [module.VPC_VPC1.vpc.id]
         "database_subnet_name" = [""]
         "cidr_block" = ["192.168.6.0/24"]
         "availability_zone" = ["us-east-1b"]
@@ -142,7 +142,7 @@ database_subnets = {
     }
 
     subnet3 = {
-        "vpc_id" = [module.VPC1.vpc.id]
+        "vpc_id" = [module.VPC_VPC1.vpc.id]
         "database_subnet_name" = [""]
         "cidr_block" = ["192.168.7.0/24"]
         "availability_zone" = ["us-east-1c"]

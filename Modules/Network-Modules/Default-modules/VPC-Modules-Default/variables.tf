@@ -56,6 +56,16 @@ variable "vpc_tags" {
 ## VPC: Secondary CIDR Block Variables ##
 #########################################
 
+variable "vpc_id_sub_cidr" {
+    type = string
+    default = ""
+}
+
+variable "sub_cidr_vpc_id" {
+    type = string
+    default = ""
+}
+
 variable "sub_cidr_blocks" {
     type = list(string)
     default = []
@@ -108,4 +118,18 @@ variable "dhcp_options_set_name" {
 variable "dhcp_options_tags" {
     type = map(string)
     default = {}
+}
+
+############################################
+## DHCP Options Set Association Variables ##
+############################################
+
+variable "vpc_id_dhcp_options" {
+    type = string
+    default = ""
+}
+
+variable "dhcp_options_id" {
+    type = string
+    default = ""
 }

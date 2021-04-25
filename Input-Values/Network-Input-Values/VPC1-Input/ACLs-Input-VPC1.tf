@@ -1,6 +1,5 @@
-module "VPC1_NACLS" {
-source = "../../../Modules/Network-Modules/VPC-Modules/Create-VPC/NACL-Modules"
-
+module "ACLS_VPC1" {
+source = "../../../Modules/Network-Modules/Default-modules/ACL-Modules-Default"
 
 ########################
 ## VPC1: Default NACl ##
@@ -9,7 +8,7 @@ default_network_acl = {
 
     acl1 = {
         default_network_acl_name = "VPC1_Default_acl"
-        default_network_acl_id = module.VPC1.vpc.default_network_acl_id
+        default_network_acl_id = module.VPC_VPC1.vpc.default_network_acl_id
         default_acl_subnet_ids = []
 
         default_network_acl_ingress = {
@@ -61,10 +60,10 @@ public_network_acl = {
 
     acl1 = {
         public_network_acl_name = "VPC1_Public_NACL"
-        vpc_id_public_acls = module.VPC1.vpc.id
+        vpc_id_public_acls = module.VPC_VPC1.vpc.id
         public_acl_subnet_ids = [
-            module.VPC1_Subnets.aws_subnet_public_subnets_subnet1.id,
-            module.VPC1_Subnets.aws_subnet_public_subnets_subnet2.id
+            module.SUBNETS_VPC1.aws_subnet_public_subnets_subnet1.id,
+            module.SUBNETS_VPC1.aws_subnet_public_subnets_subnet2.id
         ]
 
         public_network_acl_ingress = {
@@ -105,10 +104,10 @@ private_network_acl = {
 
     acl1 = {
         private_network_acl_name = "VPC1_Private_NACL"
-        vpc_id_private_acls = module.VPC1.vpc.id
+        vpc_id_private_acls = module.VPC_VPC1.vpc.id
         private_acl_subnet_ids = [
-            module.VPC1_Subnets.aws_subnet_private_subnets_subnet1.id,
-            module.VPC1_Subnets.aws_subnet_private_subnets_subnet2.id
+            module.SUBNETS_VPC1.aws_subnet_private_subnets_subnet1.id,
+            module.SUBNETS_VPC1.aws_subnet_private_subnets_subnet2.id
             ]
 
         private_network_acl_ingress = {
@@ -150,11 +149,11 @@ database_network_acl = {
 
     acl1 = {
         database_network_acl_name = "VPC1_Database_NACL"
-        vpc_id_database_acls = module.VPC1.vpc.id
+        vpc_id_database_acls = module.VPC_VPC1.vpc.id
         database_acl_subnet_ids = [
-            module.VPC1_Subnets.aws_subnet_database_subnets_subnet1.id,
-            module.VPC1_Subnets.aws_subnet_database_subnets_subnet2.id,
-            module.VPC1_Subnets.aws_subnet_database_subnets_subnet3.id
+            module.SUBNETS_VPC1.aws_subnet_database_subnets_subnet1.id,
+            module.SUBNETS_VPC1.aws_subnet_database_subnets_subnet2.id,
+            module.SUBNETS_VPC1.aws_subnet_database_subnets_subnet3.id
             ]
 
             database_network_acl_ingress = {

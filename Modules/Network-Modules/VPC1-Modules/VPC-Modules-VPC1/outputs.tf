@@ -22,6 +22,17 @@ output "enable_ipv6" {
 ## DHCP Options Set Outputs ##
 ##############################
 
+output "dhcp_options" {
+    value = aws_vpc_dhcp_options.this[0]
+}
+
+##############################
+## DHCP Options Set Outputs ##
+##############################
+
+output "dhcp_options_set_assoc_id" {
+    value = aws_vpc_dhcp_options_association.this[0].id
+}
 
 
 
