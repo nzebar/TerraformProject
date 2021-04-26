@@ -1,5 +1,5 @@
 module "ROUTE53_VPC1" {
-    source = "../../../Modules/Network-Modules/Default-modules/Route53-Modules-Default"
+    source = "../../Modules/Network-Modules/Default-modules/Route53-Modules-Default"
 
 ###########################
 ## Route53: Hosted Zones ##

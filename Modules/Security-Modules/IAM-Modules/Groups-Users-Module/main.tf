@@ -42,6 +42,7 @@ resource "aws_iam_policy" "this_policy" {
   name        = length(var.group_policy_local_path) != 0 ? element(var.group_policy_name, 0) : ""
   # description = length(var.group_policy_local_path) != 0 ? element(var.group_policy_description, 0) : ""
   path = length(var.group_policy_local_path) != 0 ? element(var.put_path_aws_group_policy, 0) : ""
+  count = length(var.group_policy_local_path) > 0 ? 1 : 0
 
   policy = file(element(var.group_policy_local_path, 0) == "" ? "" : element(var.group_policy_local_path, 0))
 }
@@ -49,7 +50,8 @@ resource "aws_iam_policy" "this_policy" {
 
 resource "aws_iam_group_policy_attachment" "group_assumable_roles" {
   group      = aws_iam_group.this.id
-  policy_arn = aws_iam_policy.this_policy.arn
+  count = length(var.group_policy_local_path) > 0 ? 1 : 0
+  policy_arn = aws_iam_policy.this_policy[0].arn
 
   depends_on = [aws_iam_policy.this_policy]
 }

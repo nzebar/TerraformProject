@@ -1,5 +1,5 @@
 module "SUBNETS_VPC1" {
-  source = "../../../Modules/Network-Modules/Default-modules/Subnets-Module-Default"
+  source = "../../Modules/Network-Modules/Default-modules/Subnets-Module-Default"
 
 
 ########################

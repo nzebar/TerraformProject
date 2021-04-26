@@ -1,5 +1,5 @@
 module "GATEWAYS_VPC1" {
-  source = "../../../Modules/Network-Modules/Default-modules/Gateways-Module-Default"
+  source = "../../Modules/Network-Modules/Default-modules/Gateways-Module-Default"
 
 #############################
 ## Internet Gateway Config ##

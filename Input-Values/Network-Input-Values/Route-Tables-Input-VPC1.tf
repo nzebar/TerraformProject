@@ -1,5 +1,5 @@
 module "VPC1_ROUTE_TABLES" {
-    source = "../../../Modules/Network-Modules/Default-modules/Route-Table-Modules-Default"
+    source = "../../Modules/Network-Modules/Default-modules/Route-Table-Modules-Default"
 
 #################################
 ## Default Route Table Config. ##

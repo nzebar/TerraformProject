@@ -5,7 +5,7 @@ output "this_iam_role_arn" {
 
 output "this_iam_policy_permissions_boundary" {
   description = "ARN of permission boundary"
-  value       = aws_iam_policy.permission_boundary_policy.arn
+  value       = aws_iam_policy.permission_boundary_policy[*]
 }
 
 output "this_iam_role_name" {

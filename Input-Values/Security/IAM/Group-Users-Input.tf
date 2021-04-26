@@ -16,8 +16,7 @@ variable "IAM_GROUP_USERS" {
         ## Group Policy Settings ##
         "group_policy_name" = ["TestGroupPolicyName"]
         "put_path_aws_group_policy" = ["/this/is/the/way/"]
-        "group_policy_local_path" = [
-          "Input-Values\\Security-Input-Values\\IAM-Groups-Users-Input\\Group-Policies\\Security-Group-Policies\\Admin-Group-Policy-Versions\\FullAccess_AccessManagement_Policy1.0.tf"] 
+        "group_policy_local_path" = [] 
 
     ##### Group Memebership Settings #####
       "membership_name" = ["testGroupmembName"]
@@ -58,7 +57,7 @@ variable "IAM_GROUP_USERS" {
 module "IAM_GROUP_USERS" {
 for_each = var.IAM_GROUP_USERS
 
-source = "../../../Modules/Security-Modules/IAM-Modules/Create-Groups-Module"
+source = "../../../Modules/Security-Modules/IAM-Modules/Groups-Users-Module"
     # Name of IAM Group & IAM Group Policy
 
         name_group = lookup(var.IAM_GROUP_USERS[each.key], "name_group" == [""] ? null : "name_group", null)

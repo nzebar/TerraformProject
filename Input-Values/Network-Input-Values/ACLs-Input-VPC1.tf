@@ -1,5 +1,5 @@
 module "ACLS_VPC1" {
-source = "../../../Modules/Network-Modules/Default-modules/ACL-Modules-Default"
+source = "../../Modules/Network-Modules/Default-modules/ACL-Modules-Default"
 
 ########################
 ## VPC1: Default NACl ##

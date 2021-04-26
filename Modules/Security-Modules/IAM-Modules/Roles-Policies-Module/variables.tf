@@ -115,104 +115,31 @@ variable "role_permission_boundary_local_path" {
 
 # Local policies to attach to the role
 
-variable "attach_admin_policy" {
+variable "attach_policy" {
   description = "Whether to attach an admin policy to a role"
   type        = list(string)
   default     = ["false"]
 }
 
-    variable "admin_policy_name" {
+    variable "policy_name" {
       description = "Admin policy name to use for admin role"
       type        = list(string)
       default     = []
     }
 
-    variable "admin_policy_description" {
+    variable "policy_description" {
       description = "Admin policy description to use for admin role"
       type        = list(string)
       default     = []
     }
 
-    variable "admin_role_policy_local_path" {
+    variable "policy_local_path" {
       description = "Local path of admin policy to use for admin role"
       type        = list(string)
       default     = []
     }
 
-variable "attach_poweruser_policy" {
-  description = "Whether to attach a poweruser policy to a role"
-  type        = list(string)
-  default     = ["false"]
-}
 
-
-    variable "poweruser_policy_name" {
-      description = "Poweruser policy name to use for poweruser role"
-      type        = list(string)
-      default     = []
-    }
-
-    variable "poweruser_policy_description" {
-      description = "Poweruser policy description to use for poweruser role"
-      type        = list(string)
-      default     = []
-    }
-
-     variable "poweruser_role_policy_local_path" {
-      description = "Local path of poweruser policy to use for role"
-      type        = list(string)
-      default     = []
-    }
-
-variable "attach_readonly_policy" {
-  description = "Whether to attach a readonly policy to a role"
-  type        = list(string)
-  default     = ["false"]
-}
-
-    variable "readonly_role_policy_local_path" {
-      description = "Policy ARN to use for readonly role"
-      type        = list(string)
-      default     = []
-    }
-
-    variable "readonly_policy_name" {
-      description = "Readnly policy name to use for readonly role"
-      type        = list(string)
-      default     = []
-    }
-
-    variable "readonly_policy_description" {
-      description = "Readonly policy description to use for readonly role"
-      type        = list(string)
-      default     = []
-    }
-
-
-
-variable "custom_policy_name" {
-  description = "Custom policy name to use for the role"
-  type        = list(string)
-  default     = []
-}
-
-variable "custom_policy_description" {
-  description = "Custom policy name to use for the role"
-  type        = list(string)
-  default     = []
-}
-
-variable "custom_role_policy_local_path" {
-  description = "Local file paths for custom IAM policies to attach to IAM role"
-  type        = list(string)
-  default     = []
-}
-
-variable "number_of_custom_policy_local_path" {
-  description = "Number of custom local IAM policies to attach to IAM role"
-  type        = list(number)
-  default     = ["0"]
-}
 
 
 

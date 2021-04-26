@@ -5,7 +5,7 @@
 ##### ENSURE THAT BOTH VARAIBLE AND MODULE HAVE THE SAME UNIQUE NAME #####
 
 module "VPC_VPC1" {
-source = "../../../Modules/Network-Modules/Default-modules/VPC-Modules-Default"
+source = "../../Modules/Network-Modules/Default-modules/VPC-Modules-Default"
 
 #################
 ## VPC Config. ##
