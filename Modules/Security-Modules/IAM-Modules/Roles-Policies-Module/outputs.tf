@@ -8,6 +8,11 @@ output "this_iam_policy_permissions_boundary" {
   value       = aws_iam_policy.permission_boundary_policy[*]
 }
 
+# output "policies" {
+#   description = "ARN of permission boundary"
+#   value       = aws_iam_policy.policy[*]
+# }
+
 output "this_iam_role_name" {
   description = "Name of IAM role"
   value       = element(concat(aws_iam_role.this.*.name, [""]), 0)

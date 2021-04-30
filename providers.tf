@@ -24,14 +24,31 @@ provider "github" {
   token = "44b06c41373f2007784de6ba5254a34ba51d3907"
 }
 
-module "Get_IAM_Groups_Users_Input_Values" {
-  source = "./Input-Values/Security/IAM"
+# module "Get_IAM_Groups_Users_Input_Values" {
+#   source = ""
+# }
+
+#################
+## IAM Modules ##
+#################       
+
+module "GET_IAM_ROLES_POLICIES" {
+source = "./Input-Values/Security/IAM"
 }
 
-module "Get_Network_Modules" {
+#####################
+## Compute Modules ##
+#####################       
+
+module "GET_COMPUTE_MODULES" {
+source = "./Input-Values/Compute"
+}
+
+       
+#####################
+## Network Modules ##
+#####################
+
+module "GET_NETWORK_MODULES" {
   source = "./Input-Values/Network-Input-Values"
 }
-
-# module "Get_VPC_NACL" {
-#   source = "./Input-Values/Network-Input-Values/VPC1-Input"
-# }

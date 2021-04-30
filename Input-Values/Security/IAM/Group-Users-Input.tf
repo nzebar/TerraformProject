@@ -16,7 +16,7 @@ variable "IAM_GROUP_USERS" {
         ## Group Policy Settings ##
         "group_policy_name" = ["TestGroupPolicyName"]
         "put_path_aws_group_policy" = ["/this/is/the/way/"]
-        "group_policy_local_path" = [] 
+        "group_policy_local_path" = ["Input-Values\\Security\\IAM\\RBAC\\Security-AccessControl\\Policies\\Admin-Policy-Versions\\FullAccess_AccessManagement_Policy1.0.tf"] 
 
     ##### Group Memebership Settings #####
       "membership_name" = ["testGroupmembName"]

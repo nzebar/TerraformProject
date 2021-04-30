@@ -76,10 +76,10 @@ resource "aws_iam_policy" "permission_boundary_policy" {
   policy = templatefile( var.role_permission_boundary_local_path[count.index] , {permission_boundary_path = element(var.permission_boundary_path, 0), permission_boundary_name = element(var.permission_boundary_policy_name, 0)}) 
 }
 
-resource "aws_iam_policy" "policy" {
+resource "aws_iam_role_policy" "policy" {
   name        = element(var.attach_policy, 0) == "true" ? element(var.policy_name, 0) : ""
-  description = element(var.policy_description, 0)
-  #role = element(var.attach_policy, 0) == "true" ? aws_iam_role.this.name : ""
+  #description = element(var.policy_description, 0)
+  role = element(var.attach_policy, 0) == "true" ? aws_iam_role.this.name : ""
   for_each = toset([ for k in var.policy_local_path: k if k != "" ])
 
   policy = templatefile(each.key, {permission_boundary_path = element(var.permission_boundary_path, 0), permission_boundary_name = element(var.permission_boundary_policy_name, 0)})

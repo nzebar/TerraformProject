@@ -133,6 +133,11 @@ variable "attach_policy" {
       default     = []
     }
 
+    variable "policy_path" {
+      type = list(string)
+      default = []
+    }
+
     variable "policy_local_path" {
       description = "Local path of admin policy to use for admin role"
       type        = list(string)
