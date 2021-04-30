@@ -11,6 +11,7 @@ variable "create_asg" {
 variable "asg_name" {
   description = "Name used across the resources created"
   type        = string
+  default = ""
 }
 
 variable "asg_use_name_prefix" {

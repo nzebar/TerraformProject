@@ -36,16 +36,7 @@ resource "aws_autoscaling_group" "this" {
 
   enabled_metrics         = var.enabled_metrics
   metrics_granularity     = var.metrics_granularity
-  service_linked_role_arn = var.service_linked_role_arn
-
-  dynamic "launch_template" {
-    for_each = var.use_launch_template == true ? var.launch_template : {}
-
-    content{
-    id = lookup(var.launch_template, "id", null)
-    version = lookup(var.launch_template, "version", null)
-    }
-  } 
+  service_linked_role_arn = var.service_linked_role_arn 
 
   dynamic "mixed_instances_policy" {
     for_each = var.create_mixed_instances_policy ? [var.mixed_instances_policy] : []
@@ -78,7 +69,7 @@ resource "aws_autoscaling_group" "this" {
   }
 
   dynamic "instance_refresh" {
-    for_each = var.instance_refresh != null ? var.instance_refresh : []
+    for_each = var.create_instance_refresh == true ? var.instance_refresh : []
     content {
       strategy = instance_refresh.value.strategy
       triggers = lookup(instance_refresh.value, "triggers", null)
@@ -97,16 +88,8 @@ resource "aws_autoscaling_group" "this" {
     delete = var.delete_timeout
   }
 
-  tags = concat(
-    [
-      {
-        "key"                 = "Name"
-        "value"               = var.asg_name
-        "propagate_at_launch" = true
-      },
-    ],
-    var.tags,
-  )
+  tags = var.tags
+  
 
   lifecycle {
     create_before_destroy = true

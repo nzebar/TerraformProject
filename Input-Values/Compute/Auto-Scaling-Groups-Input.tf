@@ -6,6 +6,7 @@ module "AUTO_SCALING_GROUPS_1_VPC1" {
 ####################################################
 
   create_asg = true
+
   asg_use_name_prefix = false
   asg_name = "Testasg"
 
@@ -39,12 +40,6 @@ module "AUTO_SCALING_GROUPS_1_VPC1" {
   use_launch_configuration = false
   launch_configuration = ""
 
-  use_launch_template = true
-  launch_template = {
-    id      = ""
-    version = "$Latest"
-  }
-
   create_mixed_instances_policy = false
     mixed_instances_policy = {
       launch_template = {
@@ -56,6 +51,7 @@ module "AUTO_SCALING_GROUPS_1_VPC1" {
             }
           }
         }
+        
     create_instances_distribution = false
         instances_distribution = {
           on_demand_allocation_strategy            = ""
@@ -89,7 +85,7 @@ module "AUTO_SCALING_GROUPS_1_VPC1" {
         }]
     }]
 
-    delete_timeout = ""
+    delete_timeout = "10m"
 
     tags = [{
       "key" = "value"
