@@ -212,17 +212,13 @@ variable "instance_refresh" {
   default     = null
 }
 
-variable "create_mixed_instances_policy" {
-  description = "Determines whether to use a mixed instances policy in the autoscaling group or not"
-  type        = bool
-  default     = false
-}
-
 variable "mixed_instances_policy" {
   description = "Configuration block containing settings to define launch targets for Auto Scaling groups"
   type        = any
   default     = null
 }
+
+
 
 variable "delete_timeout" {
   description = "Delete timeout to wait for destroying autoscaling group"
@@ -236,4 +232,139 @@ variable "tags" {
   default     = [{}]
 }
 
+########################################
+## Application Loadbalancer Variables ##
+########################################
 
+variable "create_app_lb" {
+  description = "Whether a loadbalancer should be created"
+  type = bool
+  default = false
+}
+
+variable "app_lb_name" {
+  description = "Name of App LB"
+  type = string
+  default = ""
+}
+
+variable "app_lb_internal" {
+  description = "Whether the LB should be public or private"
+  type = bool
+  default = false
+}
+
+variable "app_lb_security_groups" {
+  description = "List of security groups for the App LB"
+  type = list(string)
+  default = []
+}
+
+variable "app_lb_subnets" {
+  description = "Subnets to place the LB hosts in"
+  type = list(string)
+  default = []
+}
+
+variable "app_lb_drop_invalid_header_fields" {
+  description = "Whether the LB should drop invalid header fields or not"
+  type = bool
+  default = false
+}
+
+variable "app_lb_idle_timeout" {
+  description = "Time in seconds before an idle connection is dropped"
+  type = number
+  default = 30
+}
+
+variable "app_lb_deletion_protection" {
+  description = "Whether deletion protection of app LB is enabled or not"
+  type = bool
+  default = false
+}
+
+variable "app_lb_enable_http2" {
+  description = "Whether to enable http2 for the LB or not"
+  type = bool
+  default = false
+}
+
+variable "app_lb_customer_owned_ipv4_pool" {
+  description = "Customer owned ipv4 pools used in the LB"
+  type = string
+  default = ""
+}
+
+variable "app_lb_ip_address_type" {
+  description = "The address type for the app LB"
+  type = string
+  default = ""
+}
+
+variable "create_app_lb_target_groups" {
+  description = "whether to create target_groups for the app LB or not"
+  type = bool
+  default = false
+}
+
+variable "app_lb_target_groups" {
+  description = "Target groups used for the app LB"
+  type = map(any)
+  default = {}
+}
+
+variable "https_certificates" {
+  description = "Certs for the HTTPS target groups"
+  type = map(any)
+  default = {}
+}
+
+variable "create_app_lb_subnet_mapping" {
+  description = "whether to create a subnet mapping for the app LB or not"
+  type = bool
+  default = false
+}
+
+variable "app_lb_subnet_mapping" {
+  description = "subnet mapping used for the app LB"
+  type = map(any)
+  default = {}
+}
+
+variable "create_s3_access_logs" {
+  description = "whether to create access s3 access logs for the app LB"
+  type = bool
+  default = false
+}
+
+variable "s3_access_logs" {
+  description = "S3 Access Logs for the App LB"
+  type = any
+  default = {}
+}
+
+variable "app_lb_listeners" {
+  description = "Listeners for the app LB"
+  type = any
+  default = {}
+}
+
+variable "https_listener_rules" {
+  description = "Listener rules for the app LB"
+  type = any
+  default = {}
+  
+}
+
+variable "app_lb_environment" {
+  description = "The environment the app LB will be placed in"
+  type = string
+  default = ""
+}
+
+variable "app_lb_tags" {
+  description = "Tags for the app LB"
+  type = map(string)
+  default = {}
+}
