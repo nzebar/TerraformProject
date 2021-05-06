@@ -52,3 +52,11 @@ source = "./Input-Values/Compute"
 module "GET_NETWORK_MODULES" {
   source = "./Input-Values/Network-Input-Values"
 }
+
+#####################
+## Storage Modules ##
+#####################
+
+module "GET_STORAGE_MODULES" {
+  source = "./Input-Values/Storage"
+}

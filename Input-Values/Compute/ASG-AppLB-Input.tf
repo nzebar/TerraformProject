@@ -1,5 +1,5 @@
 module "AUTO_SCALING_GROUPS_1_VPC1" {
-  source = "../../Modules/Compute-Modules/Default-Modules/Auto-Scaling-Modules"
+  source = "../../Modules/Compute-Modules/Default-Modules/ASG-AppLB-Modules"
   
 #########################
 ## Auto Scaling Group  ##
