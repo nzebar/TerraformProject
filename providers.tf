@@ -36,6 +36,14 @@ module "GET_IAM_ROLES_POLICIES" {
 source = "./Input-Values/Security/IAM"
 }
 
+#################################
+## Security Monitoring Modules ##
+#################################
+
+module "GET_MONITORING_MODULES" {
+  source = "./Input-Values/Security/Monitoring"
+}
+
 #####################
 ## Compute Modules ##
 #####################       

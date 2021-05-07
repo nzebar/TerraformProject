@@ -1,5 +1,5 @@
 module "AURORA_SERVERLESS_VPC1" {
-    source = "../../Modules/Storage-Modules/Default-Modules/Aurora-Serverless_Modules"
+    source = "../../Modules/Storage-Modules/Default-Modules/Aurora-Cluster-Modules"
     
 ###############################    
 ## Aurora Serverless Cluster ##
@@ -52,7 +52,7 @@ module "AURORA_SERVERLESS_VPC1" {
     master_username = "TheAdmin"
     master_password = "SuperSecretPasswordisABC123"
 
-    create_scaling_configuration = true
+    create_scaling_configuration = false
     scaling_configuration = {
         auto_pause = true
         seconds_until_auto_pause = 300
@@ -70,6 +70,10 @@ module "AURORA_SERVERLESS_VPC1" {
     }
 
     apply_immediately = false
+
+    cluster_tags = {
+        "key" = "value"
+    }
 
 ###########################################    
 ## Aurora Cluster: Database Subnet Group ##
@@ -121,6 +125,30 @@ cluster_instances = {
 
 cluster_endpoints = {
     endpoint_1 = {
+        cluster_endpoint_identifier = "reader"
+        custom_endpoint_type        = "READER"
+        cluster_instances_map_key_names_static_members = [
+            "instance_1",
+        ]
+        # cluster_instances_map_key_names_excluded_members = []
+
+        tags = {
+            "key" = "value"
+        }
+    }
+    endpoint_2 = {
+        cluster_endpoint_identifier = "reader"
+        custom_endpoint_type        = "READER"
+        cluster_instances_map_key_names_static_members = [
+            "instance_1",
+        ]
+        # cluster_instances_map_key_names_excluded_members = []
+
+        tags = {
+            "key" = "value"
+        }
+    }
+    endpoint_3 = {
         cluster_endpoint_identifier = "reader"
         custom_endpoint_type        = "READER"
         cluster_instances_map_key_names_static_members = [

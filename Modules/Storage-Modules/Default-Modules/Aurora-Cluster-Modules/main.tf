@@ -75,6 +75,8 @@ for_each = var.create_restore_to_point_in_time == true ? [1] : []
 
 apply_immediately = false
 
+tags = var.cluster_tags
+
 }
 
 #####################################    

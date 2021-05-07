@@ -322,3 +322,13 @@ variable "cluster_parameter_group_parameters" {
     type = map(map(string))
   
 }
+
+###########################################   
+## Aurora Database Cluster Tags Variable ##
+###########################################
+
+variable "cluster_tags" {
+  description = "Tags for the cluster"
+  type = map(string)
+  default = null
+}
