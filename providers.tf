@@ -40,34 +40,34 @@ source = "./Input-Values/Security/IAM"
 ## Security Monitoring Modules ##
 #################################
 
-# module "GET_MONITORING_MODULES" {
-#   source = "./Input-Values/Security/Monitoring"
-# }
+module "GET_MONITORING_MODULES" {
+  source = "./Input-Values/Security/Monitoring"
+}
 
 #####################
 ## Compute Modules ##
 #####################       
 
-# module "GET_COMPUTE_MODULES" {
-# source = "./Input-Values/Compute"
-# }
+module "GET_COMPUTE_MODULES" {
+source = "./Input-Values/Compute"
+}
 
        
 #####################
 ## Network Modules ##
 #####################
 
-# module "GET_NETWORK_MODULES" {
-#   source = "./Input-Values/Network-Input-Values"
-# }
+module "GET_NETWORK_MODULES" {
+  source = "./Input-Values/Network-Input-Values"
+}
 
 #####################
 ## Storage Modules ##
 #####################
 
-# module "GET_STORAGE_MODULES" {
-#   source = "./Input-Values/Storage"
-# }
+module "GET_STORAGE_MODULES" {
+  source = "./Input-Values/Storage"
+}
 
 ####################
 ## Tesing Modules ##
