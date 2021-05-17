@@ -22,21 +22,21 @@ provider "github" {
   owner = "nzebar"
   token = "44b06c41373f2007784de6ba5254a34ba51d3907"
 }
+#########################
+## Application Modules ##
+#########################
 
-#################
-## IAM Modules ##
-#################       
-
-module "GET_IAM_ROLES_POLICIES" {
-source = "./Input-Values/Security/IAM"
+module "GET_APP_MODULES" {
+  source = "./Input-Values/Application"
+  
 }
 
-#################################
-## Security Monitoring Modules ##
-#################################
+####################
+##  CI/CD Modules ##
+####################
 
-module "GET_MONITORING_MODULES" {
-  source = "./Input-Values/Security/Monitoring"
+module "GET_CICD_MODULES" {
+  source = "./Input-Values/CICD"
 }
 
 #####################
@@ -47,7 +47,6 @@ module "GET_COMPUTE_MODULES" {
 source = "./Input-Values/Compute"
 }
 
-       
 #####################
 ## Network Modules ##
 #####################
@@ -56,6 +55,22 @@ module "GET_NETWORK_MODULES" {
   source = "./Input-Values/Network-Input-Values"
 }
 
+#################
+## IAM Modules ##
+#################       
+
+module "GET_IAM_ROLES_POLICIES" {
+source = "./Input-Values/Security/IAM"
+}
+
+########################
+## Monitoring Modules ##
+########################
+
+module "GET_MONITORING_MODULES" {
+  source = "./Input-Values/Security/Monitoring"
+}
+       
 #####################
 ## Storage Modules ##
 #####################
