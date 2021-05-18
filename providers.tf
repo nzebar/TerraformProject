@@ -26,10 +26,10 @@ provider "github" {
 ## Application Modules ##
 #########################
 
-module "GET_APP_MODULES" {
-  source = "./Input-Values/Application"
+# module "GET_APP_MODULES" {
+#   source = "./Input-Values/Application"
   
-}
+# }
 
 ####################
 ##  CI/CD Modules ##
