@@ -1,5 +1,5 @@
 module "ECR_VPC1" {
-    source = "../../Modules/Application-Modules/ECR-Modules"
+    source = "../../../Modules/CICD-Modules/ECR-Modules"
     
 ####################
 ## ECR Repository ##

@@ -6,7 +6,8 @@ terraform {
      }
      
      github = {
-       source = "integrations/github"
+      source = "integrations/github"
+      version = "4.9.4"
      }
   } 
 }
@@ -17,27 +18,35 @@ provider "aws" {
   profile = "AWSeducate"//Profile used to provision and destroy resources.
 }
 
-provider "github" {
-  alias = "githubOAuth"
-  owner = "nzebar"
-  token = "44b06c41373f2007784de6ba5254a34ba51d3907"
-}
-#########################
-## Application Modules ##
-#########################
-
-# module "GET_APP_MODULES" {
-#   source = "./Input-Values/Application"
-  
-# }
 
 ####################
 ##  CI/CD Modules ##
 ####################
 
-module "GET_CICD_MODULES" {
-  source = "./Input-Values/CICD"
-}
+    ###########################
+    ##  CI/CD Source Modules ##
+    ###########################
+
+    module "GET_CICD_SOURCE_MODULES" {
+      source = "./Input-Values/CICD/Source"
+    }
+
+    ##########################
+    ##  CI/CD Build Modules ##
+    ##########################
+
+    module "GET_CICD_BUILD_MODULES" {
+      source = "./Input-Values/CICD/Build"
+    }
+
+    ###############################
+    ##  CI/CD Codedeploy Modules ##
+    ###############################
+
+    module "GET_CICD_DEPLOYMENT_MODULES" {
+      source = "./Input-Values/CICD/Deployment"
+      
+    }
 
 #####################
 ## Compute Modules ##
@@ -83,7 +92,6 @@ module "GET_STORAGE_MODULES" {
 ## Tesing Modules ##
 ####################
 
-# module "GET_TESTING_MODULES" {
-#   source = "./Input-Values/Testing-Input"
-  
-# }
+module "GET_TESTING_MODULES" {
+  source = "./Input-Values/Testing-Input"
+}

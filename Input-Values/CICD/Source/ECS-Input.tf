@@ -1,5 +1,5 @@
 module "ECS_VPC1" {
-    source = "../../Modules/Application-Modules/ECS-Modules"
+    source = "../../../Modules/CICD-Modules/ECS-Modules"
 
 #################
 ## ECS Cluster ##
@@ -131,7 +131,7 @@ task_definitions = {
         family = "famyuh"
         task_role_arn = ""
         execution_role_arn = ""
-        container_definitions = "Input-Values\\Application\\task_def.json" # Local file path to file containing container definitions
+        container_definitions = "Input-Values\\CICD\\Source\\Container-Definitions\\task_def.json" # Local file path to file containing container definitions
 
         cpu = 2
         memory = 6

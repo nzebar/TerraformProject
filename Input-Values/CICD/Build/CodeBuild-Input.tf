@@ -1,5 +1,5 @@
 module "CODEBUILD_VPC1" {
-    source = "../../Modules/CICD-Modules/CodeBuild-Modules"
+    source = "../../../Modules/CICD-Modules/CodeBuild-Modules"
 
 #############################################
 ## CodeBuild Project Source Authentication ##
