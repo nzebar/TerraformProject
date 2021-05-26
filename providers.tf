@@ -23,9 +23,9 @@ provider "aws" {
 ##  CI/CD Modules ##
 ####################
 
-    ###########################
-    ##  CI/CD Source Modules ##
-    ###########################
+    ##########################
+    #  CI/CD Source Modules ##
+    ##########################
 
     module "GET_CICD_SOURCE_MODULES" {
       source = "./Input-Values/CICD/Source"
