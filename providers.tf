@@ -40,12 +40,19 @@ provider "aws" {
     }
 
     ###############################
-    ##  CI/CD Codedeploy Modules ##
+    ##  CI/CD Deployemnt Modules ##
     ###############################
 
     module "GET_CICD_DEPLOYMENT_MODULES" {
       source = "./Input-Values/CICD/Deployment"
-      
+    }
+
+    ############################
+    ## CI/CD Pipeline Modules ##
+    ############################
+
+    module "GET_CICD_PIPELINE_MODULES" {
+      source = "./Input-Values/CICD/Pipeline"
     }
 
 #####################
