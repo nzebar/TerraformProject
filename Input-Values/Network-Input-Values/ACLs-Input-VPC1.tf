@@ -62,8 +62,8 @@ public_network_acl = {
         public_network_acl_name = "VPC1_Public_NACL"
         vpc_id_public_acls = module.VPC_VPC1.vpc.id
         public_acl_subnet_ids = [
-            module.SUBNETS_VPC1.aws_subnet_public_subnets_subnet1.id,
-            module.SUBNETS_VPC1.aws_subnet_public_subnets_subnet2.id
+            module.SUBNETS_VPC1.public_subnet_1.id,
+            module.SUBNETS_VPC1.public_subnet_2.id
         ]
 
         public_network_acl_ingress = {
@@ -106,8 +106,8 @@ private_network_acl = {
         private_network_acl_name = "VPC1_Private_NACL"
         vpc_id_private_acls = module.VPC_VPC1.vpc.id
         private_acl_subnet_ids = [
-            module.SUBNETS_VPC1.aws_subnet_private_subnets_subnet1.id,
-            module.SUBNETS_VPC1.aws_subnet_private_subnets_subnet2.id
+            module.SUBNETS_VPC1.private_subnet_1.id,
+            module.SUBNETS_VPC1.private_subnet_2.id
             ]
 
         private_network_acl_ingress = {
@@ -151,9 +151,9 @@ database_network_acl = {
         database_network_acl_name = "VPC1_Database_NACL"
         vpc_id_database_acls = module.VPC_VPC1.vpc.id
         database_acl_subnet_ids = [
-            module.SUBNETS_VPC1.aws_subnet_database_subnets_subnet1.id,
-            module.SUBNETS_VPC1.aws_subnet_database_subnets_subnet2.id,
-            module.SUBNETS_VPC1.aws_subnet_database_subnets_subnet3.id
+            module.SUBNETS_VPC1.database_subnet_1.id,
+            module.SUBNETS_VPC1.database_subnet_2.id,
+            module.SUBNETS_VPC1.database_subnet_3.id
             ]
 
             database_network_acl_ingress = {

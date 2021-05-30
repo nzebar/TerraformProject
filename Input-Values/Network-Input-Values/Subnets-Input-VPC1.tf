@@ -1,12 +1,9 @@
 module "SUBNETS_VPC1" {
   source = "../../Modules/Network-Modules/Default-modules/Subnets-Module-Default"
 
-
 ########################
 ## Availability Zones ##
 ########################
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones
-# Ref lines 243 - 262 of main.tf file.
 
     include_all_availability_zones = true
     filter_az_by_state = ""
@@ -17,151 +14,154 @@ module "SUBNETS_VPC1" {
 #############################
 ## Declared Public Subnets ##
 #############################
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
-# Ref lines 265 - 305 of main.tf file.
-public_subnets = {
 
-    subnet1 = {
-        "vpc_id" = [module.VPC_VPC1.vpc.id]
-        "public_subnet_name" = ["subnetone"]
-        "cidr_block" = ["192.168.1.0/24"]
-        "availability_zone" = ["us-east-1a"]
-        "customer_owned_ipv4_pool" = [""] 
-        "assign_ipv6_address_on_creation" = ["false"]
-        "ipv6_cidr_block" = [""]
-        "map_customer_owned_ip_on_launch" = ["false"]
-        "map_public_ip_on_launch" = ["false"]
-        "outpost_arn" = [""]
-        "tags" = [{
-            "public" = "subnet1",
-        }]
+subnets = {
+
+    ####################
+    ## Public Subnets ##
+    ####################
+
+    public_subnet_1 = {
+        subnet_name = "public_subnet_1"
+        vpc_id = module.VPC_VPC1.vpc.id
+        cidr_block = "192.168.1.0/24"
+        availability_zone = "us-east-1a"
+        customer_owned_ipv4_pool = "" 
+        assign_ipv6_address_on_creation = false
+        ipv6_cidr_block = ""
+        map_customer_owned_ip_on_launch = false
+        map_public_ip_on_launch = false
+        outpost_arn = ""
+
+        route_table_association = module.VPC1_ROUTE_TABLES.Public_Route_Table_1.id
+
+        tags = {
+            "Public_Subnet" = "Public_Subnet_1",
+        }
     }
 
-    subnet2 = {
-        "vpc_id" = [module.VPC_VPC1.vpc.id]
-        "public_subnet_name" = ["subnettwo"]
-        "cidr_block" = ["192.168.2.0/24"]
-        "availability_zone" = ["us-east-1b"]
-        "availability_zone_id" = [""]
-        "customer_owned_ipv4_pool" = [""] 
-        "assign_ipv6_address_on_creation" = ["false"]
-        "ipv6_cidr_block" = [""]
-        "map_customer_owned_ip_on_launch" = ["false"]
-        "map_public_ip_on_launch" = ["false"]
-        "outpost_arn" = [""]
-        "tags" = [{
-            "public" = "subnet2",
-        }]
+    public_subnet_2 = {
+        subnet_name = "public_subnet_2"
+        vpc_id = module.VPC_VPC1.vpc.id
+        cidr_block = "192.168.2.0/24"
+        availability_zone = "us-east-1b"
+        customer_owned_ipv4_pool = "" 
+        assign_ipv6_address_on_creation = false
+        ipv6_cidr_block = ""
+        map_customer_owned_ip_on_launch = false
+        map_public_ip_on_launch = false
+        outpost_arn = ""
+
+        route_table_association = module.VPC1_ROUTE_TABLES.Public_Route_Table_2.id
+
+        tags = {
+            "Public_Subnet" = "Public_Subnet_2",
+        }
     }
 
+    #####################
+    ## Private Subnets ##
+    #####################
 
-}
+    private_subnet_1 = {
+        subnet_name = "private_subnet_1"
+        vpc_id = module.VPC_VPC1.vpc.id
+        cidr_block = "192.168.3.0/24"
+        availability_zone = "us-east-1a"
+        customer_owned_ipv4_pool = "" 
+        assign_ipv6_address_on_creation = false
+        ipv6_cidr_block = ""
+        map_customer_owned_ip_on_launch = false
+        map_public_ip_on_launch = false
+        outpost_arn = ""
 
-##############################
-## Declared Private Subnets ##
-##############################
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
-# Ref lines 307 - 347 of main.tf file.
+        route_table_association = module.VPC1_ROUTE_TABLES.Private_Route_Table_1.id
 
-private_subnets = {
-    subnet1 = {
-        "vpc_id" = [module.VPC_VPC1.vpc.id]
-        "private_subnet_name" = [""]
-        "cidr_block" = ["192.168.3.0/24"]
-        "availability_zone" = ["us-east-1a"]
-        "customer_owned_ipv4_pool" = [""] 
-        "assign_ipv6_address_on_creation" = ["false"]
-        "ipv6_cidr_block" = [""]
-        "map_customer_owned_ip_on_launch" = ["false"]
-        "map_public_ip_on_launch" = ["false"]
-        "outpost_arn" = [""]
-        "tags" = [{
-            "private" = "subnet1",
-        }]
+        tags = {
+            "Private_Subnet" = "Private_Subnet_1",
+        }
     }
 
-    subnet2 = {
-        "vpc_id" = [module.VPC_VPC1.vpc.id]
-        "private_subnet_name" = [""]
-        "cidr_block" = ["192.168.4.0/24"]
-        "availability_zone" = ["us-east-1b"]
-        "availability_zone_id" = [""]
-        "customer_owned_ipv4_pool" = [""] 
-        "assign_ipv6_address_on_creation" = ["false"]
-        "ipv6_cidr_block" = [""]
-        "map_customer_owned_ip_on_launch" = ["false"]
-        "map_public_ip_on_launch" = ["false"]
-        "outpost_arn" = [""]
-        "tags" = [{
-            "private" = "subnet2",
-        }]
+    private_subnet_2 = {
+        subnet_name = "private_subnet_2"
+        vpc_id = module.VPC_VPC1.vpc.id
+        cidr_block = "192.168.4.0/24"
+        availability_zone = "us-east-1b"
+        customer_owned_ipv4_pool = "" 
+        assign_ipv6_address_on_creation = false
+        ipv6_cidr_block = ""
+        map_customer_owned_ip_on_launch = false
+        map_public_ip_on_launch = false
+        outpost_arn = ""
+
+        route_table_association = module.VPC1_ROUTE_TABLES.Private_Route_Table_2.id
+
+        tags = {
+            "Private_Subnet" = "Private_Subnet_2",
+        }
     }
 
+    ######################
+    ## Database Subnets ##
+    ######################
 
-}
+    database_subnet_1 = {
+        subnet_name = "database_subnet_1"
+        vpc_id = module.VPC_VPC1.vpc.id
+        cidr_block = "192.168.5.0/24"
+        availability_zone = "us-east-1a"
+        customer_owned_ipv4_pool = "" 
+        assign_ipv6_address_on_creation = false
+        ipv6_cidr_block = ""
+        map_customer_owned_ip_on_launch = false
+        map_public_ip_on_launch = false
+        outpost_arn = ""
 
-##############################
-## Declared Database Subnets ##
-##############################
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
-# Ref lines 265 - 305 of main.tf file.
-# If you would like to not create these resources, comment out the lines referenced above.
+        route_table_association = module.VPC1_ROUTE_TABLES.Database_Route_Table_1.id
 
-database_subnets = {
-    subnet1 = {
-        "vpc_id" = [module.VPC_VPC1.vpc.id]
-        "database_subnet_name" = [""]
-        "cidr_block" = ["192.168.5.0/24"]
-        "availability_zone" = ["us-east-1a"]
-        "customer_owned_ipv4_pool" = [""] 
-        "assign_ipv6_address_on_creation" = ["false"]
-        "ipv6_cidr_block" = [""]
-        "map_customer_owned_ip_on_launch" = ["false"]
-        "map_public_ip_on_launch" = ["false"]
-        "outpost_arn" = [""]
-        "tags" = [{
-            "database" = "subnet1",
-        }]
+        tags = {
+            "Database_Subnet" = "Database_Subnet_1",
+        }
     }
 
-    subnet2 = {
-        "vpc_id" = [module.VPC_VPC1.vpc.id]
-        "database_subnet_name" = [""]
-        "cidr_block" = ["192.168.6.0/24"]
-        "availability_zone" = ["us-east-1b"]
-        "availability_zone_id" = [""]
-        "customer_owned_ipv4_pool" = [""] 
-        "assign_ipv6_address_on_creation" = ["false"]
-        "ipv6_cidr_block" = [""]
-        "map_customer_owned_ip_on_launch" = ["false"]
-        "map_public_ip_on_launch" = ["false"]
-        "outpost_arn" = [""]
-        "tags" = [{
-            "database" = "subnet2",
-        }]
+    database_subnet_2 = {
+        subnet_name = "database_subnet_2"
+        vpc_id = module.VPC_VPC1.vpc.id
+        cidr_block = "192.168.6.0/24"
+        availability_zone = "us-east-1b"
+        customer_owned_ipv4_pool = "" 
+        assign_ipv6_address_on_creation = false
+        ipv6_cidr_block = ""
+        map_customer_owned_ip_on_launch = false
+        map_public_ip_on_launch = false
+        outpost_arn = ""
+
+        route_table_association = module.VPC1_ROUTE_TABLES.Database_Route_Table_2.id
+
+        tags = {
+            "Database_Subnet" = "Database_Subnet_2",
+        }
     }
 
-    subnet3 = {
-        "vpc_id" = [module.VPC_VPC1.vpc.id]
-        "database_subnet_name" = [""]
-        "cidr_block" = ["192.168.7.0/24"]
-        "availability_zone" = ["us-east-1c"]
-        "availability_zone_id" = [""]
-        "customer_owned_ipv4_pool" = [""] 
-        "assign_ipv6_address_on_creation" = ["false"]
-        "ipv6_cidr_block" = [""]
-        "map_customer_owned_ip_on_launch" = ["false"]
-        "map_public_ip_on_launch" = ["false"]
-        "outpost_arn" = [""]
-        "tags" = [{
-            "database" = "subnet3"
-        }]
+    database_subnet_3 = {
+        subnet_name = "database_subnet_3"
+        vpc_id = module.VPC_VPC1.vpc.id
+        cidr_block = "192.168.7.0/24"
+        availability_zone = "us-east-1c"
+        customer_owned_ipv4_pool = "" 
+        assign_ipv6_address_on_creation = false
+        ipv6_cidr_block = ""
+        map_customer_owned_ip_on_launch = false
+        map_public_ip_on_launch = false
+        outpost_arn = ""
+
+        route_table_association = module.VPC1_ROUTE_TABLES.Database_Route_Table_3.id
+
+        tags = {
+            "Database_Subnet" = "Database_Subnet_3",
+        }
     }
-
-
-  }
-
-
-
   
+}
+
 }

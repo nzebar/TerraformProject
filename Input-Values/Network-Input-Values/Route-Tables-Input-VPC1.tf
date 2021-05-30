@@ -4,163 +4,168 @@ module "VPC1_ROUTE_TABLES" {
 #################################
 ## Default Route Table Config. ##
 #################################
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_route_table
-# Ref lines 98 - 132 of main.tf file.
 
     manage_default_route_table = true
-    default_route_table_id = module.VPC_VPC1.vpc_default_route_table_id.default_route_table_id
+    default_route_table_name = "Default_Route_Table"
+    default_route_table_id = module.VPC_VPC1.vpc_default_route_table_id
     default_route_table_propagating_vgws = [] 
     default_route_table_routes = {}
 
-    default_route_table_name = "dummy default"
     default_route_table_tags = {
-        "hey" = "yo"
+        "Default_Route_Table" = "Default_Route_Table_VPC1"
     }
 
+route_tables = {
 
-################################
-## Public Route Table Config. ##
-################################
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table
-# Ref lines 134 - 170 of main.tf file.
+########################
+## Public Route Table ## 
+########################
+        
+    Public_Route_Table_1 = {
+      ## ROUTE TABLE SETTIINGS ##
+        route_table_name = "Public_Route_Table_1"
+        vpc_id = module.VPC_VPC1.vpc.id
+        propagating_vgws = []
 
-    Public_Route_Tables = {
-
-        RouteTable1 = {
-            public_route_table_name = "PublicRouteTable"
-            "vpc_id_for_public_route_table" = module.VPC_VPC1.vpc.id
-            "propagating_vgws_for_public_route_table" = []
-
-            associated_routes = {
-                Pubroute1 =  {
-                    cidr_block = "192.168.0.0/16"
-                    "gateway_id"     = module.GATEWAYS_VPC1.internet_gateway_igw1.id
+      ## ASSOCIATED ROUTES ##
+        associated_routes = {
+            Public_Route_1 =  {
+                cidr_block = "192.168.0.0/16"
+                gateway_id     = module.GATEWAYS_VPC1.internet_gateway_igw1.id
                 }
         }
 
-        public_route_table_tags = {
-            "public" = "table"
-        }
+      ## ROUTE TABLE TAGS ##
+        tags = {
+          Public_Route_Table = "Public_Route_Table_1"
+          }
     }
 
-        RouteTable2 = {
-            public_route_table_name = "PrivateRouteTable"
-            "vpc_id_for_public_route_table" = module.VPC_VPC1.vpc.id
-            "propagating_vgws_for_public_route_table" = []
+    Public_Route_Table_2 = {
+      ## ROUTE TABLE SETTIINGS ##
+        route_table_name = "Public_Route_Table_2"
+        vpc_id = module.VPC_VPC1.vpc.id
+        propagating_vgws = []
 
-            associated_routes = {
-                Pubroute1 =  {
-                        cidr_block = "192.168.0.0/16"
-                        "gateway_id" = module.GATEWAYS_VPC1.internet_gateway_igw1.id
-                    }
-            }
-
-            public_route_table_tags = {
-                "public" = "table"
+      ## ASSOCIATED ROUTES ##
+        associated_routes = {
+          Public_Route_1 =  {
+              cidr_block = "192.168.0.0/16"
+              "gateway_id"     = module.GATEWAYS_VPC1.internet_gateway_igw1.id
+              }
         }
+
+      ## ROUTE TABLE TAGS ##
+        tags = {
+          Public_Route_Table = "Public_Route_Table_2"
+          }
     }
+
+##########################
+## Private Route Tables ##
+##########################
+
+    Private_Route_Table_1 = {
+      ## ROUTE TABLE SETTIINGS ##
+        route_table_name = "Private_Route_Table_1"
+        vpc_id = module.VPC_VPC1.vpc.id
+        propagating_vgws = []
+
+      ## ASSOCIATED ROUTES ##
+        associated_routes = {
+          # Private_Route_1 =  {
+          #     cidr_block = "192.168.0.0/16"
+          #     nat_gateway = module.GATEWAYS_VPC1.nat_gateway_id_useast1a.id
+          #     }
+          # Private_Route_2 =  {
+          #     cidr_block = "192.168.0.0/16"
+          #     nat_gateway = module.GATEWAYS_VPC1.nat_gateway_id_useast1b.id
+          #     }
+          }
+
+      ## ROUTE TABLE TAGS ##
+        tags = {
+          Public_Route_Table = "Private_Route_Table_1"
+          }
+    }
+
+    Private_Route_Table_2 = {
+      ## ROUTE TABLE SETTIINGS ##
+        route_table_name = "Private_Route_Table_2"
+        vpc_id = module.VPC_VPC1.vpc.id
+        propagating_vgws = []
+
+      ## ASSOCIATED ROUTES ##
+        associated_routes = {
+          # Private_Route_1 =  {
+          #     cidr_block = "192.168.0.0/16"
+          #     nat_gateway = module.GATEWAYS_VPC1.nat_gateway_id_useast1a.id
+          #     }
+          # Private_Route_2 =  {
+          #     cidr_block = "192.168.0.0/16"
+          #     nat_gateway = module.GATEWAYS_VPC1.nat_gateway_id_useast1b.id
+          #     }
+          }
+
+      ## ROUTE TABLE TAGS ##
+        tags = {
+          Public_Route_Table = "Private_Route_Table_2"
+          }
+    }
+
+###########################
+## Database Route Tables ##
+###########################
+
+    Database_Route_Table_1 = {
+      ## ROUTE TABLE SETTIINGS ##
+        route_table_name = "Database_Route_Table_1"
+        vpc_id = module.VPC_VPC1.vpc.id
+        propagating_vgws = []
+
+      ## ASSOCIATED ROUTES ##
+        associated_routes = {}
+
+      ## ROUTE TABLE TAGS ##
+        tags = {
+          Database_Route_Table = "Database_Route_Table_1"
+          }
+    }
+
+    Database_Route_Table_2 = {
+      ## ROUTE TABLE SETTIINGS ##
+        route_table_name = "Database_Route_Table_2"
+        vpc_id = module.VPC_VPC1.vpc.id
+        propagating_vgws = []
+
+      ## ASSOCIATED ROUTES ##
+        associated_routes = {}
+
+      ## ROUTE TABLE TAGS ##
+        tags = {
+          Database_Route_Table = "Database_Route_Table_2"
+          }
+    }
+
+    Database_Route_Table_3 = {
+      ## ROUTE TABLE SETTIINGS ##
+        route_table_name = "Database_Route_Table_3"
+        vpc_id = module.VPC_VPC1.vpc.id
+        propagating_vgws = []
+
+      ## ASSOCIATED ROUTES ##
+        associated_routes = {}
+
+      ## ROUTE TABLE TAGS ##
+        tags = {
+          Database_Route_Table = "Database_Route_Table_3"
+          }
+    }
+
 }
 
-#################################
-## Private Route Table Config. ##
-#################################
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table
-# Ref lines 172 - 208 of main.tf file.
 
-    Private_Route_Tables = {
 
-        RouteTable1 = {
-            private_route_table_name = "PublicRouteTable"
-            "vpc_id_for_private_route_table" = module.VPC_VPC1.vpc.id
-            "propagating_vgws_for_private_route_table" = []
 
-            associated_routes = {
 
-                Privroute1 =  {
-                        cidr_block = "192.168.0.0/16"
-                        nat_gateway = module.GATEWAYS_VPC1.nat_gateway_id_useast1a.id
-                    }
-
-                Privroute2 =  {
-                        cidr_block = "192.168.0.0/16"
-                        nat_gateway = module.GATEWAYS_VPC1.nat_gateway_id_useast1b.id
-                    }
-                }
-
-            private_route_table_tags = {
-                "public" = "table"
-            }
-        }
-
-        RouteTable2 = {
-            public_route_table_name = "PrivateRouteTable"
-            "vpc_id_for_private_route_table" = module.VPC_VPC1.vpc.id
-            "propagating_vgws_for_private_route_table" = []
-
-            associated_routes = {
-                Privroute1 =  {
-                        cidr_block = "192.168.0.0/16"
-                        nat_gateway = module.GATEWAYS_VPC1.nat_gateway_id_useast1a.id
-                    }
-                Privroute2 =  {
-                        cidr_block = "192.168.0.0/16"
-                        nat_gateway = module.GATEWAYS_VPC1.nat_gateway_id_useast1b.id
-                    }
-                }
-
-            private_route_table_tags = {
-                "private" = "table"
-            }
-        }
-    }
-
-##################################
-## Database Route Table Config. ##
-##################################
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table
-# Ref lines 209 - 244 of main.tf file.
-
-    Database_Route_Tables = {
-
-        RouteTable1 = {
-            datatabase_route_table_name = "PublicRouteTable"
-            "vpc_id_for_database_route_table" = module.VPC_VPC1.vpc.id
-            "propagating_vgws_for_database_route_table" = []
-
-            associated_routes = {
-            }
-
-            database_route_table_tags = {
-                "public" = "table"
-                }
-            }
-        
-
-        RouteTable2 = {
-            datatabase_route_table_name = "PublicRouteTable"
-            "vpc_id_for_database_route_table" = module.VPC_VPC1.vpc.id
-            "propagating_vgws_for_database_route_table" = []
-
-            associated_routes = {
-            }
-
-            database_route_table_tags = {
-                "public" = "table"
-                }
-            }   
-
-        RouteTable3 = {
-            datatabase_route_table_name = "PublicRouteTable"
-            "vpc_id_for_database_route_table" = module.VPC_VPC1.vpc.id
-            "propagating_vgws_for_database_route_table" = []
-
-            associated_routes = {
-            }
-
-            database_route_table_tags = {
-                "public" = "table"
-            }
-        }
-    }
-  
 }

@@ -20,106 +20,38 @@ data "aws_availability_zones" "available" {
 }
 
 
-###################
-## Public subnet ##
-###################
+############
+## Subnet ##
+############
 
-resource "aws_subnet" "public_subnets" {
-  #for_each = [for k in var.internet_gateways: k if length(var.internet_gateways) > 0 ]
-  for_each = var.public_subnets 
+resource "aws_subnet" "subnets" {
+  for_each = var.subnets 
 
-  vpc_id = element(lookup(var.public_subnets[each.key], "vpc_id", null), 0)
-
-  cidr_block = element(lookup(var.public_subnets[each.key], "cidr_block", [""]), 0)
-
-  availability_zone = element(lookup(var.public_subnets[each.key], "availability_zone", [""]), 0)
-
-  customer_owned_ipv4_pool = element(lookup(var.public_subnets[each.key], "customer_owned_ipv4_pool", [""]), 0)
-
-  assign_ipv6_address_on_creation = tobool(element(lookup(var.public_subnets[each.key], "assign_ipv6_address_on_creation", ["false"]), 0))
-
-  ipv6_cidr_block = tobool(element(lookup(var.public_subnets[each.key], "assign_ipv6_address_on_creation", ["false"]), 0)) == true ? element(lookup(var.public_subnets[each.key], "ipv6_cidr_block", [""]), 0) : null
-
-  map_customer_owned_ip_on_launch = element(lookup(var.public_subnets[each.key], "map_customer_owned_ip_on_launch", [""]), 0) 
-
-  map_public_ip_on_launch = tobool(element(lookup(var.public_subnets[each.key], "map_public_ip_on_launch", ["false"]), 0))
-
-  outpost_arn = element(lookup(var.public_subnets[each.key], "outpost_arn", [""]), 0)
-
+  vpc_id = each.value.vpc_id
+  cidr_block = each.value.cidr_block
+  availability_zone = each.value.availability_zone
+  customer_owned_ipv4_pool = each.value.customer_owned_ipv4_pool
+  assign_ipv6_address_on_creation = each.value.assign_ipv6_address_on_creation
+  ipv6_cidr_block = each.value.ipv6_cidr_block == "" ? null : each.value.ipv6_cidr_block
+  map_customer_owned_ip_on_launch = each.value.map_customer_owned_ip_on_launch
+  map_public_ip_on_launch = each.value.map_public_ip_on_launch
+  outpost_arn = each.value.outpost_arn
   tags = merge(
     {
-      "Name" = element(lookup(var.public_subnets[each.key], "public_subnet_name", [""]), 0)
+      "Name" = each.value.subnet_name
     },
-    element(lookup(var.public_subnets[each.key], "tags", {}), 0 ),
+    each.value.tags,
   )
 }
 
-#####################
-## Private subnets ##
-#####################
+#####################################
+## Public Route Table Associations ##
+#####################################
 
-resource "aws_subnet" "private_subnets" {
-  # for_each = [for k in var.internet_gateways: k if length(var.internet_gateways) > 0 ]
-  for_each = var.private_subnets 
+resource "aws_route_table_association" "route_table_associations" {
+for_each = var.subnets
 
-  vpc_id = element(lookup(var.private_subnets[each.key], "vpc_id", null), 0)
-
-  cidr_block = element(lookup(var.private_subnets[each.key], "cidr_block", [""]), 0)
-
-  availability_zone = element(lookup(var.private_subnets[each.key], "availability_zone", [""]), 0)
-
-  customer_owned_ipv4_pool = element(lookup(var.private_subnets[each.key], "customer_owned_ipv4_pool", [""]), 0)
-
-  assign_ipv6_address_on_creation = tobool(element(lookup(var.private_subnets[each.key], "assign_ipv6_address_on_creation", ["false"]), 0))
-
-  ipv6_cidr_block = tobool(element(lookup(var.private_subnets[each.key], "assign_ipv6_address_on_creation", ["false"]), 0)) == true ? element(lookup(var.public_subnets[each.key], "ipv6_cidr_block", [""]), 0) : null
-
-  map_customer_owned_ip_on_launch = element(lookup(var.private_subnets[each.key], "map_customer_owned_ip_on_launch", [""]), 0) 
-
-  map_public_ip_on_launch = tobool(element(lookup(var.private_subnets[each.key], "map_public_ip_on_launch", ["false"]), 0))
-
-  outpost_arn = element(lookup(var.private_subnets[each.key], "outpost_arn", [""]), 0)
-
-  tags = merge(
-    {
-      "Name" = element(lookup(var.private_subnets[each.key], "private_subnet_name", [""]), 0)
-    },
-    element(lookup(var.private_subnets[each.key], "tags", {}), 0 ),
-  )
-
-  
+  subnet_id      = aws_subnet.subnets[each.key].id
+  route_table_id = each.value.route_table_association
 }
 
-######################
-## Database subnets ##
-######################
-
-resource "aws_subnet" "database_subnets" {
-  # for_each = [for k in var.internet_gateways: k if length(var.internet_gateways) > 0 ]
-  for_each = var.database_subnets 
-
-  vpc_id = element(lookup(var.database_subnets[each.key], "vpc_id", null), 0)
-
-  cidr_block = element(lookup(var.database_subnets[each.key], "cidr_block", [""]), 0)
-
-  availability_zone = element(lookup(var.database_subnets[each.key], "availability_zone", [""]), 0)
-
-  customer_owned_ipv4_pool = element(lookup(var.database_subnets[each.key], "customer_owned_ipv4_pool", [""]), 0)
-
-  assign_ipv6_address_on_creation = tobool(element(lookup(var.database_subnets[each.key], "assign_ipv6_address_on_creation", ["false"]), 0))
-
-  ipv6_cidr_block = tobool(element(lookup(var.database_subnets[each.key], "assign_ipv6_address_on_creation", ["false"]), 0)) == true ? element(lookup(var.public_subnets[each.key], "ipv6_cidr_block", [""]), 0) : null
-
-  map_customer_owned_ip_on_launch = element(lookup(var.database_subnets[each.key], "map_customer_owned_ip_on_launch", [""]), 0) 
-
-  map_public_ip_on_launch = tobool(element(lookup(var.database_subnets[each.key], "map_public_ip_on_launch", ["false"]), 0))
-
-  outpost_arn = element(lookup(var.database_subnets[each.key], "outpost_arn", [""]), 0)
-
-  tags = merge(
-    {
-      "Name" = element(lookup(var.database_subnets[each.key], "database_subnet_name", [""]), 0)
-    },
-    element(lookup(var.database_subnets[each.key], "tags", {}), 0 ),
-  )
-}

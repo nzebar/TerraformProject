@@ -44,14 +44,14 @@ nat_gateways = {
     natGW-usEast1a = {
         "nat_gateway_name" = ["natGW-usEast1a"]
         "eip_allocation_id" = [module.GATEWAYS_VPC1.internet_gateway_igw1.id]
-        "subnet_id" = [module.SUBNETS_VPC1.aws_subnet_public_subnets_subnet1.id]
+        "subnet_id" = [ module.SUBNETS_VPC1.private_subnet_1.id ]
         
         }
 
     natGW-usEast1b = {
         "nat_gateway_name" = ["natGW-usEast1b"]
         "eip_allocation_id" = [module.GATEWAYS_VPC1.internet_gateway_igw1.id]
-        "subnet_id" = [module.SUBNETS_VPC1.aws_subnet_public_subnets_subnet2.id]
+        "subnet_id" = [ module.SUBNETS_VPC1.private_subnet_2.id ]
         }
     }
 

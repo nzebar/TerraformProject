@@ -10,22 +10,39 @@ output "aws_default_route_table_default" {
 ## Public route table Outputs ##
 #################################
 
-output "aws_route_table_public" {
-    value = aws_route_table.public[*]
+output "Public_Route_Table_1" {
+    value = aws_route_table.route_tables["Public_Route_Table_1"]
+}
+
+output "Public_Route_Table_2" {
+    value = aws_route_table.route_tables["Public_Route_Table_2"]
 }
 
 #################################
 ## Private route table Outputs ##
 #################################
 
-output "aws_route_table_private" {
-    value = aws_route_table.private[*]
+output "Private_Route_Table_1" {
+    value = aws_route_table.route_tables["Private_Route_Table_1"]
+}
+
+output "Private_Route_Table_2" {
+    value = aws_route_table.route_tables["Private_Route_Table_2"]
 }
 
 ##################################
 ## Database route table Outputs ##
 ##################################
 
-output "aws_route_table_database" {
-    value = aws_route_table.database[*]
+output "Database_Route_Table_1" {
+    value = aws_route_table.route_tables["Database_Route_Table_1"]
 }
+
+output "Database_Route_Table_2" {
+    value = aws_route_table.route_tables["Database_Route_Table_2"]
+}
+
+output "Database_Route_Table_3" {
+    value = aws_route_table.route_tables["Database_Route_Table_3"]
+}
+

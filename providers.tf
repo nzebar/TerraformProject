@@ -19,9 +19,9 @@ provider "aws" {
 }
 
 
-####################
-##  CI/CD Modules ##
-####################
+###################
+#  CI/CD Modules ##
+###################
 
     ##########################
     #  CI/CD Source Modules ##
@@ -63,9 +63,9 @@ module "GET_COMPUTE_MODULES" {
 source = "./Input-Values/Compute"
 }
 
-#####################
-## Network Modules ##
-#####################
+####################
+# Network Modules ##
+####################
 
 module "GET_NETWORK_MODULES" {
   source = "./Input-Values/Network-Input-Values"

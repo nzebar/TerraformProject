@@ -21,11 +21,11 @@ output "egress_internet_gateway_igw1" {
 output "nat_gateway_id_useast1a" {
     value = aws_nat_gateway.nat_gateway["natGW-usEast1a"]
 
-    depends_on = [aws_nat_gateway.nat_gateway]
+    #depends_on = [aws_nat_gateway.nat_gateway]
 }
 
 output "nat_gateway_id_useast1b" {
     value = aws_nat_gateway.nat_gateway["natGW-usEast1b"]
 
-    depends_on = [aws_nat_gateway.nat_gateway]
+    #depends_on = [aws_nat_gateway.nat_gateway]
 }

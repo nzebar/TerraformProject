@@ -56,17 +56,14 @@ variable "vpc_tags" {
 ## VPC: Secondary CIDR Block Variables ##
 #########################################
 
-variable "vpc_id_sub_cidr" {
-    type = string
-    default = ""
+variable "associate_cidr_blocks" {
+    description = "Whether or not to associate the specified cidr blocks with the newly created VPC"
+    type = bool
+    default = false
 }
 
-variable "sub_cidr_vpc_id" {
-    type = string
-    default = ""
-}
-
-variable "sub_cidr_blocks" {
+variable "cidr_blocks_associated" {
+    description = "The cidr blocks to associate with the newly created vpc"
     type = list(string)
     default = []
 }

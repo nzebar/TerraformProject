@@ -2,7 +2,7 @@
 ## VPC ##
 #########
 
-resource "aws_vpc" "vpc1" {
+resource "aws_vpc" "vpc" {
   count = var.create_vpc ? 1 : 0
 
   cidr_block                       = var.cidr_block
@@ -26,11 +26,10 @@ resource "aws_vpc" "vpc1" {
 ###############################
 
 resource "aws_vpc_ipv4_cidr_block_association" "this" {
-  count = var.create_vpc && length(var.sub_cidr_blocks) > 0 ? length(var.sub_cidr_blocks) : 0
+  count = var.associate_cidr_blocks == true ? length(var.cidr_blocks_associated) : 0
 
-  vpc_id = var.vpc_id_sub_cidr
-
-  cidr_block = element(var.sub_cidr_blocks, count.index)
+  vpc_id = aws_vpc.vpc[0].id
+  cidr_block = var.cidr_blocks_associated[count.index]
 }
 
 ######################
@@ -61,7 +60,7 @@ resource "aws_vpc_dhcp_options" "this" {
 resource "aws_vpc_dhcp_options_association" "this" {
   count = var.create_vpc && var.enable_dhcp_options ? 1 : 0
 
-  vpc_id          = var.vpc_id_dhcp_options
-  dhcp_options_id = var.dhcp_options_id
+  vpc_id          = aws_vpc.vpc[0].id
+  dhcp_options_id = aws_vpc_dhcp_options.this[0].id
 }
 
