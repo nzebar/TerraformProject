@@ -3,7 +3,11 @@
 ################################
 
 variable "internet_gateways" {
-    type = any
+    type = map(object({
+        igw_name = string
+        vpc_id = string
+        tags = map(string)
+    }))
     default = {}
 }
 
@@ -12,7 +16,11 @@ variable "internet_gateways" {
 ############################################
 
 variable "egress_internet_gateways" {
-    type = any
+    type = map(object({
+        egress_igw_name = string
+        vpc_id = string
+        tags = map(string)
+    }))
     default = {}
 }
 
@@ -21,7 +29,12 @@ variable "egress_internet_gateways" {
 ##############################
 
 variable "nat_gateways" {
-    type = any
+    type = map(object({
+        nat_gateway_name = string
+        eip_allocation_id = string
+        subnet_id = string
+        tags = map(string)
+    }))
     default = {}
 }
 

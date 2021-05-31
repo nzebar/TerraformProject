@@ -1,37 +1,38 @@
 module "GATEWAYS_VPC1" {
   source = "../../Modules/Network-Modules/Default-modules/Gateways-Module-Default"
 
-#############################
-## Internet Gateway Config ##
-#############################
-#Ref lines 62 - 78 of main.tf file.
+#######################
+## Internet Gateways ##
+#######################
 internet_gateways = {
 
-    igw1 = {
-        "vpc_id" = [module.VPC_VPC1.vpc.id] #default
-        "igw_name" = ["VPC1-igw1"]
-        "igw_tags" = [{
-            "VPC1" = "igw"
-        }]
+    Internet_Gateway_1_VPC1 = {
+        igw_name = "IGW_1_VPC1"
 
+        vpc_id = module.VPC_VPC1.vpc.id
+
+        tags = {
+            "Internet_Gateways" = "IGW_1_VPC1"
+        }
     }
 
 }
 
-##########################################
-## Egress Only Internet Gateway Config. ##
-##########################################
-# Ref lines 80 - 96 of main.tf file.
+###################################
+## Egress Only Internet Gateways ##
+###################################
 egress_internet_gateways = {
 # assign_generated_ipv6_cidr_block in VPC1 module must = true
 
-    egress_gw1 = {
-        "vpc_id" = [module.VPC_VPC1.vpc.id]
-        "egress_igw_name" = ["egressIGW"] 
-        "egress_igw_tags" = [{
-            "egress" = "igw"
-        }]
-    }
+    # Egress_Only_Internet_Gateway_1_VPC1 = {
+    #     egress_igw_name = "EGRESS_IGW_1_VPC1"
+
+    #     vpc_id = module.VPC_VPC1.vpc.id
+         
+    #     tags = {
+    #         egress_only_internet_gateways = "EGRESS_IGW_1_VPC1"
+    #     }
+    # }
 
 }
 
@@ -41,18 +42,36 @@ egress_internet_gateways = {
 
 nat_gateways = {
 
-    natGW-usEast1a = {
-        "nat_gateway_name" = ["natGW-usEast1a"]
-        "eip_allocation_id" = [module.GATEWAYS_VPC1.internet_gateway_igw1.id]
-        "subnet_id" = [ module.SUBNETS_VPC1.private_subnet_1.id ]
-        
+    internet_gateway_1 = {
+        nat_gateway_name = "natGW-usEast1a"
+        eip_allocation_id = module.GATEWAYS_VPC1.Internet_Gateway_1_VPC1.id
+        subnet_id =  module.SUBNETS_VPC1.private_subnet_1.id 
+
+        tags = {
+            "internet_gateways" = "internet_gateway_1_VPC1"
+            }
         }
 
-    natGW-usEast1b = {
-        "nat_gateway_name" = ["natGW-usEast1b"]
-        "eip_allocation_id" = [module.GATEWAYS_VPC1.internet_gateway_igw1.id]
-        "subnet_id" = [ module.SUBNETS_VPC1.private_subnet_2.id ]
+    internet_gateway_2 = {
+        nat_gateway_name = "natGW-usEast1b"
+        eip_allocation_id = module.GATEWAYS_VPC1.Internet_Gateway_1_VPC1.id
+        subnet_id =  module.SUBNETS_VPC1.private_subnet_2.id 
+
+        tags = {
+            "internet_gateways" = "internet_gateway_2_VPC1"
+            }
         }
     }
+
+
+
+
+
+
+
+
+
+
+
 
 }

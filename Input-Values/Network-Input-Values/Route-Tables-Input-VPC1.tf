@@ -31,7 +31,7 @@ route_tables = {
         associated_routes = {
             Public_Route_1 =  {
                 cidr_block = "192.168.0.0/16"
-                gateway_id     = module.GATEWAYS_VPC1.internet_gateway_igw1.id
+                gateway_id     = module.GATEWAYS_VPC1.Internet_Gateway_1_VPC1.id
                 }
         }
 
@@ -51,7 +51,7 @@ route_tables = {
         associated_routes = {
           Public_Route_1 =  {
               cidr_block = "192.168.0.0/16"
-              "gateway_id"     = module.GATEWAYS_VPC1.internet_gateway_igw1.id
+              "gateway_id"     = module.GATEWAYS_VPC1.Internet_Gateway_1_VPC1.id
               }
         }
 
