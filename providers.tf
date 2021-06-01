@@ -20,12 +20,12 @@ provider "aws" {
 
 
 ###################
-#  CI/CD Modules ##
+## CI/CD Modules ##
 ###################
 
-#     ##########################
-#     #  CI/CD Source Modules ##
-#     ##########################
+#     ###########################
+#     ##  CI/CD Source Modules ##
+#     ###########################
 
 #     module "GET_CICD_SOURCE_MODULES" {
 #       source = "./Input-Values/CICD/Source"
@@ -63,13 +63,13 @@ provider "aws" {
 # source = "./Input-Values/Compute"
 # }
 
-####################
-# Network Modules ##
-####################
+#####################
+## Network Modules ##
+#####################
 
-module "GET_NETWORK_MODULES" {
-  source = "./Input-Values/Network-Input-Values"
-}
+  module "GET_NETWORK_MODULES" {
+    source = "./Input-Values/Network-Input-Values"
+  }
 
 # #################
 # ## IAM Modules ##

@@ -43,6 +43,459 @@ source = "../../Modules/Network-Modules/Default-modules/VPC-Modules-Default"
         "DHCP" = "DHCP_VPC1"
     }
 
+##########################
+## Default Route Tables ##
+##########################
+
+    manage_default_route_table = true
+    default_route_table_name = "Default_Route_Table"
+    default_route_table_id = module.VPC_VPC1.vpc_default_route_table_id
+    default_route_table_propagating_vgws = [] 
+    default_route_table_routes = {}
+
+    default_route_table_tags = {
+        "Default_Route_Table" = "Default_Route_Table_VPC1"
+    }
+
+##################
+## Route Tables ##
+##################
+
+route_tables = {
+
+    ## Public Route Table ## 
+            
+        Public_Route_Table_1 = {
+            ## ROUTE TABLE SETTIINGS ##
+            route_table_name = "Public_Route_Table_1"
+            vpc_id = module.VPC_VPC1.vpc.id
+            propagating_vgws = []
+
+            ## ASSOCIATED ROUTES ##
+            associated_routes = {
+                Public_Route_1 =  {
+                    cidr_block = "0.0.0.0/0"
+                    gateway_id     = "Internet_Gateway_1_VPC1"
+                    }
+            }
+
+            ## ROUTE TABLE TAGS ##
+            tags = {
+                Public_Route_Table = "Public_Route_Table_1"
+                }
+        }
+
+        Public_Route_Table_2 = {
+            ## ROUTE TABLE SETTIINGS ##
+            route_table_name = "Public_Route_Table_2"
+            vpc_id = module.VPC_VPC1.vpc.id
+            propagating_vgws = []
+
+            ## ASSOCIATED ROUTES ##
+            associated_routes = {
+                Public_Route_1 =  {
+                    cidr_block = "0.0.0.0/0"
+                    gateway_id     = "Internet_Gateway_1_VPC1"
+                    }
+            }
+
+            ## ROUTE TABLE TAGS ##
+            tags = {
+                Public_Route_Table = "Public_Route_Table_2"
+                }
+        }
+
+    ## Private Route Tables ##
+
+        Private_Route_Table_1 = {
+            ## ROUTE TABLE SETTIINGS ##
+            route_table_name = "Private_Route_Table_1"
+            vpc_id = module.VPC_VPC1.vpc.id
+            propagating_vgws = []
+
+            ## ASSOCIATED ROUTES ##
+            associated_routes = {
+                Private_Route_1 =  {
+                    cidr_block = "0.0.0.0/0"
+                    nat_gateway_id = "nat_gateway_1"
+                    }
+                }
+
+            ## ROUTE TABLE TAGS ##
+            tags = {
+                Public_Route_Table = "Private_Route_Table_1"
+                }
+        }
+
+        Private_Route_Table_2 = {
+            ## ROUTE TABLE SETTIINGS ##
+            route_table_name = "Private_Route_Table_2"
+            vpc_id = module.VPC_VPC1.vpc.id
+            propagating_vgws = []
+
+            ## ASSOCIATED ROUTES ##
+            associated_routes = {
+                Private_Route_1 =  {
+                    cidr_block = "0.0.0.0/0"
+                    nat_gateway_id = "nat_gateway_1"
+                    }
+                }
+
+            ## ROUTE TABLE TAGS ##
+            tags = {
+                Public_Route_Table = "Private_Route_Table_2"
+                }
+        }
+
+        
+    ## Database Route Tables ##
+
+        Database_Route_Table_1 = {
+            ## ROUTE TABLE SETTIINGS ##
+            route_table_name = "Database_Route_Table_1"
+            vpc_id = module.VPC_VPC1.vpc.id
+            propagating_vgws = []
+
+            ## ASSOCIATED ROUTES ##
+            associated_routes = {}
+
+            ## ROUTE TABLE TAGS ##
+            tags = {
+                Database_Route_Table = "Database_Route_Table_1"
+                }
+        }
+
+        Database_Route_Table_2 = {
+            ## ROUTE TABLE SETTIINGS ##
+            route_table_name = "Database_Route_Table_2"
+            vpc_id = module.VPC_VPC1.vpc.id
+            propagating_vgws = []
+            ## ASSOCIATED ROUTES ##
+            associated_routes = {}
+
+            ## ROUTE TABLE TAGS ##
+            tags = {
+                Database_Route_Table = "Database_Route_Table_2"
+                }
+        }
+
+        Database_Route_Table_3 = {
+            ## ROUTE TABLE SETTIINGS ##
+            route_table_name = "Database_Route_Table_3"
+            vpc_id = module.VPC_VPC1.vpc.id
+            propagating_vgws = []
+
+            ## ASSOCIATED ROUTES ##
+            associated_routes = {}
+
+            ## ROUTE TABLE TAGS ##
+            tags = {
+                Database_Route_Table = "Database_Route_Table_3"
+                }
+        }
+}
+
+########################
+## DESTINATION ROUTES ##
+########################
+
+       
+     ## VPC Peering Connection ##
+
+        vpc_peering_connections = {
+
+            peering_connection_1 = {
+                peer_owner_id = ""
+                peer_vpc_id = ""
+                vpc_id = ""
+                auto_accept = true
+                peer_region = ""
+                acceptor = {
+                    allow_remote_vpc_dns_resolution = true
+                    allow_classic_link_to_remote_vpc = true
+                    allow_vpc_to_remote_classic_link = true
+                }
+                requester = {
+                    allow_remote_vpc_dns_resolution = true
+                    allow_classic_link_to_remote_vpc = true
+                    allow_vpc_to_remote_classic_link = true
+                }
+                tags = { 
+                    "key" = "value"
+                }
+            }
+
+        }
+
+        
+    ## Internet Gateways ##
+        
+        internet_gateways = {
+
+            Internet_Gateway_1_VPC1 = {
+                igw_name = "IGW_1_VPC1"
+
+                vpc_id = module.VPC_VPC1.vpc.id
+
+                tags = {
+                    "Internet_Gateways" = "IGW_1_VPC1"
+                }
+            }
+        }
+
+        
+    ## Egress Only Internet Gateways ##
+        
+        egress_internet_gateways = {
+        # assign_generated_ipv6_cidr_block in VPC1 module must = true
+
+            Egress_Only_Internet_Gateway_1_VPC1 = {
+                egress_igw_name = "EGRESS_IGW_1_VPC1"
+
+                vpc_id = module.VPC_VPC1.vpc.id
+                
+                tags = {
+                    egress_only_internet_gateways = "EGRESS_IGW_1_VPC1"
+                }
+            }
+
+        }
+
+        
+    ## NAT Gateways ##
+        
+        nat_gateways = {
+
+            nat_gateway_1 = {
+                nat_gateway_name = "nat_gateway_1_VPC1"
+                subnet_id =  "public_subnet_1"
+                create_new_eip = true
+                new_eip_index = 0
+                eip_allocation_id = ""
+                
+                new_eip_tags = { "nat_gw_eip" = "nat_gw_1_eip" }
+                tags = { "internet_gateways" = "internet_gateway_1_VPC1" }
+                }
+
+            nat_gateway_2 = {
+                nat_gateway_name = "nat_gateway_2_VPC1"
+                subnet_id =  "public_subnet_2"
+                create_new_eip = true
+                new_eip_index = 1
+                eip_allocation_id = ""
+
+                new_eip_tags = { "nat_gw_eip" = "nat_gw_2_eip" }
+                tags = { "internet_gateways" = "internet_gateway_2_VPC1" }
+                }
+
+            }
+
+        
+    ## VPC Endpoints ##
+        
+        vpc_endpoints = {
+
+            vpc_endpoint_1 = {
+                vpc_endpoint_type = "Interface"
+                service_name = "" 
+                vpc_id = ""
+                auto_accept = true
+                policy = ""
+                private_dns_enabled = true
+                route_table_ids = []
+                subnet_ids = []
+                security_group_ids = []
+
+                tags = {
+                    "key" = "value"
+                }
+            }
+
+        }
+
+       
+    ## Transit Gateways ##
+        
+        transit_gateways = {
+            transit_gateway_1 = {
+                description = ""
+                amazon_side_asn = 64512
+                auto_accept_shared_attachments = "disable"
+                default_route_table_association = "disable"
+                default_route_table_propagation = "disable"
+                dns_support = "disable"
+                vpn_ecmp_support = "disable"
+
+                tags = {
+                    "key" = "value"
+                }
+            }
+        }
+
+######################
+## Declared Subnets ##
+######################
+
+subnets = {
+
+    ## Public Subnets ##
+        
+        public_subnet_1 = {
+            subnet_name = "public_subnet_1"
+            vpc_id = module.VPC_VPC1.vpc.id
+            cidr_block = "192.168.1.0/24"
+            availability_zone = "us-east-1a"
+            customer_owned_ipv4_pool = "" 
+            assign_ipv6_address_on_creation = false
+            ipv6_cidr_block = ""
+            map_customer_owned_ip_on_launch = false
+            map_public_ip_on_launch = false
+            outpost_arn = ""
+
+            route_table_association = "Public_Route_Table_1"
+
+            tags = {
+                "Public_Subnet" = "Public_Subnet_1",
+            }
+        }
+
+        public_subnet_2 = {
+            subnet_name = "public_subnet_2"
+            vpc_id = module.VPC_VPC1.vpc.id
+            cidr_block = "192.168.2.0/24"
+            availability_zone = "us-east-1b"
+            customer_owned_ipv4_pool = "" 
+            assign_ipv6_address_on_creation = false
+            ipv6_cidr_block = ""
+            map_customer_owned_ip_on_launch = false
+            map_public_ip_on_launch = false
+            outpost_arn = ""
+
+            route_table_association = "Public_Route_Table_2"
+
+            tags = {
+                "Public_Subnet" = "Public_Subnet_2",
+            }
+        }
+
+     
+    ## Private Subnets ##
+    
+        private_subnet_1 = {
+            subnet_name = "private_subnet_1"
+            vpc_id = module.VPC_VPC1.vpc.id
+            cidr_block = "192.168.3.0/24"
+            availability_zone = "us-east-1a"
+            customer_owned_ipv4_pool = "" 
+            assign_ipv6_address_on_creation = false
+            ipv6_cidr_block = ""
+            map_customer_owned_ip_on_launch = false
+            map_public_ip_on_launch = false
+            outpost_arn = ""
+
+            route_table_association = "Private_Route_Table_1"
+
+            tags = {
+                "Private_Subnet" = "Private_Subnet_1",
+            }
+        }
+
+        private_subnet_2 = {
+            subnet_name = "private_subnet_2"
+            vpc_id = module.VPC_VPC1.vpc.id
+            cidr_block = "192.168.4.0/24"
+            availability_zone = "us-east-1b"
+            customer_owned_ipv4_pool = "" 
+            assign_ipv6_address_on_creation = false
+            ipv6_cidr_block = ""
+            map_customer_owned_ip_on_launch = false
+            map_public_ip_on_launch = false
+            outpost_arn = ""
+
+            route_table_association = "Private_Route_Table_2"
+
+            tags = {
+                "Private_Subnet" = "Private_Subnet_2",
+            }
+        }
+
+    ## Database Subnets ##
+
+        database_subnet_1 = {
+            subnet_name = "database_subnet_1"
+            vpc_id = module.VPC_VPC1.vpc.id
+            cidr_block = "192.168.5.0/24"
+            availability_zone = "us-east-1a"
+            customer_owned_ipv4_pool = "" 
+            assign_ipv6_address_on_creation = false
+            ipv6_cidr_block = ""
+            map_customer_owned_ip_on_launch = false
+            map_public_ip_on_launch = false
+            outpost_arn = ""
+
+            route_table_association = "Database_Route_Table_1"
+
+            tags = {
+                "Database_Subnet" = "Database_Subnet_1",
+            }
+        }
+
+        database_subnet_2 = {
+            subnet_name = "database_subnet_2"
+            vpc_id = module.VPC_VPC1.vpc.id
+            cidr_block = "192.168.6.0/24"
+            availability_zone = "us-east-1b"
+            customer_owned_ipv4_pool = "" 
+            assign_ipv6_address_on_creation = false
+            ipv6_cidr_block = ""
+            map_customer_owned_ip_on_launch = false
+            map_public_ip_on_launch = false
+            outpost_arn = ""
+
+            route_table_association = "Database_Route_Table_2"
+
+            tags = {
+                "Database_Subnet" = "Database_Subnet_2",
+            }
+        }
+
+        database_subnet_3 = {
+            subnet_name = "database_subnet_3"
+            vpc_id = module.VPC_VPC1.vpc.id
+            cidr_block = "192.168.7.0/24"
+            availability_zone = "us-east-1c"
+            customer_owned_ipv4_pool = "" 
+            assign_ipv6_address_on_creation = false
+            ipv6_cidr_block = ""
+            map_customer_owned_ip_on_launch = false
+            map_public_ip_on_launch = false
+            outpost_arn = ""
+
+            route_table_association = "Database_Route_Table_3"
+
+            tags = {
+                "Database_Subnet" = "Database_Subnet_3",
+            }
+        }
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

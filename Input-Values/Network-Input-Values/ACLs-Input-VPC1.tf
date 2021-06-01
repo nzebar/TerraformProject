@@ -59,8 +59,8 @@ public_network_acl = {
         public_network_acl_name = "VPC1_Public_NACL_1"
         vpc_id = module.VPC_VPC1.vpc.id
         public_acl_subnet_ids = [
-            module.SUBNETS_VPC1.public_subnet_1.id,
-            module.SUBNETS_VPC1.public_subnet_2.id
+            module.VPC_VPC1.public_subnet_1.id,
+            module.VPC_VPC1.public_subnet_2.id
         ]
 
         public_network_acl_ingress = {
@@ -206,7 +206,7 @@ public_network_acl = {
 
             # egress_rule_6 = {
             #     action = "allow"
-            #     cidr_block = module.SUBNETS_VPC1.private_subnet_1.cidr_block
+            #     cidr_block = module.VPC_VPC1.private_subnet_1.cidr_block
             #     protocol = "tcp"
             #     rule_no = 298
             #     from_port = 22
@@ -218,7 +218,7 @@ public_network_acl = {
 
             # egress_rule_7 = {
             #     action = "allow"
-            #     cidr_block = module.SUBNETS_VPC1.private_subnet_2.cidr_block
+            #     cidr_block = module.VPC_VPC1.private_subnet_2.cidr_block
             #     protocol = "tcp"
             #     rule_no = 299
             #     from_port = 22
@@ -258,15 +258,15 @@ private_network_acl = {
         private_network_acl_name = "VPC1_Private_NACL_1"
         vpc_id = module.VPC_VPC1.vpc.id
         private_acl_subnet_ids = [
-            module.SUBNETS_VPC1.private_subnet_1.id,
-            module.SUBNETS_VPC1.private_subnet_2.id
+            module.VPC_VPC1.private_subnet_1.id,
+            module.VPC_VPC1.private_subnet_2.id
             ]
 
         private_network_acl_ingress = {
 
             ingress_rule_1 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_1.cidr_block
                 protocol = "tcp"
                 rule_no = 10
                 from_port = 443
@@ -278,7 +278,7 @@ private_network_acl = {
 
             ingress_rule_2 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_2.cidr_block
                 protocol = "tcp"
                 rule_no = 11
                 from_port = 443
@@ -290,7 +290,7 @@ private_network_acl = {
 
             ingress_rule_3 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_1.cidr_block
                 protocol = "tcp"
                 rule_no = 30
                 from_port = 80
@@ -302,7 +302,7 @@ private_network_acl = {
 
             ingress_rule_4 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_2.cidr_block
                 protocol = "tcp"
                 rule_no = 31
                 from_port = 80
@@ -314,7 +314,7 @@ private_network_acl = {
 
             ingress_rule_5 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_1.cidr_block
                 protocol = "udp"
                 rule_no = 40
                 from_port = 80
@@ -326,7 +326,7 @@ private_network_acl = {
 
             ingress_rule_6 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_2.cidr_block
                 protocol = "udp"
                 rule_no = 41
                 from_port = 80
@@ -338,7 +338,7 @@ private_network_acl = {
 
             ingress_rule_7 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_1.cidr_block
                 protocol = "tcp"
                 rule_no = 50
                 from_port = 1024
@@ -350,7 +350,7 @@ private_network_acl = {
 
             ingress_rule_8 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_2.cidr_block
                 protocol = "tcp"
                 rule_no = 51
                 from_port = 1024
@@ -362,7 +362,7 @@ private_network_acl = {
 
             ingress_rule_9 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_1.cidr_block
                 protocol = "udp"
                 rule_no = 60
                 from_port = 1024
@@ -374,7 +374,7 @@ private_network_acl = {
 
             ingress_rule_10 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_2.cidr_block
                 protocol = "udp"
                 rule_no = 61
                 from_port = 1024
@@ -386,7 +386,7 @@ private_network_acl = {
 
             ingress_rule_11 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.database_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.database_subnet_1.cidr_block
                 protocol = "tcp"
                 rule_no = 70
                 from_port = 3306
@@ -398,7 +398,7 @@ private_network_acl = {
 
             ingress_rule_12 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.database_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.database_subnet_2.cidr_block
                 protocol = "tcp"
                 rule_no = 71
                 from_port = 3306
@@ -410,7 +410,7 @@ private_network_acl = {
 
             ingress_rule_13 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.database_subnet_3.cidr_block
+                cidr_block = module.VPC_VPC1.database_subnet_3.cidr_block
                 protocol = "tcp"
                 rule_no = 72
                 from_port = 3306
@@ -422,7 +422,7 @@ private_network_acl = {
 
             # ingress_rule_14 = {
             #     action = "allow"
-            #     cidr_block = module.SUBNETS_VPC1.public_subnet_1.cidr_block
+            #     cidr_block = module.VPC_VPC1.public_subnet_1.cidr_block
             #     protocol = "tcp"
             #     rule_no = 299
             #     from_port = 22
@@ -434,7 +434,7 @@ private_network_acl = {
 
             # ingress_rule_15 = {
             #     action = "allow"
-            #     cidr_block = module.SUBNETS_VPC1.public_subnet_2.cidr_block
+            #     cidr_block = module.VPC_VPC1.public_subnet_2.cidr_block
             #     protocol = "tcp"
             #     rule_no = 300
             #     from_port = 22
@@ -463,7 +463,7 @@ private_network_acl = {
 
             egress_rule_2 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_1.cidr_block
                 protocol = "tcp"
                 rule_no = 30
                 from_port = 80
@@ -475,7 +475,7 @@ private_network_acl = {
 
             egress_rule_3 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_2.cidr_block
                 protocol = "tcp"
                 rule_no = 31
                 from_port = 80
@@ -487,7 +487,7 @@ private_network_acl = {
 
             egress_rule_4 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_1.cidr_block
                 protocol = "udp"
                 rule_no = 40
                 from_port = 80
@@ -499,7 +499,7 @@ private_network_acl = {
 
             egress_rule_5 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_2.cidr_block
                 protocol = "udp"
                 rule_no = 41
                 from_port = 80
@@ -511,7 +511,7 @@ private_network_acl = {
 
             egress_rule_6 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_1.cidr_block
                 protocol = "tcp"
                 rule_no = 50
                 from_port = 1024
@@ -523,7 +523,7 @@ private_network_acl = {
 
             egress_rule_7 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_2.cidr_block
                 protocol = "tcp"
                 rule_no = 51
                 from_port = 1024
@@ -535,7 +535,7 @@ private_network_acl = {
 
             egress_rule_7 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_1.cidr_block
                 protocol = "udp"
                 rule_no = 60
                 from_port = 1024
@@ -546,7 +546,7 @@ private_network_acl = {
                 }
             egress_rule_8 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_2.cidr_block
                 protocol = "udp"
                 rule_no = 61
                 from_port = 1024
@@ -558,7 +558,7 @@ private_network_acl = {
             
             egress_rule_8 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.database_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.database_subnet_1.cidr_block
                 protocol = "tcp"
                 rule_no = 70
                 from_port = 3306
@@ -570,7 +570,7 @@ private_network_acl = {
 
             egress_rule_9 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.database_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.database_subnet_2.cidr_block
                 protocol = "tcp"
                 rule_no = 71
                 from_port = 3306
@@ -582,7 +582,7 @@ private_network_acl = {
 
             egress_rule_10 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.database_subnet_3.cidr_block
+                cidr_block = module.VPC_VPC1.database_subnet_3.cidr_block
                 protocol = "tcp"
                 rule_no = 72
                 from_port = 3306
@@ -594,7 +594,7 @@ private_network_acl = {
 
             egress_rule_11 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_1.cidr_block
                 protocol = "tcp"
                 rule_no = 299
                 from_port = 22
@@ -606,7 +606,7 @@ private_network_acl = {
 
             egress_rule_12 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.public_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.public_subnet_2.cidr_block
                 protocol = "tcp"
                 rule_no = 300
                 from_port = 22
@@ -634,16 +634,16 @@ database_network_acl = {
         database_network_acl_name = "VPC1_Database_NACL"
         vpc_id = module.VPC_VPC1.vpc.id
         database_acl_subnet_ids = [
-            module.SUBNETS_VPC1.database_subnet_1.id,
-            module.SUBNETS_VPC1.database_subnet_2.id,
-            module.SUBNETS_VPC1.database_subnet_3.id
+            module.VPC_VPC1.database_subnet_1.id,
+            module.VPC_VPC1.database_subnet_2.id,
+            module.VPC_VPC1.database_subnet_3.id
             ]
 
         database_network_acl_ingress = {
 
             ingress_rule_1 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.private_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.private_subnet_1.cidr_block
                 protocol = "tcp"
                 rule_no = 1
                 from_port = 3306
@@ -656,7 +656,7 @@ database_network_acl = {
 
             ingress_rule_2 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.private_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.private_subnet_2.cidr_block
                 protocol = "tcp"
                 rule_no = 2
                 from_port = 3306
@@ -671,7 +671,7 @@ database_network_acl = {
 
             egress_rule_1 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.private_subnet_1.cidr_block
+                cidr_block = module.VPC_VPC1.private_subnet_1.cidr_block
                 protocol = "tcp"
                 rule_no = 1
                 from_port = 3306
@@ -683,7 +683,7 @@ database_network_acl = {
 
             egress_rule_2 = {
                 action = "allow"
-                cidr_block = module.SUBNETS_VPC1.private_subnet_2.cidr_block
+                cidr_block = module.VPC_VPC1.private_subnet_2.cidr_block
                 protocol = "tcp"
                 rule_no = 2
                 from_port = 3306
