@@ -1,25 +1,27 @@
 ##################
 ## VPC Overview ##
 ##################
-Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc
+[VPC Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc)
 
 Allows you to create a vpc in the desired AWS account.
 Use the following example to use as reference for inputing values to create a VPC
 Example:
 
-    create_vpc = bool <- Whether or not to create the VPC
-    vpc_name = "" <- VPC name to be mreged with the tags below
-    cidr_block       = "" <- CIDR block for the VPC
-    assign_generated_ipv6_cidr_block = bool <- Whether or not to assign IPv6 CIDR block to the VPC
-    instance_tenancy = "" <- "default" || "dedicated" ## Unless big $$$, use default
-    enable_dns_support = bool <- If DNS resolution is supported. If true DNS servers are @ 169.254.169.253 || base VPC CIDR Block + 2
-    enable_dns_hostnames = bool <- automaticaly assigns resolvable public DNS hostnames to Public IP addresses
-    enable_classiclink = bool <- Whether or not allow the creation of a classic link for EC2 classic instances
-    enable_classiclink_dns_support = bool
+```t
+    create_vpc = bool # Whether or not to create the VPC
+    vpc_name = string # VPC name to be mreged with the tags below
+    cidr_block       = string # CIDR block for the VPC
+    assign_generated_ipv6_cidr_block = string # Whether or not to assign IPv6 CIDR block to the VPC
+    instance_tenancy = string # "default" || "dedicated". Unless big $$$, use default
+    enable_dns_support = bool # If DNS resolution is supported. If true DNS servers are @ 169.254.169.253 || base VPC CIDR Block + 2
+    enable_dns_hostnames = bool # automaticaly assigns resolvable public DNS hostnames to Public IP addresses
+    enable_classiclink = bool # Whether or not allow the creation of a classic link for EC2 classic instances
+    enable_classiclink_dns_support = bool # Whether to enable classic link dns support
     
     vpc_tags = {
-        "Key" = "Value" <- Tags for the VPC
+        "Key" = "Value" # Tags for the VPC
     }
+```
 
 #########################################
 ## VPC: Associated CIDR Block Overview ##
