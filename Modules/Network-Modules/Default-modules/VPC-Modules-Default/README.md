@@ -1,6 +1,6 @@
-################
-## VPC Config ##
-################
+##################
+## VPC Overview ##
+##################
 Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc
 
 Allows you to create a vpc in the desired AWS account.
@@ -21,9 +21,9 @@ Example:
         "Key" = "Value" <- Tags for the VPC
     }
 
-################################
-## VPC: Associated CIDR Block ##
-################################
+#########################################
+## VPC: Associated CIDR Block Overview ##
+#########################################
 Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipv4_cidr_block_association
 
 Allows you to associate extra CIDR block for the newly created VPC.
@@ -32,9 +32,9 @@ Use the example below as reference:
     associate_cidr_blocks = bool <- Whether or not to associate the CIDR blocks below with the VPC
     cidr_blocks_associated = [""] <- The CIDR blocks to associate with the VPC
 
-##############################
-## DHCP Options Set Config. ##
-##############################
+###############################
+## DHCP Options Set Overview ##
+###############################
 Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_dhcp_options
 
 Allows you to create a DHCP options set for the VPC.
@@ -51,9 +51,6 @@ Use the example below as reference:
     dhcp_options_tags = {
         "Key" = "Value" <- Tags to associate with the DHCP options set
     }
-
-
-
 
 ################################################
 ## Default Route Table / Route Table Overview ##
@@ -86,6 +83,7 @@ Use the following example to create a default route table for the VPC:
 Allows you to create multiple instances of route tables to deploy.
 Use the following reference to specify a route table to be provisiioned:
 
+route_tables = {
         Example_Route_Table = {
             ## ROUTE TABLE SETTIINGS ##
             route_table_name = "" <- Name of the Route Table to be merged with the tags below
@@ -105,6 +103,7 @@ Use the following reference to specify a route table to be provisiioned:
                 "Key" = "Value" <- Tags to associate with the route table
                 }
         }
+    }
 
     ## Notes: 
         - When specifyiing TargetArguments in the "associated routes" map. Use the KEY from one of the desired entries in the TARGET ROUTES section below to use for a TargetArgument.
@@ -127,6 +126,8 @@ Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest
 Allows you to create as many VPC peering connections as desired.
 Use the follwoing example to as a reference:
 
+vpc_peering_connections = {
+
     peering_connection_1 = {
             peer_owner_id = "" <- The AWS account ID of the owner for which the peering connection will connect with
             peer_vpc_id = "" <- ID of the VPC for which you will be creating the peering connection with
@@ -147,12 +148,16 @@ Use the follwoing example to as a reference:
                 "key" = "value" <- Tags to be assocaited with the VPC peering connection
             }
         }
+
+    }
  
 ## Internet Gateway ##
 Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway
 
 Allows you to create as many Internet Gateways as desired.
 Use the follwoing example to as a reference:
+
+internet_gateways = {
 
     Example_Internet_Gateway = {
             igw_name = "" <- IGW name to be merged with the tags below
@@ -163,12 +168,16 @@ Use the follwoing example to as a reference:
                 "Key" = "Value" <- Tags to associate with the IGW
             }
         }
+    
+    }
 
 ## Egress Only Internet Gateways ##
 Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/egress_only_internet_gateway
 
 Allows you to create as many Egress Only Internet Gateways as desired.
 Use the follwoing example to as a reference:
+
+egress_internet_gateways = {
 
     Example_Egress_Only_Internet_Gateway = {
             egress_igw_name = "Example_Name" <- Egress only IGW name to be merged with the tags below
@@ -180,11 +189,15 @@ Use the follwoing example to as a reference:
             }
         }
 
+    }
+
 ## NAT Gateways ##
 Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway
 
 Allows you to create as many NAT Gateways as desired.
 Use the follwoing example to as a reference:
+
+nat_gateways = {
 
      Example_NAT_Gateway = {
             nat_gateway_name = "" <- Name of NAT Gateway to be merged with the tags below
@@ -195,7 +208,8 @@ Use the follwoing example to as a reference:
             
             tags = { "Key" = "Value" } <- Tags to associate with the NAT Gateway
             }
-    
+
+    }
     Notes:
         new_eip_index - A list of new EIPs is created base upon the number of NAT gateways that specified true for creating a new EIP.
                         The index number tells Terraform which EIP amongst that list to associate with each NAT Gateway.
@@ -239,6 +253,8 @@ Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest
 Allows you to create as many VPC Endpoints as desired.
 Use the follwoing example to as a reference:
 
+vpc_endpoints = {
+
         Example_VPC_Endpoint = {
             vpc_endpoint_type = "" <- Type of VPC Endpoint
             service_name = "" <- Service name for the VPC Endpoint
@@ -255,12 +271,16 @@ Use the follwoing example to as a reference:
             }
         }
 
+    }
+
 ## Transit Gateways ##
 Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway
 
 Allows you to create as many Transit Gateways as desired.
 Use the follwoing example to as a reference:
        
+transit_gateways = {
+
         Example_Transit_Gateway = {
             description = "" <- Description of Transit Gateway
             amazon_side_asn = number <- ASN for the Amazon side BGP session.  
@@ -274,15 +294,19 @@ Use the follwoing example to as a reference:
                 "key" = "value" <- Tags to associate with the Transit Gateway
             }
         }
+    
+    }
 
-#############
-## Subnets ##
-#############   
+######################
+## Subnets Overview ##
+######################   
 Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
 
 Allows you to create as many Subnets as desired.
 As well, allows you to associate the subnet with a route table.
 Use the follwoing example to as a reference:
+
+subnets = {
 
         Example_Subnet = {
             subnet_name = "" <- Name of subnet to be merged with the tags below
@@ -302,3 +326,5 @@ Use the follwoing example to as a reference:
                 "Key" = "Value", <- The tags to associate with the subnet
             }
         }
+
+    }

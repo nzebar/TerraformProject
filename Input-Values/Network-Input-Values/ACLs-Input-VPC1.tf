@@ -1,9 +1,9 @@
 module "ACLS_VPC1" {
 source = "../../Modules/Network-Modules/Default-modules/ACL-Modules-Default"
 
-########################
-## VPC1: Default NACl ##
-########################
+#######################
+## VPC1: Default ACl ##
+#######################
 default_network_acl = {
 
     Default_Network_ACL = {
@@ -45,8 +45,7 @@ default_network_acl = {
             "default_network_acl" = "VPC1_Default_ACL"
         }
     }
-
-
+    
 }
 
 
