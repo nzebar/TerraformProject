@@ -1,6 +1,7 @@
 ################
 ## VPC Config ##
 ################
+Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc
 
 Allows you to create a vpc in the desired AWS account.
 Use the following example to use as reference for inputing values to create a VPC
@@ -23,6 +24,7 @@ Example:
 ################################
 ## VPC: Associated CIDR Block ##
 ################################
+Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipv4_cidr_block_association
 
 Allows you to associate extra CIDR block for the newly created VPC.
 Use the example below as reference:
@@ -33,6 +35,7 @@ Use the example below as reference:
 ##############################
 ## DHCP Options Set Config. ##
 ##############################
+Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_dhcp_options
 
 Allows you to create a DHCP options set for the VPC.
 Use the example below as reference:
@@ -55,6 +58,9 @@ Use the example below as reference:
 ################################################
 ## Default Route Table / Route Table Overview ##
 ################################################
+Resource Reference:
+- Default Route Table: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_route_table
+- Route Table: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table
 
 ## Default Route Table ##
 
@@ -116,6 +122,7 @@ Use the following reference to specify a route table to be provisiioned:
 #################################
 
 ## VPC Peering Connection ##
+Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection
 
 Allows you to create as many VPC peering connections as desired.
 Use the follwoing example to as a reference:
@@ -141,7 +148,9 @@ Use the follwoing example to as a reference:
             }
         }
  
- ## Internet Gateway ##
+## Internet Gateway ##
+Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway
+
 Allows you to create as many Internet Gateways as desired.
 Use the follwoing example to as a reference:
 
@@ -156,6 +165,8 @@ Use the follwoing example to as a reference:
         }
 
 ## Egress Only Internet Gateways ##
+Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/egress_only_internet_gateway
+
 Allows you to create as many Egress Only Internet Gateways as desired.
 Use the follwoing example to as a reference:
 
@@ -170,6 +181,8 @@ Use the follwoing example to as a reference:
         }
 
 ## NAT Gateways ##
+Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway
+
 Allows you to create as many NAT Gateways as desired.
 Use the follwoing example to as a reference:
 
@@ -221,6 +234,8 @@ Use the follwoing example to as a reference:
                         ** Since there are two NAT Gateway instances that are creating a new EIP "Example_NAT_Gateway_1" will receive the first new EIP. "Example_NAT_Gateway_2" will receive the second new EIP
 
 ## VPC Endpoints ##
+Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint
+
 Allows you to create as many VPC Endpoints as desired.
 Use the follwoing example to as a reference:
 
@@ -241,6 +256,8 @@ Use the follwoing example to as a reference:
         }
 
 ## Transit Gateways ##
+Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway
+
 Allows you to create as many Transit Gateways as desired.
 Use the follwoing example to as a reference:
        
@@ -260,7 +277,9 @@ Use the follwoing example to as a reference:
 
 #############
 ## Subnets ##
-#############        
+#############   
+Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
+
 Allows you to create as many Subnets as desired.
 As well, allows you to associate the subnet with a route table.
 Use the follwoing example to as a reference:
