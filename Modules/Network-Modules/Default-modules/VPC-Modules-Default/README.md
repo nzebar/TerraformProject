@@ -1,4 +1,4 @@
-## VPC Overview 
+# VPC Overview 
 
 Use the following example to use as reference to create a VPC:
 
@@ -20,7 +20,7 @@ Use the following example to use as reference to create a VPC:
     }
 ```
 
-## VPC: Associated CIDR Block Overview 
+# VPC: Associated CIDR Block Overview 
 
 Use the example below as reference to associate extra CIDR block for the newly created VPC:
 
@@ -31,7 +31,7 @@ Use the example below as reference to associate extra CIDR block for the newly c
     cidr_blocks_associated = list(string) # The CIDR blocks to associate with the VPC
 ```
 
-## DHCP Options Set Overview 
+# DHCP Options Set Overview 
 
 Use the example below as reference to create a DHCP options set for the VPC:
 
@@ -51,9 +51,9 @@ Use the example below as reference to create a DHCP options set for the VPC:
     }
 ```
 
-## Default Route Table / Route Table Overview 
+# Default Route Table / Route Table Overview 
 
-# Default Route Table 
+## Default Route Table 
 
 Use the following example to create a default route table and routes for the VPC:
 
@@ -76,7 +76,7 @@ Use the following example to create a default route table and routes for the VPC
     }
 ```
 
-# Route Tables 
+## Route Tables 
 
 Use the following example to to create multiple instances of route tables and routes:
 
@@ -118,10 +118,9 @@ route_tables = {
      #       }
 ```
 
-## Destination Routes Overview 
+# Destination Routes Overview 
 
-
-# VPC Peering Connection 
+## VPC Peering Connection 
 
 Use the follwoing example to create as many VPC peering connections as desired:
 
@@ -153,9 +152,9 @@ vpc_peering_connections = {
 
 }
 ```
-# Internet Gateway 
+## Internet Gateway 
 
-# Use the follwoing example to create as many Internet Gateways as desired:
+Use the follwoing example to create as many Internet Gateways as desired:
 
 [Internet Gateway Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway)
 
@@ -175,9 +174,9 @@ internet_gateways = {
 }
 ```
 
-# Egress Only Internet Gateways 
+## Egress Only Internet Gateways 
 
-# Use the follwoing example to create as many Egress Only Internet Gateways as desired:
+Use the follwoing example to create as many Egress Only Internet Gateways as desired:
 
 [Egress Only Internet Gateway Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/egress_only_internet_gateway)
 
@@ -197,7 +196,7 @@ egress_internet_gateways = {
 }
 ```
 
-# NAT Gateways 
+## NAT Gateways 
 
  Use the follwoing example to create as many NAT Gateways as desired:
 
@@ -256,7 +255,7 @@ nat_gateways = {
     #                    ** Since there are two NAT Gateway instances that are creating a new EIP "Example_NAT_Gateway_1" will receive the first new EIP. "Example_NAT_Gateway_2" 
     #                       will receive the second new EIP
 ```
-# VPC Endpoints 
+## VPC Endpoints 
 
 Use the follwoing example to create as many VPC Endpoints as desired:
 
@@ -284,7 +283,7 @@ vpc_endpoints = {
 }
 ```
 
-# Transit Gateways 
+## Transit Gateways 
 
 Use the follwoing example to create as many Transit Gateways as desired:
 
@@ -309,7 +308,7 @@ transit_gateways = {
     
 }
 ```
-## Subnets Overview 
+# Subnets Overview 
    
 Use the follwoing example to create as many Subnets with route table associations as desired:
 
