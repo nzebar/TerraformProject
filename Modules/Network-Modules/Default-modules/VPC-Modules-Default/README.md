@@ -1,13 +1,12 @@
-##################
-## VPC Overview ##
-##################
+## VPC Overview 
+
 [VPC Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc)
 
 Allows you to create a vpc in the desired AWS account.
 Use the following example to use as reference for inputing values to create a VPC
 Example:
 
-```t
+```terraform
     create_vpc = bool # Whether or not to create the VPC
     vpc_name = string # VPC name to be mreged with the tags below
     cidr_block       = string # CIDR block for the VPC
@@ -23,9 +22,8 @@ Example:
     }
 ```
 
-#########################################
-## VPC: Associated CIDR Block Overview ##
-#########################################
+## VPC: Associated CIDR Block Overview 
+
 Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipv4_cidr_block_association
 
 Allows you to associate extra CIDR block for the newly created VPC.
