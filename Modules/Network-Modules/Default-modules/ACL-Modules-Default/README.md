@@ -3,10 +3,11 @@
 #########################
 Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_network_acl
 
-Allows you to create as many default ACLs for the desired VPCs
-Use the example below for a reference:
-
 default_network_acl = {
+
+# Allows you to create as many default ACLs for the desired VPCs
+# Use the example below for a reference:
+
     Example_Default_Network_ACL = {
         default_network_acl_name = "" <- Name of default ACL to be merged with tags below
         default_network_acl_id = "" <- ID of default_network_acl attribute exported from the VPC resource 
@@ -53,12 +54,12 @@ default_network_acl = {
 #################
 Resource Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl
 
-Allows you to create as many Network ACLs for the desired VPCs
-Use the example below for a reference:
-
-    ** Example is used for three identical variables: public_network_acl | private_network_acl | database_network_acl
-
 ( public || private || database )_network_acl = {
+
+# Allows you to create as many Network ACLs for the desired VPCs
+# Use the example below for a reference:
+# Example is used for three identical variables: public_network_acl | private_network_acl | database_network_acl
+
     Example_Network_ACL = {
         public_network_acl_name = "" <- Name of ACL to be merged with tags below
         vpc_id = "" <- ID of VPC for the Network ACL to reside in
