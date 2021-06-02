@@ -9,7 +9,6 @@ source = "../../Modules/Network-Modules/Default-modules/VPC-Modules-Default"
     vpc_name = "VPC1"
     cidr_block       = "192.168.0.0/16"
     assign_generated_ipv6_cidr_block = false
-    enable_ipv6 = false
     instance_tenancy = "default"
     enable_dns_support = true
     enable_dns_hostnames = true
@@ -195,39 +194,15 @@ route_tables = {
         }
 }
 
-########################
-## DESTINATION ROUTES ##
-########################
+###################
+## TARGET ROUTES ##
+###################
 
        
      ## VPC Peering Connection ##
 
-        vpc_peering_connections = {
+        vpc_peering_connections = {}
 
-            peering_connection_1 = {
-                peer_owner_id = ""
-                peer_vpc_id = ""
-                vpc_id = ""
-                auto_accept = true
-                peer_region = ""
-                acceptor = {
-                    allow_remote_vpc_dns_resolution = true
-                    allow_classic_link_to_remote_vpc = true
-                    allow_vpc_to_remote_classic_link = true
-                }
-                requester = {
-                    allow_remote_vpc_dns_resolution = true
-                    allow_classic_link_to_remote_vpc = true
-                    allow_vpc_to_remote_classic_link = true
-                }
-                tags = { 
-                    "key" = "value"
-                }
-            }
-
-        }
-
-        
     ## Internet Gateways ##
         
         internet_gateways = {
@@ -246,22 +221,9 @@ route_tables = {
         
     ## Egress Only Internet Gateways ##
         
-        egress_internet_gateways = {
         # assign_generated_ipv6_cidr_block in VPC1 module must = true
+        egress_internet_gateways = {}
 
-            Egress_Only_Internet_Gateway_1_VPC1 = {
-                egress_igw_name = "EGRESS_IGW_1_VPC1"
-
-                vpc_id = module.VPC_VPC1.vpc.id
-                
-                tags = {
-                    egress_only_internet_gateways = "EGRESS_IGW_1_VPC1"
-                }
-            }
-
-        }
-
-        
     ## NAT Gateways ##
         
         nat_gateways = {
@@ -273,7 +235,6 @@ route_tables = {
                 new_eip_index = 0
                 eip_allocation_id = ""
                 
-                new_eip_tags = { "nat_gw_eip" = "nat_gw_1_eip" }
                 tags = { "internet_gateways" = "internet_gateway_1_VPC1" }
                 }
 
@@ -284,7 +245,6 @@ route_tables = {
                 new_eip_index = 1
                 eip_allocation_id = ""
 
-                new_eip_tags = { "nat_gw_eip" = "nat_gw_2_eip" }
                 tags = { "internet_gateways" = "internet_gateway_2_VPC1" }
                 }
 
@@ -293,44 +253,11 @@ route_tables = {
         
     ## VPC Endpoints ##
         
-        vpc_endpoints = {
+        vpc_endpoints = {}
 
-            vpc_endpoint_1 = {
-                vpc_endpoint_type = "Interface"
-                service_name = "" 
-                vpc_id = ""
-                auto_accept = true
-                policy = ""
-                private_dns_enabled = true
-                route_table_ids = []
-                subnet_ids = []
-                security_group_ids = []
-
-                tags = {
-                    "key" = "value"
-                }
-            }
-
-        }
-
-       
     ## Transit Gateways ##
         
-        transit_gateways = {
-            transit_gateway_1 = {
-                description = ""
-                amazon_side_asn = 64512
-                auto_accept_shared_attachments = "disable"
-                default_route_table_association = "disable"
-                default_route_table_propagation = "disable"
-                dns_support = "disable"
-                vpn_ecmp_support = "disable"
-
-                tags = {
-                    "key" = "value"
-                }
-            }
-        }
+        transit_gateways = {}
 
 ######################
 ## Declared Subnets ##
