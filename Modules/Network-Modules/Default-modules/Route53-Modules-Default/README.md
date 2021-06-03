@@ -45,8 +45,8 @@ route53_records = {
         type = string # Type of DNS record 
         ttl = number # Time to live value for DNS record. Value is Null if create_alias == true
         multivalue_answer_routing_policy = bool # Whether this DNS record accepts multivalue responses
-        records = ["192.168.0.5"] # Resource values for the DNS record. Value is Null if create_alias == true
-        health_check_id = "" # The health check ID to associate this DNS record with
+        records = list(string) # Resource values for the DNS record. Value is Null if create_alias == true
+        health_check_id = string # The health check ID to associate this DNS record with
 
         set_identifier = string # "faliover" # "failover" || "latency" || "geolocation" || "weighted"
         policy = {
