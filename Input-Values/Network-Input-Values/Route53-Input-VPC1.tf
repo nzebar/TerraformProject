@@ -4,72 +4,106 @@ module "ROUTE53_VPC1" {
 ###########################
 ## Route53: Hosted Zones ##
 ###########################
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_zone
 
-    Hosted_Zones = {
+hosted_zones = {
+
         Zone1 = {
             name = "nutsandbolts.com"
             comment = "This is a hosted zone"
             force_destroy = true
             delegation_set_id = ""
 
-            regions = {
+            private_zone = true
+            private_zone_settings = {
                 vpc_id = module.VPC_VPC1.vpc.id
                 vpc_region = "us-east-1"
             }
         tags = {
             "HostedZone" = "One"
+            }
         }
-    }
-
-
+        
 }
 
 ###########################
 ## Route53: Zone Records ##
 ###########################
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record
 
-    # Get the Hosted Zone ID
-    zone_id = module.ROUTE53_VPC1.Hosted_Zone_Zone_1.id
-    zone_name = ""
-    private_zone = false
+route53_records = {
+    record_1 = {
+        zone_key = "Zone1"
+        name = "testrecord1"
+        type = "A" 
+        ttl = 40 # Null if create_alias == true
+        multivalue_answer_routing_policy = true
+        records = ["192.168.0.5"] # null if create_alias == true
+        health_check_id = ""
 
-    # Create records for the Hosted Zone
-    records = [
-        {
-            name = "testrecord1"
-            failover_routing_policy = false
-            weighted_routing_policy = false
-            latency_routing_policy = false
-            geolocation_routing_policy = false
-            alias = false
-            type = "A"
-            records = ["192.168.0.56"]
-            set_identifier = ""
-            health_check_id = ""
-            
+        set_identifier = "faliover"
+        policy = {}
 
-                alias = {
-                    name = ""
-                    zone_id = ""
-                    evaluate_target_health = false
-                }
-
-                failover_routing_policy = {
-                    type = ""
-                }
-
-                weighted_routing_policy = {
-                    weight = 0
-                }
-
-                latency_routing_policy = {
-                    region = ""
-                }
-
+        create_alias = false
+        alias = {
+            values = {
+                name = "thebomb.com"
+                zone_key = "Zone1"
+                evaluate_target_health = true
+            }
         }
-    ]
+
+        allow_overwrite = true
+    }
+
+    record_2 = {
+        zone_key = "Zone1"
+        name = "testrecord2"
+        type = "A" 
+        ttl = 40 # Null if create_alias == true
+        multivalue_answer_routing_policy = false
+        records = ["192.168.0.6"] # null if create_alias == true
+        health_check_id = ""
+
+        set_identifier = "weighted"
+        policy = {
+            weight = 75
+        }
+
+        create_alias = false
+        alias = {
+            values = {
+                name = "thebomb.com"
+                zone_key = "Zone1"
+                evaluate_target_health = true
+            }
+        }
+
+        allow_overwrite = true
+    }
+
+    record_3 = {
+        zone_key = "Zone1"
+        name = "testrecord3"
+        type = "A" 
+        ttl = 40 # Null if create_alias == true
+        multivalue_answer_routing_policy = false
+        records = ["192.168.0.7"] # null if create_alias == true
+        health_check_id = ""
+
+        set_identifier = ""
+        policy = {}
+
+        create_alias = false
+        alias = {
+            values = {
+                name = "thebomb.com"
+                zone_key = "Zone1"
+                evaluate_target_health = false
+            }
+        }
+
+        allow_overwrite = true
+    }
+}
 
 
 

@@ -3,88 +3,83 @@
 ###########################
 
 resource "aws_route53_zone" "this" {
-  for_each = var.Hosted_Zones
+  for_each = var.hosted_zones
 
-  name          = lookup(var.Hosted_Zones[each.key], "name", null)
-  comment       = lookup(var.Hosted_Zones[each.key], "comment", null)
-  force_destroy = lookup(var.Hosted_Zones[each.key], "force_destroy", false)
-  delegation_set_id = lookup(var.Hosted_Zones[each.key], "delegation_set_id", false) == "" ? null : lookup(var.Hosted_Zones[each.key], "delegation_set_id", false)
+  name          = each.value.name
+  comment       = each.value.comment
+  force_destroy = each.value.force_destroy
+  delegation_set_id = each.value.private_zone == true ? null : each.value.delegation_set_id
 
   dynamic "vpc" {
-    for_each = try(tolist(lookup(var.Hosted_Zones[each.key], "regions", [])), [lookup(var.Hosted_Zones[each.key], "regions", {})])
-
+    for_each = each.value.private_zone == true ? each.value.private_zone_settings : {}
     content {
-      vpc_id     = lookup(vpc.value, "vpc_id", null)
-      vpc_region = lookup(vpc.value, "vpc_region", null)
+      vpc_id     = lookup(each.value.private_zone_settings, "vpc_id", null)
+      vpc_region = lookup(each.value.private_zone_settings, "region", null)
     }
   }
 
-  tags = merge(
-    lookup(var.Hosted_Zones[each.key], "tags", {}),
-  )
+  tags = each.value.tags
 }
 
 ###########################
 ## Route53: Zone Records ##
 ###########################
 
-locals {
-  # convert from list to map with unique keys
-  recordsets = { for rs in var.records : join(" ", compact(["${rs.name} ${rs.type}", lookup(rs, "set_identifier", "")])) => rs }
-}
-
-data "aws_route53_zone" "this" {
-  zone_id      = var.zone_id
-  name         = var.zone_name
-  private_zone = var.private_zone
-
-  depends_on = [aws_route53_zone.this]
-}
-
 resource "aws_route53_record" "this" {
-  for_each = local.recordsets 
+  for_each = var.route53_records
 
-  zone_id = data.aws_route53_zone.this.zone_id  
+  zone_id = aws_route53_zone.this[each.value.zone_key].zone_id
 
-  name            = each.value.name != "" ? "${each.value.name}.${data.aws_route53_zone.this.name}" : data.aws_route53_zone.this.name
+  name            = each.value.name != "" ? "${each.value.name}.${aws_route53_zone.this[each.value.zone_key].name}" : aws_route53_zone.this[each.value.zone_key].name
   type            = each.value.type
-  ttl             = lookup(each.value, "ttl", "") == "" ? null : lookup(each.value, "ttl", null) 
-  records         = lookup(each.value, "records", [])
-  set_identifier  = lookup(each.value, "set_identifier", "")
-  health_check_id = lookup(each.value, "health_check_id", "")
+  ttl             = each.value.create_alias == true ? null : each.value.ttl  
+  multivalue_answer_routing_policy = each.value.set_identifier != "failover" && each.value.set_identifier != "latency" && each.value.set_identifier != "geolocation" && each.value.set_identifier != "weighted" ? each.value.multivalue_answer_routing_policy : null
+  records         = each.value.create_alias == true ? null : each.value.records
+  set_identifier  = each.value.set_identifier == "" ? null : each.value.set_identifier
+  health_check_id = each.value.health_check_id == "" ? null : each.value.health_check_id
 
   dynamic "alias" {
-    for_each = length(keys(lookup(each.value, "alias", {}))) == true ? lookup(each.value, "alias", {}) : {}
+    for_each = each.value.create_alias == true ? each.value.alias : {}
 
     content {
-      name                   = each.value.alias.name
-      zone_id                = try(each.value.alias.zone_id, data.aws_route53_zone.this.zone_id)
-      evaluate_target_health = lookup(each.value.alias, "evaluate_target_health", false)
+      name                   = alias.value.name
+      zone_id                = aws_route53_zone.this[alias.value.zone_key].zone_id
+      evaluate_target_health = alias.value.evaluate_target_health
     }
   }
 
   dynamic "failover_routing_policy" {
-    for_each = length(keys(lookup(each.value, "failover_routing_policy", {}))) == true ? lookup(each.value, "failover_routing_policy", {}): {}
+    for_each = each.value.set_identifier == "failover" && each.value.multivalue_answer_routing_policy != true ? each.value.policy : {}
 
     content {
-      type = each.value.failover_routing_policy.type
+      type = lookup(each.value.policy, "type", null)
     }
   }
 
   dynamic "weighted_routing_policy" {
-    for_each = length(keys(lookup(each.value, "weighted_routing_policy", {}))) == true ? lookup(each.value, "weighted_routing_policy", {}) : {}
+    for_each = each.value.set_identifier == "weighted" && each.value.multivalue_answer_routing_policy != true  ? each.value.policy : {}
 
     content {
-      weight = each.value.weighted_routing_policy.weight
+      weight = lookup(each.value.policy, "weight", null)
     }
   }
 
    dynamic "latency_routing_policy" {
-    for_each = length(keys(lookup(each.value, "latency_routing_policy", {}))) == true ? lookup(each.value, "latency_routing_policy", {}) : {}
+    for_each = each.value.set_identifier == "latency" && each.value.multivalue_answer_routing_policy != true  ? each.value.policy : {} 
 
     content {
-      region = each.value.geolocation_routing_policy.region
+      region = lookup(each.value.policy, "region", null)
     }
    }
 
+   dynamic "geolocation_routing_policy" {
+     for_each = each.value.set_identifier == "geolocation" && each.value.multivalue_answer_routing_policy != true  ? each.value.policy : {}
+     content {
+       continent = lookup(each.value.policy, "continent", null)
+       country = lookup(each.value.policy, "country", null)
+       subdivision = lookup(each.value.policy, "subdivision", null)
+     }
+   }
+
+  allow_overwrite = each.value.allow_overwrite
 }

@@ -19,49 +19,49 @@ provider "aws" {
 }
 
 
-##################
-# CI/CD Modules ##
-##################
+# ##################
+# # CI/CD Modules ##
+# ##################
 
-    ###########################
-    ##  CI/CD Source Modules ##
-    ###########################
+#     ###########################
+#     ##  CI/CD Source Modules ##
+#     ###########################
 
-    module "GET_CICD_SOURCE_MODULES" {
-      source = "./Input-Values/CICD/Source"
-    }
+#     module "GET_CICD_SOURCE_MODULES" {
+#       source = "./Input-Values/CICD/Source"
+#     }
 
-    ##########################
-    ##  CI/CD Build Modules ##
-    ##########################
+#     ##########################
+#     ##  CI/CD Build Modules ##
+#     ##########################
 
-    module "GET_CICD_BUILD_MODULES" {
-      source = "./Input-Values/CICD/Build"
-    }
+#     module "GET_CICD_BUILD_MODULES" {
+#       source = "./Input-Values/CICD/Build"
+#     }
 
-    ###############################
-    ##  CI/CD Deployemnt Modules ##
-    ###############################
+#     ###############################
+#     ##  CI/CD Deployemnt Modules ##
+#     ###############################
 
-    module "GET_CICD_DEPLOYMENT_MODULES" {
-      source = "./Input-Values/CICD/Deployment"
-    }
+#     module "GET_CICD_DEPLOYMENT_MODULES" {
+#       source = "./Input-Values/CICD/Deployment"
+#     }
 
-    ############################
-    ## CI/CD Pipeline Modules ##
-    ############################
+#     ############################
+#     ## CI/CD Pipeline Modules ##
+#     ############################
 
-    module "GET_CICD_PIPELINE_MODULES" {
-      source = "./Input-Values/CICD/Pipeline"
-    }
+#     module "GET_CICD_PIPELINE_MODULES" {
+#       source = "./Input-Values/CICD/Pipeline"
+#     }
 
-#####################
-## Compute Modules ##
-#####################       
+# #####################
+# ## Compute Modules ##
+# #####################       
 
-module "GET_COMPUTE_MODULES" {
-source = "./Input-Values/Compute"
-}
+# module "GET_COMPUTE_MODULES" {
+# source = "./Input-Values/Compute"
+# }
 
 #####################
 ## Network Modules ##
@@ -71,34 +71,34 @@ source = "./Input-Values/Compute"
     source = "./Input-Values/Network-Input-Values"
   }
 
-#################
-## IAM Modules ##
-#################       
+# #################
+# ## IAM Modules ##
+# #################       
 
-module "GET_IAM_ROLES_POLICIES" {
-source = "./Input-Values/Security/IAM"
-}
+# module "GET_IAM_ROLES_POLICIES" {
+# source = "./Input-Values/Security/IAM"
+# }
 
-########################
-## Monitoring Modules ##
-########################
+# ########################
+# ## Monitoring Modules ##
+# ########################
 
-module "GET_MONITORING_MODULES" {
-  source = "./Input-Values/Security/Monitoring"
-}
+# module "GET_MONITORING_MODULES" {
+#   source = "./Input-Values/Security/Monitoring"
+# }
        
-#####################
-## Storage Modules ##
-#####################
+# #####################
+# ## Storage Modules ##
+# #####################
 
-module "GET_STORAGE_MODULES" {
-  source = "./Input-Values/Storage"
-}
+# module "GET_STORAGE_MODULES" {
+#   source = "./Input-Values/Storage"
+# }
 
-####################
-## Tesing Modules ##
-####################
+# ####################
+# ## Tesing Modules ##
+# ####################
 
-module "GET_TESTING_MODULES" {
-  source = "./Input-Values/Testing-Input"
-}
+# module "GET_TESTING_MODULES" {
+#   source = "./Input-Values/Testing-Input"
+# }

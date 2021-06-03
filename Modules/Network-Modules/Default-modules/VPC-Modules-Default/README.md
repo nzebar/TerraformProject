@@ -1,6 +1,6 @@
-##############
+
 # VPC Overview   
-##############
+
 Use the following example to use as reference to create a VPC:
 
 [VPC Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc)
@@ -20,9 +20,8 @@ Use the following example to use as reference to create a VPC:
         "Key" = "Value" # Tags for the VPC
     }
 ```
-#####################################
+
 # VPC: Associated CIDR Block Overview
-##################################### 
 
 Use the example below as reference to associate extra CIDR block for the newly created VPC:
 
@@ -33,9 +32,7 @@ Use the example below as reference to associate extra CIDR block for the newly c
     cidr_blocks_associated = list(string) # The CIDR blocks to associate with the VPC
 ```
 
-###########################
 # DHCP Options Set Overview 
-###########################
 
 Use the example below as reference to create a DHCP options set for the VPC:
 
@@ -54,10 +51,9 @@ Use the example below as reference to create a DHCP options set for the VPC:
         "Key" = "Value" # Tags to associate with the DHCP options set
     }
 ```
-############################################
-# Default Route Table / Route Table Overview
-############################################ 
 
+# Default Route Table / Route Table Overview
+ 
 ## Default Route Table 
 
 Use the following example to create a default route table and routes for the VPC:
@@ -123,9 +119,8 @@ route_tables = {
      #       }
 ```
 
-#############################
+
 # Destination Routes Overview 
-#############################
 
 ## VPC Peering Connection 
 
@@ -316,10 +311,9 @@ transit_gateways = {
 }
 ```
 
-##################
+
 # Subnets Overview
-################## 
-   
+ 
 Use the follwoing example to create as many Subnets with route table associations as desired:
 
 [Subnet Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)
