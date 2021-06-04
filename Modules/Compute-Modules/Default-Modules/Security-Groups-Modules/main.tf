@@ -1,101 +1,108 @@
-resource "aws_security_group" "public_security_group" {
+resource "aws_security_group" "public_security_groups" {
 for_each = var.public_security_groups
 
-  name        = lookup(var.public_security_groups[each.key], "name", "" )
-  description = lookup(var.public_security_groups[each.key], "description", "" )
-  vpc_id      = lookup(var.public_security_groups[each.key], "vpc_id", "" )
+  name        = each.value.name
+  description = each.value.description
+  vpc_id      = each.value.vpc_id
 
   dynamic "ingress" {
-    for_each = lookup(var.public_security_groups[each.key], "ingress_rules", {} )
+    for_each = each.value.ingress_rules
     content {
-    description      = lookup(ingress.value, "description", null )
-    from_port        = lookup(ingress.value, "from_port", null )
-    to_port          = lookup(ingress.value, "to_port", null )
-    protocol         = lookup(ingress.value, "protocol", null )
-    cidr_blocks      = lookup(ingress.value, "cidr_blocks", null )
-    ipv6_cidr_blocks = lookup(ingress.value, "ipv6_cidr_blocks", null )
+    description      = ingress.value.description == "" ? null : ingress.value.description
+    from_port        = ingress.value.from_port  
+    to_port          = ingress.value.to_port
+    protocol         = ingress.value.protocol
+    cidr_blocks      = ingress.value.cidr_blocks == [] ? null : ingress.value.cidr_blocks
+    ipv6_cidr_blocks = ingress.value.ipv6_cidr_blocks == [] ? null : ingress.value.ipv6_cidr_blocks
+    self = ingress.value.self
     }
   }
 
   dynamic "egress" {
-    for_each = lookup(var.public_security_groups[each.key], "egress_rules", {} )
+    for_each = each.value.egress_rules
     content {
-    description = lookup(egress.value, "description", null )
-    from_port        = lookup(egress.value, "from_port", null )
-    to_port          = lookup(egress.value, "to_port", null )
-    protocol         = lookup(egress.value, "protocol", null )
-    cidr_blocks      = lookup(egress.value, "cidr_blocks", null )
-    ipv6_cidr_blocks = lookup(egress.value, "ipv6_cidr_blocks", null )
+    description      = egress.value.description == "" ? null : egress.value.description
+    from_port        = egress.value.from_port  
+    to_port          = egress.value.to_port
+    protocol         = egress.value.protocol
+    cidr_blocks      = egress.value.cidr_blocks == [] ? null : egress.value.cidr_blocks
+    ipv6_cidr_blocks = egress.value.ipv6_cidr_blocks == [] ? null : egress.value.ipv6_cidr_blocks
+    self = egress.value.self
     }
   }
 
-  tags = lookup(var.public_security_groups[each.key], "tags", {} )
+  tags = each.value.tags
 }
 
-resource "aws_security_group" "private_security_group" {
+
+resource "aws_security_group" "private_security_groups" {
 for_each = var.private_security_groups
 
-  name        = lookup(var.private_security_groups[each.key], "name", "" )
-  description = lookup(var.private_security_groups[each.key], "description", "" )
-  vpc_id      = lookup(var.private_security_groups[each.key], "vpc_id", "" )
+  name        = each.value.name
+  description = each.value.description
+  vpc_id      = each.value.vpc_id
 
   dynamic "ingress" {
-    for_each = lookup(var.private_security_groups[each.key], "ingress_rules", {} )
+    for_each = each.value.ingress_rules
     content {
-    description      = lookup(ingress.value, "description", null )
-    from_port        = lookup(ingress.value, "from_port", null )
-    to_port          = lookup(ingress.value, "to_port", null )
-    protocol         = lookup(ingress.value, "protocol", null )
-    cidr_blocks      = lookup(ingress.value, "cidr_blocks", null )
-    ipv6_cidr_blocks = lookup(ingress.value, "ipv6_cidr_blocks", null )
+    description      = ingress.value.description == "" ? null : ingress.value.description
+    from_port        = ingress.value.from_port  
+    to_port          = ingress.value.to_port
+    protocol         = ingress.value.protocol
+    cidr_blocks      = ingress.value.cidr_blocks == [] ? null : ingress.value.cidr_blocks
+    ipv6_cidr_blocks = ingress.value.ipv6_cidr_blocks == [] ? null : ingress.value.ipv6_cidr_blocks
+    self = ingress.value.self
     }
   }
 
   dynamic "egress" {
-    for_each = lookup(var.private_security_groups[each.key], "egress_rules", {} )
+    for_each = each.value.egress_rules
     content {
-    description = lookup(egress.value, "description", null )
-    from_port        = lookup(egress.value, "from_port", null )
-    to_port          = lookup(egress.value, "to_port", null )
-    protocol         = lookup(egress.value, "protocol", null )
-    cidr_blocks      = lookup(egress.value, "cidr_blocks", null )
-    ipv6_cidr_blocks = lookup(egress.value, "ipv6_cidr_blocks", null )
+    description      = egress.value.description == "" ? null : egress.value.description
+    from_port        = egress.value.from_port  
+    to_port          = egress.value.to_port
+    protocol         = egress.value.protocol
+    cidr_blocks      = egress.value.cidr_blocks == [] ? null : egress.value.cidr_blocks
+    ipv6_cidr_blocks = egress.value.ipv6_cidr_blocks == [] ? null : egress.value.ipv6_cidr_blocks
+    self = egress.value.self
     }
   }
 
-  tags = lookup(var.private_security_groups[each.key], "tags", {} )
+  tags = each.value.tags
 }
 
-resource "aws_security_group" "database_security_group" {
+resource "aws_security_group" "database_security_groups" {
 for_each = var.database_security_groups
 
-  name        = lookup(var.database_security_groups[each.key], "name", "" )
-  description = lookup(var.database_security_groups[each.key], "description", "" )
-  vpc_id      = lookup(var.database_security_groups[each.key], "vpc_id", "" )
+  name        = each.value.name
+  description = each.value.description
+  vpc_id      = each.value.vpc_id
 
   dynamic "ingress" {
-    for_each = lookup(var.database_security_groups[each.key], "ingress_rules", {} )
+    for_each = each.value.ingress_rules
     content {
-    description      = lookup(ingress.value, "description", null )
-    from_port        = lookup(ingress.value, "from_port", null )
-    to_port          = lookup(ingress.value, "to_port", null )
-    protocol         = lookup(ingress.value, "protocol", null )
-    cidr_blocks      = lookup(ingress.value, "cidr_blocks", null )
-    ipv6_cidr_blocks = lookup(ingress.value, "ipv6_cidr_blocks", null )
+    description      = ingress.value.description == "" ? null : ingress.value.description
+    from_port        = ingress.value.from_port  
+    to_port          = ingress.value.to_port
+    protocol         = ingress.value.protocol
+    cidr_blocks      = ingress.value.cidr_blocks == [] ? null : ingress.value.cidr_blocks
+    ipv6_cidr_blocks = ingress.value.ipv6_cidr_blocks == [] ? null : ingress.value.ipv6_cidr_blocks
+    self = ingress.value.self
     }
   }
 
   dynamic "egress" {
-    for_each = lookup(var.database_security_groups[each.key], "egress_rules", {} )
+    for_each = each.value.egress_rules
     content {
-    description = lookup(egress.value, "description", null )
-    from_port        = lookup(egress.value, "from_port", null )
-    to_port          = lookup(egress.value, "to_port", null )
-    protocol         = lookup(egress.value, "protocol", null )
-    cidr_blocks      = lookup(egress.value, "cidr_blocks", null )
-    ipv6_cidr_blocks = lookup(egress.value, "ipv6_cidr_blocks", null )
+    description      = egress.value.description == "" ? null : egress.value.description
+    from_port        = egress.value.from_port  
+    to_port          = egress.value.to_port
+    protocol         = egress.value.protocol
+    cidr_blocks      = egress.value.cidr_blocks == [] ? null : egress.value.cidr_blocks
+    ipv6_cidr_blocks = egress.value.ipv6_cidr_blocks == [] ? null : egress.value.ipv6_cidr_blocks
+    self = egress.value.self
     }
   }
 
-  tags = lookup(var.database_security_groups[each.key], "tags", {} )
+  tags = each.value.tags
 }
