@@ -1,6 +1,6 @@
-## Load Balancer Module
+# Load Balancer Module
 
-# Load Balancer
+## Load Balancer
 
 This section of the module allows you to create:
     1 - Load Balancer
@@ -175,7 +175,7 @@ create_load_balancer = false # Whether to create a load balancer
 
 ```
 
-# Load Balancer Listeners
+## Load Balancer Listeners
 
 This section of the module allows you to create:
 
@@ -321,7 +321,7 @@ listeners = {
 
 ```
 
-# Load Balancer Listener Rules
+## Load Balancer Listener Rules
 
 This section of the module allows you to create:
 
