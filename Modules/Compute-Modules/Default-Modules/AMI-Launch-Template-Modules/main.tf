@@ -7,9 +7,10 @@ locals {
                                     ] 
                                   )
 
-  lt_new_network_interface = flatten( [ for interfaces, interface_values in var.network_interfaces: interface_values if interface_values.new_network_interface == true ] )
-
   new_ebs_block_device = flatten( [ for ebs_block, ebs_block_vals in var.ebs_block_devices: ebs_block_vals if ebs_block_vals.use_new_snapshot == true ] )
+
+  lt_new_network_interface = flatten( [ for interfaces, interface_values in var.network_interfaces: interface_values if var.create_network_interfaces == true && interface_values.new_network_interface == true ] )
+
 }
 
 ################
@@ -122,7 +123,7 @@ count = var.copy_ami["enable"] == true ? 1 : 0
 }
 
 resource "aws_kms_key" "ami_copy_kms_key" {
-  for_each = var.copy_ami["create_new_kms_key"] == true ? var.copy_ami["new_kms_key_settings"] : {}
+  for_each = var.copy_ami["enable"] && var.copy_ami["create_new_kms_key"] == true ? var.copy_ami["new_kms_key_settings"] : {}
   description             = each.value.description
   is_enabled = each.value.is_enabled
   policy = each.value.policy == "" ? null : each.value.policy
@@ -390,7 +391,7 @@ resource "aws_network_interface" "new_lt_network_interface" {
 #####################################
 
 resource "aws_security_group" "launch_template_security_groups" {
-for_each = var.create_launch_template_security_groups == true ? var.launch_template_security_groups : {}
+for_each = var.create_launch_template_security_groups == true && var.create_lt == true ? var.launch_template_security_groups : {}
 
   name        = each.value.name
   description = each.value.description

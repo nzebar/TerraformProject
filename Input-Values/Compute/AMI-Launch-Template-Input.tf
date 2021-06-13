@@ -1,11 +1,12 @@
 module "AMI_VPC1" {
-    source = "../../Modules/Compute-Modules/Default-Modules/Launch-Template-Modules"
+    source = "../../Modules/Compute-Modules/Default-Modules/AMI-Launch-Template-Modules"
 
 ####################
 ## Create New AMI ##
 ####################
 
-create_new_ami = true
+create_new_ami = false
+
 ami_name = "AMI_001"
 ami_description = "This is the first AMI created for the launch template"
 root_device_name = "/dev/xvda"
@@ -28,7 +29,7 @@ ebs_block_devices = {
         existing_snapshot_id = ""
 
       # New EBS Block Device Settings
-        use_new_snapshot = true # Creates empty EBS for snapshot id
+        use_new_snapshot = false # Creates empty EBS for snapshot id
         ebs_key = "ebs_1" # Key identifier for this EBS instance. Must be unique
         availability_zone = "us-east-1a"
         ebs_tags = {"ebs" = "ebs_1"}
@@ -70,7 +71,7 @@ ami_tags = {
 ## Launch Template ##
 #####################
 
-  create_lt = true
+  create_lt = false
   lt_name = "AMI_001_Launch_Template"
   lt_use_name_prefix = false
   lt_description = "This is the launch template for AMI 001"
@@ -92,7 +93,7 @@ ami_tags = {
     source_ami_region = ""
     encrypted = true
     kms_key_id = "" # Null if create_new_kms_key == true
-    create_new_kms_key = true
+    create_new_kms_key = false
     new_kms_key_settings = {
       values = {
           description = "This is the KMS key for the copied AMI for the launch template"
@@ -214,7 +215,7 @@ ami_tags = {
 ## EBS SETTINGS ##
 
   ebs_optimized = false
-  manage_block_device_mappings = true
+  manage_block_device_mappings = false
   block_device_mappings = {
     mapping_1 = {
         device_name  = "/dev/xvdb"
@@ -229,7 +230,7 @@ ami_tags = {
           volume_type           = "gp2"
           encrypted             = true # null if snapshot_id != ""
           kms_key_id            = "" # null if snapshot_id != ""
-          create_new_kms_key = true
+          create_new_kms_key = false
           new_kms_key_settings = {
             description = "AMI_001_EBS_001 KMS key" # Desc for each new KMS key must be unique
             is_enabled = true
@@ -246,16 +247,16 @@ ami_tags = {
 
   disable_api_termination              = false
 
-  create_network_interfaces = true
+  create_network_interfaces = false
   network_interfaces = {
     interface_1 = {
       description                  = "Network Interface 1" # Description for each interface must be unique
   
       existing_network_interface_id = ""
-      new_network_interface = true
+      new_network_interface = false
 
     # Network Interface Settings
-      subnet_id                    = module.AMI_VPC1.public_subnet_1.id
+      subnet_id                    = ""
       associate_carrier_ip_address = false
       associate_public_ip_address  = false
       ipv4_addresses               = ["192.168.1.8", "192.168.1.9"]
@@ -318,14 +319,14 @@ ami_tags = {
 ## Launch Template Security Groups ##
 #####################################
 
-create_launch_template_security_groups = true
+create_launch_template_security_groups = false
 
 launch_template_security_groups = {
 
     Launch_Template_Security_Group_1 = { 
         name        = "Web Security Group"
         description = "This is the SecGrp for web instances" 
-        vpc_id      = module.AMI_VPC1.vpc.id
+        vpc_id      = ""
 
         ingress_rules = { 
             rule_1 = {

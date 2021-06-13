@@ -120,9 +120,9 @@ ecs_capacity_providers = {
 }
 
 
-############################
-## ECS Capacity Providers ##
-############################
+########################## 
+## ECS Task Definitiona ##
+##########################
 
 create_task_definitions = true
 

@@ -19,9 +19,9 @@ provider "aws" {
 }
 
 
-# ##################
-# # CI/CD Modules ##
-# ##################
+##################
+# CI/CD Modules ##
+##################
 
 #     ###########################
 #     ##  CI/CD Source Modules ##
@@ -59,9 +59,9 @@ provider "aws" {
 # ## Compute Modules ##
 # #####################       
 
-# module "GET_COMPUTE_MODULES" {
-# source = "./Input-Values/Compute"
-# }
+module "GET_COMPUTE_MODULES" {
+source = "./Input-Values/Compute"
+}
 
 # ####################
 # # Network Modules ##
@@ -95,10 +95,10 @@ provider "aws" {
 #   source = "./Input-Values/Storage"
 # }
 
-####################
-## Tesing Modules ##
-####################
+###################
+# Tesing Modules ##
+###################
 
-module "GET_TESTING_MODULES" {
-  source = "./Input-Values/Testing-Input"
-}
+# module "GET_TESTING_MODULES" {
+#   source = "./Input-Values/Testing-Input"
+# }
