@@ -1,9 +1,9 @@
 module "LOADBALANCER_VPC1" {
     source = "../../Modules/Compute-Modules/Default-Modules/Loadbalancer-Modules"
     
-###############################
+###################
 ## Load Balancer ##
-###############################
+###################
 
   create_load_balancer = false
 
@@ -251,7 +251,7 @@ listener_rules = {
     listener_map_key_name = "listener_1"
     priority = 100
 
-  ## Listener Actions ##
+  ## Listener Rule Actions ##
     actions = {
 
       action_1 = {
@@ -319,7 +319,7 @@ listener_rules = {
 
   }
 
-  ## Listener Conditions ##
+  ## Listener Rule Conditions ##
     conditions = {
 
       host_header = {
