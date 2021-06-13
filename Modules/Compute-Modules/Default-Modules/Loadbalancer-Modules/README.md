@@ -3,6 +3,8 @@
 ## Load Balancer
 
 This section of the module allows you to create:
+
+```
     1 - Load Balancer
         1a - Allows you to create application load balancer.
             1aa - Specify application load balancer settings.
@@ -21,6 +23,7 @@ This section of the module allows you to create:
         1f - Allows you to create S3 access logs.
             1fa - Specify settings for S3 access logs.
         1g - Allows you to associate tags with the load balancer.
+```
 
 Use the example below as a reference to create a load balancer:
 
@@ -179,6 +182,7 @@ create_load_balancer = false # Whether to create a load balancer
 
 This section of the module allows you to create:
 
+```
     2 - Listener
         2a - Specify listener port and protocol.
         2b - Specify listener SSL certificates.
@@ -191,8 +195,9 @@ This section of the module allows you to create:
             2cd - Create authenticate-cognito default action.
             2ce - Create authenticate-oidc default action.
         2d - Automatically associates listener with the load balancer above.
+```
 
-Use the example below aas reference to create one or more listeners for the load balancer above:
+Use the example below as reference to create one or more listeners for the load balancer above:
 
 [Load Balancer Listener Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener)
 [Listener SSL Certificate Association Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener_certificate)
@@ -325,6 +330,7 @@ listeners = {
 
 This section of the module allows you to create:
 
+```
     3 - Listener Rule
         3a - Specify listener rule port and listener to associate with.
         3b - Create one or more default actions.
@@ -340,6 +346,7 @@ This section of the module allows you to create:
             3cd - Create http_request_method condtion
             3ce - Create path_pattern condition
             3cf - Create ip_source condition
+```
 
 Use the example below as reference to create one or more listener rules to associate with the listeners above:
 
