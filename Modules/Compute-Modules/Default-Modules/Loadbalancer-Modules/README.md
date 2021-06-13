@@ -27,8 +27,10 @@ This section of the module allows you to create:
 
 Use the example below as a reference to create a load balancer:
 
-[Load Balancer Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb) 
+[Load Balancer Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb)
+
 [Subnets Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)
+
 [Security Group Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group)
 
 ```terraform
@@ -200,6 +202,7 @@ This section of the module allows you to create:
 Use the example below as reference to create one or more listeners for the load balancer above:
 
 [Load Balancer Listener Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener)
+
 [Listener SSL Certificate Association Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener_certificate)
 
 ```terraform
@@ -353,6 +356,7 @@ Use the example below as reference to create one or more listener rules to assoc
 [Listener Rule Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener_rule)
 
 ```terraform
+create_listener_rules = false # Whether to create listener rules for the listeners above
 listener_rules = {
 
 rule_1 = {
@@ -466,8 +470,8 @@ rule_1 = {
         # Able to create more than one http_header. Copy and post from below.
 
         string_1 = { # Key of the query_string. Must be unique. Terraform does not process duplicates
-          key = "" Query string key pattern to match
-          value = "" Query string value pattern to match
+          key = "" # Query string key pattern to match
+          value = "" # Query string value pattern to match
         }
 
       }
