@@ -14,7 +14,7 @@ variable "new_ecs_cluster_settings" {
     name = string
     existing_capacity_providers = list(string)
     new_capacity_provider_key = list(string)
-    default_capacity_provider_strategy = map(object({
+    default_capacity_provider_strategies = map(object({
       capacity_provider = string
       weight = number
       base = number

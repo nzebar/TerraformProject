@@ -3,7 +3,6 @@ locals {
   lifecycle_hooks = flatten( [ for target_groups, target_group_vals in var.auto_scaling_groups:
                                 [ for hooks, hook_vals in target_group_vals.lifecycle_hooks: hook_vals ]
                                    if target_group_vals.create_lifecycle_hooks == true ] )
-
 }
 
 ##################
@@ -18,7 +17,7 @@ resource "aws_ecs_cluster" "new_ecs_cluster" {
   capacity_providers = concat(each.value.existing_capacity_providers, [ for cap_prov in each.value.new_capacity_provider_key: aws_ecs_capacity_provider.new_capacity_providers[cap_prov].name ] )
 
   dynamic "default_capacity_provider_strategy" {
-    for_each = each.value.default_capacity_provider_strategy
+    for_each = each.value.default_capacity_provider_strategies
     content {
       capacity_provider = default_capacity_provider_strategy.value.capacity_provider
       weight = default_capacity_provider_strategy.value.weight

@@ -13,9 +13,14 @@ new_ecs_cluster_settings = {
       existing_capacity_providers = []
       new_capacity_provider_key = []
 
-      default_capacity_provider_strategy = {
+      default_capacity_provider_strategies = {
         cap_1 = {
-          capacity_provider = ""
+          capacity_provider = "1"
+          weight = 0
+          base = 0
+        }
+        cap_2 = {
+          capacity_provider = "2"
           weight = 0
           base = 0
         }
@@ -34,7 +39,6 @@ new_ecs_cluster_settings = {
 #############################
 
 create_capacity_providers = false
-
 capacity_providers = {
   cap_1 = {
     name = "cap_yuh"
