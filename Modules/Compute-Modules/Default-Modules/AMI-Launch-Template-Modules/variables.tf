@@ -145,6 +145,12 @@ variable "use_new_ami" {
 }
 
 variable "use_existing_ami_id" {
+  description = "Whether to use the ID of an existing AMI"
+  type = bool
+  default = false
+}
+
+variable "existing_ami_id" {
   description = "The AMI in the existing account to use for the launch template"
   type = string
   default = "" 
@@ -243,7 +249,7 @@ variable "user_data_local_file_path" {
   description = "The local path to the file containing user data"
   type = string
   default = ""
-  sensitive = true
+  sensitive = false
 }
 
 variable "create_metadata_options" {
@@ -556,6 +562,7 @@ variable "launch_template_security_groups" {
       protocol = string
       cidr_blocks = list(string)
       ipv6_cidr_blocks = list(string)
+      security_groups = list(string)
       self = bool
     }))
     egress_rules = map(object({
@@ -565,6 +572,7 @@ variable "launch_template_security_groups" {
       protocol = string
       cidr_blocks = list(string)
       ipv6_cidr_blocks = list(string)
+      security_groups = list(string)
       self = bool
     }))
     tags = map(string)

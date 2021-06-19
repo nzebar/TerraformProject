@@ -155,7 +155,7 @@ resource "aws_launch_template" "this" {
 
   ## AMI SETTINGS ##
 
-  image_id      = var.use_new_ami == true ? aws_ami.this_ami[0].id : null || var.use_existing_ami_id == "" ? null : var.use_existing_ami_id || var.copy_ami["enable"] == true ? aws_ami_copy.ami_copy[0].id : null || var.copy_instance_ami["enable"] == true ? aws_ami_from_instance.instance_ami_copy[0].id : null
+  image_id      = var.use_new_ami == true ? aws_ami.this_ami[0].id : var.use_existing_ami_id == true ? var.existing_ami_id : var.copy_ami["enable"] == true ? aws_ami_copy.ami_copy[0].id : null || var.copy_instance_ami["enable"] == true ? aws_ami_from_instance.instance_ami_copy[0].id : null
 
   ## PRICE MANAGEMENT SETTINGS ##
 
@@ -309,7 +309,7 @@ resource "aws_launch_template" "this" {
       ipv6_address_count           = network_interfaces.value.ipv6_addresses != 0 ? null : network_interfaces.value.ipv6_address_count
       network_interface_id         = network_interfaces.value.new_network_interface == true ? aws_network_interface.new_lt_network_interface[network_interfaces.value.description].id : network_interfaces.value.existing_network_interface_id
       private_ip_address           = network_interfaces.value.primary_private_ip_address
-      security_groups              = concat( network_interfaces.value.existing_security_groups, [ for sec_grp in network_interfaces.value.use_new_security_groups: aws_security_group.launch_template_security_groups[sec_grp].id ] )
+      security_groups              = concat( network_interfaces.value.existing_security_groups, length(networ_interface.value.use_new_security_groups) > 0 ? [ for sec_grp in network_interfaces.value.use_new_security_groups: aws_security_group.launch_template_security_groups[sec_grp].id ] : [] )
       subnet_id                    = network_interfaces.value.subnet_id
       interface_type               = network_interfaces.value.interface_type
     }
@@ -317,14 +317,13 @@ resource "aws_launch_template" "this" {
 
   ## SECURITY/MONITORING SETTINGS ##
 
-  vpc_security_group_ids = concat(var.existing_security_group_ids, [ for sec_grp in var.use_new_security_groups: aws_security_group.launch_template_security_groups[sec_grp].id ]) 
+  vpc_security_group_ids = concat(var.existing_security_group_ids, length(var.use_new_security_groups) > 0 ? [ for sec_grp in var.use_new_security_groups: aws_security_group.launch_template_security_groups[sec_grp].id ] : [] )
 
   key_name      = var.key_name
   
   dynamic "iam_instance_profile" {
     for_each = var.create_iam_instance_profile == true ? var.iam_instance_profile : {}
     content {
-      name = lookup(var.iam_instance_profile, "name", "" )
       arn  = lookup(var.iam_instance_profile, "arn", "" )
     }
   }
@@ -406,6 +405,7 @@ for_each = var.create_launch_template_security_groups == true && var.create_lt =
     protocol         = ingress.value.protocol
     cidr_blocks      = ingress.value.cidr_blocks == [] ? null : ingress.value.cidr_blocks
     ipv6_cidr_blocks = ingress.value.ipv6_cidr_blocks == [] ? null : ingress.value.ipv6_cidr_blocks
+    security_groups = ingress.value.security_groups == [] ? null : ingress.value.security_groups
     self = ingress.value.self
     }
   }
@@ -419,6 +419,7 @@ for_each = var.create_launch_template_security_groups == true && var.create_lt =
     protocol         = egress.value.protocol
     cidr_blocks      = egress.value.cidr_blocks == [] ? null : egress.value.cidr_blocks
     ipv6_cidr_blocks = egress.value.ipv6_cidr_blocks == [] ? null : egress.value.ipv6_cidr_blocks
+    security_groups = egress.value.security_groups == [] ? null : egress.value.security_groups
     self = egress.value.self
     }
   }

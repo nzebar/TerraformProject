@@ -32,16 +32,16 @@ ebs_block_devices = {
         use_new_snapshot = false # Creates empty EBS for snapshot id
         ebs_key = "ebs_1" # Key identifier for this EBS instance. Must be unique
         availability_zone = "us-east-1a"
-        ebs_tags = {"ebs" = "ebs_1"}
-        snapshot_tags = {}
+        ebs_tags = {"ebs_useast1a" = "ebs_001"}
+        snapshot_tags = {"ebs_snapshot_useast1a" = "snapshot_001"}
 
       # EBS Block Device Settings
         device_name = "/dev/xvda"
         volume_type = "gp2"
         volume_size = 10
         iops = 500
-        throughput = 125
-        delete_on_termination = false
+        throughput = null
+        delete_on_termination = true
     }
   }
 
@@ -62,7 +62,7 @@ ami_launch_permissions = {
 }
 
 ami_tags = {
-    "AMI" = "AMI_001"
+    "AMI_useast1" = "AMI_001"
 }
 
 
@@ -71,8 +71,8 @@ ami_tags = {
 ## Launch Template ##
 #####################
 
-  create_lt = false
-  lt_name = "AMI_001_Launch_Template"
+  create_lt = true
+  lt_name = "AMI_001_LT"
   lt_use_name_prefix = false
   lt_description = "This is the launch template for AMI 001"
 
@@ -82,37 +82,45 @@ ami_tags = {
   default_version                      = 1 
 
 ## AMI SETTINGS ##
+  
+    # USE ABOVE AMI
+    use_new_ami      = false
 
-  use_new_ami      = true
-  use_existing_ami_id = "" # Leave "" for null
-  copy_ami = {
-    enable = false
-    name              = ""
-    description       = ""
-    source_ami_id     = ""
-    source_ami_region = ""
-    encrypted = true
-    kms_key_id = "" # Null if create_new_kms_key == true
-    create_new_kms_key = false
-    new_kms_key_settings = {
-      values = {
-          description = "This is the KMS key for the copied AMI for the launch template"
-          is_enabled = true
-          policy = ""
-          enable_key_rotation = true
-          deletion_window_in_days = 30
-          tags = { "AMI_KEYS" = "AMI_KEY_1" }
+    # Use existing AMI id
+    use_existing_ami_id = true 
+    existing_ami_id = "ami-0819ea31b8a98287d"
+
+    # Copy AMI from instance
+    copy_instance_ami = { # Instance will experience downtime if running
+      enable = false
+      name = ""
+      source_instance_id = ""
+    }
+
+    # Copy AMI
+    copy_ami = {
+      enable = false
+      name              = ""
+      description       = ""
+      source_ami_id     = ""
+      source_ami_region = ""
+      encrypted = true
+      kms_key_id = "" # Null if create_new_kms_key == true
+      create_new_kms_key = false
+      new_kms_key_settings = {
+        values = {
+            description = "This is the KMS key for the copied AMI for the launch template"
+            is_enabled = true
+            policy = ""
+            enable_key_rotation = true
+            deletion_window_in_days = 30
+            tags = { "AMI_KEYS" = "AMI_KEY_1" }
+        }
       }
-    }
-    tags = {
-        "key" = "value"
-    }
-  } 
-  copy_instance_ami = { # Instance will experience downtime if running
-    enable = false
-    name = ""
-    source_instance_id = ""
-  }
+      tags = {
+          "key" = "value"
+      }
+    } 
 
 ## PRICE MANAGEMENT SETTINGS ##
 
@@ -146,7 +154,7 @@ ami_tags = {
   kernel_id                            = ""
   ram_disk_id                          = ""
 
-  user_data_local_file_path = "Input-Values\\Compute\\Scripts\\Docker-Agent-Install.sh" # Leave "" for null
+  user_data_local_file_path = "Input-Values\\Compute\\Scripts\\httpd-test.sh" /* "Input-Values\\Compute\\Scripts\\Docker-Agent-Install.sh" */ 
 
   create_metadata_options = false
   metadata_options = {
@@ -185,7 +193,7 @@ ami_tags = {
     configured = false
   }
 
-  instance_initiated_shutdown_behavior = "stop"
+  instance_initiated_shutdown_behavior = "terminate"
 
 ## CPU SETTINGS ##
 
@@ -195,9 +203,9 @@ ami_tags = {
     threads_per_core = 2
   }
 
-  create_credit_specification = false
+  create_credit_specification = true
   credit_specification = {
-    cpu_credits = "standard"
+    cpu_credits = "unlimited"
   }
 
 ## GPU SETTINGS ##
@@ -218,7 +226,7 @@ ami_tags = {
   manage_block_device_mappings = false
   block_device_mappings = {
     mapping_1 = {
-        device_name  = "/dev/xvdb"
+        device_name  = "/dev/xvda"
         no_device    = ""
         virtual_name = ""
         ebs = {
@@ -228,16 +236,16 @@ ami_tags = {
           throughput            = 125
           volume_size           = 10
           volume_type           = "gp2"
-          encrypted             = true # null if snapshot_id != ""
+          encrypted             = false # null if snapshot_id != ""
           kms_key_id            = "" # null if snapshot_id != ""
           create_new_kms_key = false
           new_kms_key_settings = {
-            description = "AMI_001_EBS_001 KMS key" # Desc for each new KMS key must be unique
+            description = "LT_001_KMS_001" # Desc for each new KMS key must be unique
             is_enabled = true
             policy = ""
             enable_key_rotation = false
             deletion_window_in_days = 22
-            tags = { "AMI_001_KEYS" = "AMI_001_EBS_001_KEY_001" }
+            tags = { "LT_001_KEYS" = "KMS_001" }
           }
         }
      }
@@ -250,17 +258,17 @@ ami_tags = {
   create_network_interfaces = false
   network_interfaces = {
     interface_1 = {
-      description                  = "Network Interface 1" # Description for each interface must be unique
+      description                  = "Interface_001" # Description for each interface must be unique
   
       existing_network_interface_id = ""
-      new_network_interface = false
+      new_network_interface = true
 
     # Network Interface Settings
       subnet_id                    = ""
       associate_carrier_ip_address = false
       associate_public_ip_address  = false
-      ipv4_addresses               = ["192.168.1.8", "192.168.1.9"]
-      primary_private_ip_address   = "192.168.1.8"
+      ipv4_addresses               = [""]
+      primary_private_ip_address   = ""
       ipv4_address_count           = 0 # Null if ipv4 addresses != 0
       ipv6_addresses               = []
       ipv6_address_count           = 0 # Null if ipv6_addresses != 0
@@ -272,21 +280,20 @@ ami_tags = {
       existing_security_groups              = []
       use_new_security_groups = ["Launch_Template_Security_Group_1"]
 
-      delete_on_termination        = false
+      delete_on_termination        = true
     }
   }
 
 ## SECURITY/MONITORING SETTINGS ##
 
-  use_new_security_groups = []
+  use_new_security_groups = ["Launch_Template_Security_Group_1"]
   existing_security_group_ids = []
 
-  key_name      = "AMI_001_PUB_KEY"
+  key_name      = "EC2-key"
 
-  create_iam_instance_profile = false
+  create_iam_instance_profile = true
   iam_instance_profile = {
-      name = ""
-      arn = ""
+      arn = "arn:aws:iam::092968731555:instance-profile/EC2-Instance-Profile"
   }
 
   create_enclave_options = false
@@ -312,21 +319,21 @@ ami_tags = {
   }
 
   launch_template_tags = {
-    "Launch_Template" = "LT_001_AMI_001"
+    "LT_useast1a" = "LT_001"
   }
 
 #####################################
 ## Launch Template Security Groups ##
 #####################################
 
-create_launch_template_security_groups = false
+create_launch_template_security_groups = true
 
 launch_template_security_groups = {
 
     Launch_Template_Security_Group_1 = { 
         name        = "Web Security Group"
         description = "This is the SecGrp for web instances" 
-        vpc_id      = ""
+        vpc_id      = module.VPC_VPC1.vpc.id
 
         ingress_rules = { 
             rule_1 = {
@@ -336,6 +343,7 @@ launch_template_security_groups = {
                 protocol         = "-1" 
                 cidr_blocks      = ["0.0.0.0/0"] 
                 ipv6_cidr_blocks = []   
+                security_groups = [module.LOADBALANCER_VPC1.app_lb_security_group.id]
                 self = false  
             }
         }
@@ -348,6 +356,7 @@ launch_template_security_groups = {
                 protocol         = "-1" 
                 cidr_blocks      = ["0.0.0.0/0"] 
                 ipv6_cidr_blocks = []   
+                security_groups = []
                 self = false  
             }
         }

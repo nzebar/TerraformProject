@@ -1,164 +1,204 @@
-####################    
-## Aurora Cluster ##
-####################
+locals {
 
-resource "aws_rds_cluster" "default" {
-count = var.create_cluster == true ? 1 : 0
+  db_subnets = flatten( [ for clusters, cluster_vals in var.aurora_clusters: cluster_vals.new_db_subnet_group if cluster_vals.create_new_db_subnet_group == true ] )
 
-global_cluster_identifier = var.global_cluster_identifier
-cluster_identifier = var.cluster_identifier
-snapshot_identifier = var.snapshot_identifier
-source_region = var.source_region
-replication_source_identifier = var.replication_source_identifier
-deletion_protection = var.deletion_protection
+  endpoints = flatten( [ for clusters, cluster_vals in var.aurora_clusters: 
+                          [ for endpoints, endpoint_vals in cluster_vals.cluster_endpoints: endpoint_vals ] if cluster_vals.create_cluster_endpoints == true ] )
 
-dynamic "s3_import" {
-  for_each = var.create_s3_import == true ? [1] : []
-    content{
-        bucket_name = ""
-        bucket_prefix = ""
-        ingestion_role = ""
-        source_engine = ""
-        source_engine_version = ""
-  }
+  cluster_kms = flatten( [ for clusters, cluster_vals in var.aurora_clusters: cluster_vals.new_kms_key if cluster_vals.create_new_kms_key == true ] )
+
+  new_security_group = flatten( [ for clusters, cluster_vals in var.aurora_clusters: cluster_vals.new_vpc_security_group if cluster_vals.create_new_vpc_security_group == true ] )
+
+  allowed_ingress_protocols_ports = flatten( [ for clusters, cluster_vals in var.aurora_clusters: 
+                                                [ for ingress_rules, rule_vals in cluster_vals.new_vpc_security_group: 
+                                                    [ for vals in cluster_vals.new_vpc_security_group.ingress_protocols_ports: vals ] 
+                                                  ]
+                                                 if cluster_vals.create_new_vpc_security_group == true ] )
+
+  allowed_egress_protocols_ports = flatten( [ for clusters, cluster_vals in var.aurora_clusters: 
+                                                [ for egress_rules, rule_vals in cluster_vals.new_vpc_security_group: 
+                                                    [ for vals in cluster_vals.new_vpc_security_group.egress_protocols_ports: vals ] 
+                                                  ]
+                                                 if cluster_vals.create_new_vpc_security_group == true ] )
 }
 
-database_name = var.database_name
-db_cluster_parameter_group_name = var.db_cluster_parameter_group_name
-engine_mode = var.engine_mode
-engine_version = var.engine_version
-allow_major_version_upgrade = var.allow_major_version_upgrade
-port = var.db_port
-enable_http_endpoint = var.enable_http_endpoint
-iam_database_authentication_enabled = var.iam_database_authentication_enabled
-storage_encrypted = var.storage_encrypted
-kms_key_id = var.kms_key_id
-iam_roles = var.iam_roles
-vpc_security_group_ids = var.vpc_security_group_ids
-db_subnet_group_name = var.create_db_subnet_group == true ? aws_db_subnet_group.db_subnet_group[0].name : var.db_subnet_group_name
-availability_zones = var.availability_zones
+###########################
+## Aurora Global Cluster ##
+###########################
 
-backtrack_window = var.backtrack_window
-backup_retention_period = var.backup_retention_period
-preferred_backup_window = var.preferred_backup_window
-preferred_maintenance_window = var.preferred_maintenance_window
+resource "aws_rds_global_cluster" "global_cluster" {
+count = var.create_aurora_global_cluster == true ? 1 : 0
+
+  global_cluster_identifier = var.global_cluster_identifier
+  database_name             = var.global_database_name
+  engine                    = var.source_db_cluster_identifier != "" || var.source_db_cluster_identifier != null ? null : var.global_engine
+  engine_version            = var.global_engine_version
+  storage_encrypted = var.global_storage_encrypted
+
+  source_db_cluster_identifier = var.source_db_cluster_identifier
  
-skip_final_snapshot = var.skip_final_snapshot
-final_snapshot_identifier = var.final_snapshot_identifier
-copy_tags_to_snapshot = var.copy_tags_to_snapshot
+  deletion_protection = var.global_deletion_protection
+  force_destroy = var.global_force_destroy
+}
 
-enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
+#####################
+## Aurora Clusters ##
+#####################
 
-master_username = var.master_username
-master_password = var.master_password
+resource "aws_rds_cluster" "aurora_clusters" {
+for_each = var.create_aurora_clusters == true ? var.aurora_clusters : {}
 
-dynamic "scaling_configuration" {
-  for_each = var.create_scaling_configuration == true ? [1] : []
-  content {
-    auto_pause = true
-    seconds_until_auto_pause = 300
-    max_capacity = 16
-    min_capacity = 1
-    timeout_action = "RollbackCapacityChange"
+  ## Cluster Settings ##
+  global_cluster_identifier = each.value.global_cluster_member == true && var.create_aurora_global_cluster == true ? var.global_cluster_identifier : null
+  cluster_identifier      = each.value.use_cluster_identifier_prefix == true ? null : each.value.cluster_identifier
+  cluster_identifier_prefix = each.value.use_cluster_identifier_prefix == true ? "${each.value.cluster_identifier}-" : null
+  replication_source_identifier = each.value.replication_source_identifier
+  source_region = each.value.source_region
+  apply_immediately = each.value.apply_immediately
+
+  ## Cluster Placement ##
+  availability_zones      = each.value.availability_zones
+  db_subnet_group_name = each.value.create_new_db_subnet_group == true ? each.value.new_db_subnet_group["name"] : each.value.db_subnet_group_name
+
+  ## Cluster System Settings ##
+  database_name = each.value.global_cluster_member == true && var.create_aurora_global_cluster == true ? var.global_database_name : each.value.engine_mode
+  master_username = each.value.master_username
+  master_password = each.value.master_password
+  engine_mode = each.value.global_cluster_member == true && var.create_aurora_global_cluster == true ? "global" : each.value.engine_mode
+  engine                  = each.value.global_cluster_member == true && var.create_aurora_global_cluster == true ? var.global_engine : each.value.engine
+  engine_version          = each.value.global_cluster_member == true && var.create_aurora_global_cluster == true ? var.global_engine_version : each.value.engine_version
+  allow_major_version_upgrade = each.value.allow_major_version_upgrade
+  db_cluster_parameter_group_name = each.value.db_cluster_parameter_group_name
+  deletion_protection = each.value.deletion_protection
+
+  enabled_cloudwatch_logs_exports = each.value.enabled_cloudwatch_logs_exports
+
+  ## Cluster Network Settings ##
+  port = each.value.port
+  enable_http_endpoint = each.value.enable_http_endpoint
+
+  ## Cluster Security Settings ##
+  vpc_security_group_ids = each.value.create_new_vpc_security_group == true ? concat( [aws_security_group.db_security_group[each.value.new_vpc_security_group["name"]].id], each.value.vpc_security_group_ids ) : each.value.vpc_security_group_ids
+  iam_database_authentication_enabled = each.value.iam_database_authentication_enabled
+  iam_roles = each.value.iam_roles
+  storage_encrypted = each.value.storage_encrypted
+  kms_key_id = each.value.create_new_kms_key == true ? aws_kms_key.cluster_kms[each.value.new_kms_key["description"]].id : each.value.kms_key_id
+
+  ## Cluster Backup & Maintenance Settings ##
+  preferred_backup_window = each.value.preferred_backup_window
+  backup_retention_period = each.value.backup_retention_period
+  backtrack_window = each.value.backtrack_window
+  skip_final_snapshot = each.value.skip_final_snapshot
+  final_snapshot_identifier = each.value.final_snapshot_identifier
+  preferred_maintenance_window = each.value.preferred_maintenance_window
+
+  dynamic "restore_to_point_in_time" {
+      for_each = each.value.create_restore_to_point_in_time == true ? each.value.restore_to_point_in_time : {}
+      content {
+        source_cluster_identifier  = restore_to_point_in_time.value.source_cluster_identifier
+        restore_type               = restore_to_point_in_time.value.restore_type
+        restore_to_time = restore_to_point_in_time.value.restore_to_time
+      }
   }
-}
 
-dynamic "restore_to_point_in_time" {
-for_each = var.create_restore_to_point_in_time == true ? [1] : []
-  content{
-    use_latest_restorable_time = true
-    restore_to_time = "8"
-    source_cluster_identifier = ""
-    restore_type = ""
+  ## Cluster Auto Scaling ##
+  dynamic "scaling_configuration" {
+      for_each = each.value.engine_mode == "serverless" ? each.value.scaling_configuration : {}
+      content {
+        auto_pause = scaling_configuration.value.auto_pause
+        max_capacity = scaling_configuration.value.max_capacity
+        min_capacity = scaling_configuration.value.min_capacity
+        seconds_until_auto_pause = scaling_configuration.value.seconds_until_auto_pause
+        timeout_action = scaling_configuration.value.timeout_action
+      }
   }
+
+  ## Cluster Tags ##
+  copy_tags_to_snapshot = each.value.copy_tags_to_snapshot
+  tags = each.value.tags
 }
 
-apply_immediately = false
+##############################
+## Aurora Cluster Endpoints ##
+##############################
 
-tags = var.cluster_tags
+resource "aws_rds_cluster_endpoint" "cluster_endpoints" {
+for_each = { for o in local.endpoints: o.cluster_endpoint_identifier => o }
 
+  cluster_identifier          = aws_rds_cluster.aurora_clusters[each.value.cluster_key].cluster_identifier
+  cluster_endpoint_identifier = each.value.cluster_endpoint_identifier
+  custom_endpoint_type        = each.value.custom_endpoint_type
+  static_members = each.value.static_members
+  excluded_members = each.value.static_members != [] ? null : each.value.excluded_members
+
+  tags = each.value.endpoint_tags
 }
 
-#####################################    
-## Aurora Cluster: DB Subnet Group ##
-#####################################
+############################
+## Aurora DB Subnet Group ##
+############################
 
 resource "aws_db_subnet_group" "db_subnet_group" {
-count = var.create_db_subnet_group == true ? 1 : 0
-  name       = var.db_subnet_name
-  name_prefix = var.db_subnet_name_prefix
-  description = var.db_subnet_description
-  subnet_ids = var.db_subnet_ids
+for_each = { for o in local.db_subnets: o.name => o }
 
-  tags = {
-    Name = var.db_subnet_name
-  }
+  name       = each.value.name
+  subnet_ids = each.value.subnet_ids
+
+  tags = each.value.db_subnet_tags
 }
 
-#######################################   
-## Aurora Cluster: Cluster Instances ##
-#######################################
+#########################
+## New Cluster KMS Key ##
+#########################
 
-resource "aws_rds_cluster_instance" "cluster_instances" {
-for_each = var.cluster_instances
+resource "aws_kms_key" "cluster_kms" {
+for_each = { for o in local.cluster_kms: o.description => o }
 
-    identifier         = lookup(var.cluster_instances[each.key], "identifier", null)
-    promotion_tier = lookup(var.cluster_instances[each.key], "promotion_tier", null)
-    cluster_identifier = aws_rds_cluster.default[0].cluster_identifier
-    availability_zone = lookup(var.cluster_instances[each.key], "availability_zone", null)
-    db_subnet_group_name = var.create_db_subnet_group == true ? aws_db_subnet_group.db_subnet_group[0].name : lookup(var.cluster_instances[each.key], "db_subnet_group_name", null)
-
-    instance_class     = lookup(var.cluster_instances[each.key], "instance_class", null)
-    engine             = lookup(var.cluster_instances[each.key], "engine", null)
-    engine_version     = lookup(var.cluster_instances[each.key], "engine_version", null)
-    auto_minor_version_upgrade = lookup(var.cluster_instances[each.key], "auto_minor_version_upgrade", null)
-    db_parameter_group_name = lookup(var.cluster_instances[each.key], "db_parameter_group_name", null) == "" ? aws_rds_cluster_parameter_group.default.name : lookup(var.cluster_instances[each.key], "db_parameter_group_name", null)
-    ca_cert_identifier = lookup(var.cluster_instances[each.key], "ca_cert_identifier", null)
-
-    preferred_backup_window = lookup(var.cluster_instances[each.key], "preferred_backup_window", null)
-    preferred_maintenance_window = lookup(var.cluster_instances[each.key], "preferred_maintenance_window", null)
-
-    monitoring_interval = lookup(var.cluster_instances[each.key], "monitoring_interval", null)
-    monitoring_role_arn = lookup(var.cluster_instances[each.key], "monitoring_role_arn", null)
-
-    apply_immediately = lookup(var.cluster_instances[each.key], "apply_immediately", null)
-
-    copy_tags_to_snapshot = lookup(var.cluster_instances[each.key], "copy_tags_to_snapshot", null)
-    tags = lookup(var.cluster_instances[each.key], "tags", null)
-
+  description             = each.value.description
+  is_enabled = true
+  deletion_window_in_days = each.value.deletion_window_in_days
+  policy = each.value.policy
+  enable_key_rotation = each.value.enable_key_rotation
+  
+  tags = each.value.key_tags
 }
 
-#######################################   
-## Aurora Cluster: Cluster Endpoints ##
-#######################################
+###########################
+## New DB Security Group ##
+###########################
 
-resource "aws_rds_cluster_endpoint" "eligible" {
-for_each = var.cluster_endpoints
-  cluster_identifier          = aws_rds_cluster.default[0].id
-  cluster_endpoint_identifier = lookup(var.cluster_endpoints[each.key], "cluster_endpoint_identifier", [])
-  custom_endpoint_type        = lookup(var.cluster_endpoints[each.key], "custom_endpoint_type", [])
-  static_members = [ for map_key_names in lookup(var.cluster_endpoints[each.key], "cluster_instances_map_key_names_static_members", [] ): aws_rds_cluster_instance.cluster_instances[map_key_names].id ]
-  #excluded_members = [ for map_key_names in lookup(var.cluster_endpoints[each.key], "cluster_instances_map_key_names_excluded_members", [] ): aws_rds_cluster_instance.cluster_instances[map_key_names].id ]
+resource "aws_security_group" "db_security_group" {
+for_each = { for o in local.new_security_group: o.name => o }
 
-  tags = lookup(var.cluster_endpoints[each.key], "tags", {})
-}
+  name        = each.value.name
+  description = each.value.description
+  vpc_id      = each.value.vpc_id
 
-#############################################   
-## Aurora Cluster: Cluster Parameter Group ##
-#############################################
-
-resource "aws_rds_cluster_parameter_group" "default" {
-  name        = var.cluster_parameter_group_name
-  family      = var.cluster_parameter_group_family
-  description = var.cluster_parameter_group_description
-
-  dynamic "parameter" {
-    for_each = var.cluster_parameter_group_parameters
-    content{
-    name  = lookup(parameter.value, "name", null)
-    value = lookup(parameter.value, "value", null)
+  dynamic "ingress" {
+    for_each = toset( [ for val in local.allowed_ingress_protocols_ports: split(".", val ) ] )
+    content {
+      description      = each.value.description
+      protocol         = ingress.value[0]
+      from_port        = ingress.value[1]
+      to_port          = ingress.value[2]
+      security_groups = each.value.ingress_security_groups
+      cidr_blocks      = each.value.ingress_ipv4_cidr_blocks
+      ipv6_cidr_blocks = each.value.ingress_ipv6_cidr_blocks
     }
   }
+
+  dynamic "egress" {
+    for_each = toset( [ for val in local.allowed_egress_protocols_ports: split(".", val ) ] )
+    content {
+      description      = each.value.description
+      protocol         = egress.value[0]
+      from_port        = egress.value[1]
+      to_port          = egress.value[2]
+      security_groups = each.value.egress_security_groups
+      cidr_blocks      = each.value.egress_ipv4_cidr_blocks
+      ipv6_cidr_blocks = each.value.egress_ipv6_cidr_blocks
+    }
+  }
+
+  tags = each.value.security_group_tags
 }
-
-

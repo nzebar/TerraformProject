@@ -79,6 +79,7 @@ variable "lb_target_groups" {
     port = number
     target_type = string
     app_lb_algorithm_type = string
+    slow_start = number
     health_check = object({
       enabled = bool
       path = string

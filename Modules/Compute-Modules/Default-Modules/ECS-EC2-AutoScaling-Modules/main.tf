@@ -33,6 +33,12 @@ resource "aws_ecs_cluster" "new_ecs_cluster" {
   tags = each.value.tags
 }
 
+resource "aws_iam_service_linked_role" "ecs_service_linked_role" {
+  count = var.create_new_ecs_cluster == true ? 1 : 0
+
+  aws_service_name = "ecs.amazonaws.com"
+}
+
 #############################
 ## ECS: Capacity Providers ##
 #############################
@@ -53,6 +59,10 @@ resource "aws_ecs_capacity_provider" "new_capacity_providers" {
       target_capacity           = each.value.target_capacity
     }
   }
+
+  depends_on = [
+    aws_iam_service_linked_role.ecs_service_linked_role
+  ]
 }
 
 #################################
@@ -73,7 +83,8 @@ resource "aws_lb_target_group" "lb_target_groups" {
   protocol = each.value.protocol
   target_type = each.value.target_type
   load_balancing_algorithm_type = each.value.app_lb_algorithm_type
-
+  slow_start = each.value.slow_start
+  
   health_check {
     enabled = each.value.health_check["enabled"]
     path = each.value.health_check["path"]
