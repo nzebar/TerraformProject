@@ -26,7 +26,7 @@ cluster_1 = { # Unique key used for organizational purposes. Organize cluster in
             use_identifier_prefix = false # Whether to use a cluster instance for the identifier
             promotion_tier = 0 # Level of priority this cluster instance has over other cluster members to become the WRITER for the Cluster. Lower the number, the higher the priority
             # Placement Settings #
-            availability_zone = "" The AZ to place this cluster instance in
+            availability_zone = "" # The AZ to place this cluster instance in
             db_subnet_group_name = "" # Name of the DB Subnet Group this Cluster Instance will be located in. Must be the same as the DB Subnet Group Name specified in the Cluster.
             # System Settings #
             engine = "" # The engine for this cluster instance
