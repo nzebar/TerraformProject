@@ -53,12 +53,12 @@ aurora_clusters = {
     master_password = "SuperSecretPassword123"
     engine_mode = "serverless"
     engine = "aurora-mysql"
-    engine_version = "2.03.02"
+    engine_version = "5.7.mysql_aurora.2.07.1"
     allow_major_version_upgrade = false
     db_cluster_parameter_group_name = ""
     deletion_protection = false
 
-    enabled_cloudwatch_logs_exports = []
+    enabled_cloudwatch_logs_exports = [] # Not Supported when engine_mode == "serverless"
 
     ## Cluster Network Settings ##
     port = 3306
@@ -89,13 +89,13 @@ aurora_clusters = {
         ingress_ipv6_cidr_blocks = []
         egress_protocols_ports = [] # "protocol.fromport.toport"
         egress_security_groups = []
-        egress_ipv4_cidr_blocks = [module.VPC_VPC1.private_subnet_1.cidr_block, module.VPC_VPC1.private_subnet_2.cidr_block]
+        egress_ipv4_cidr_blocks = []
         egress_ipv6_cidr_blocks = []
         security_group_tags = { "severless_security_groups" = "serverless_1_security_group_1"}
     }
     iam_database_authentication_enabled = false
     iam_roles = []
-    storage_encrypted = false
+    storage_encrypted = true # Required when engine_mode == "serverless"
     kms_key_id = ""
     create_new_kms_key = true
     new_kms_key = {
@@ -109,7 +109,7 @@ aurora_clusters = {
     ## Cluster Backup & Maintenance Settings ##
     preferred_backup_window = "03:00-04:00"
     backup_retention_period = 4
-    backtrack_window = 259200
+    backtrack_window = 0
     skip_final_snapshot = true
     final_snapshot_identifier = "snapyuh"
     preferred_maintenance_window = "sun:04:00-sun:05:00"
@@ -124,7 +124,7 @@ aurora_clusters = {
     scaling_configuration = {
         values = {
             auto_pause = true
-            max_capacity = 5
+            max_capacity = 4
             min_capacity = 1
             seconds_until_auto_pause = 300
             timeout_action = "RollbackCapacityChange"
@@ -167,12 +167,12 @@ cluster_2 = {
     master_password = "Security101isABC123"
     engine_mode = "serverless"
     engine = "aurora-mysql"
-    engine_version = "2.03.02"
+    engine_version = "5.7.mysql_aurora.2.07.1"
     allow_major_version_upgrade = false
     db_cluster_parameter_group_name = ""
     deletion_protection = false
 
-    enabled_cloudwatch_logs_exports = []
+    enabled_cloudwatch_logs_exports = [] # Not Supported when engine_mode == "serverless"
 
     ## Cluster Network Settings ##
     port = 3306
@@ -197,19 +197,19 @@ cluster_2 = {
         name = "Serverless_2_Security_Group_1"
         description = "Description YUH"
         vpc_id = module.VPC_VPC1.vpc.id
-        ingress_protocols_ports = ["tcp.3306.3306"] # "protocol.fromport.toport"
+        ingress_protocols_ports = ["tcp.3306.3306", "tcp.443.443", "tcp.80.80"] # "protocol.fromport.toport"
         ingress_security_groups = []
         ingress_ipv4_cidr_blocks = [module.VPC_VPC1.private_subnet_1.cidr_block, module.VPC_VPC1.private_subnet_2.cidr_block]
         ingress_ipv6_cidr_blocks = []
         egress_protocols_ports = [] # "protocol.fromport.toport"
         egress_security_groups = []
-        egress_ipv4_cidr_blocks = [module.VPC_VPC1.private_subnet_1.cidr_block, module.VPC_VPC1.private_subnet_2.cidr_block]
+        egress_ipv4_cidr_blocks = []
         egress_ipv6_cidr_blocks = []
         security_group_tags = { "severless_security_groups" = "serverless_2_security_group_1"}
     }
     iam_database_authentication_enabled = false
     iam_roles = []
-    storage_encrypted = false
+    storage_encrypted = true # Required when engine_mode == "serverless"
     kms_key_id = ""
     create_new_kms_key = true
     new_kms_key = {
@@ -223,7 +223,7 @@ cluster_2 = {
     ## Cluster Backup & Maintenance Settings ##
     preferred_backup_window = "04:00-05:00"
     backup_retention_period = 4
-    backtrack_window = 259200
+    backtrack_window = 0
     skip_final_snapshot = true
     final_snapshot_identifier = "snapyuh"
     preferred_maintenance_window = "sun:05:00-sun:06:00"
@@ -238,7 +238,7 @@ cluster_2 = {
     scaling_configuration = {
         values = {
             auto_pause = true
-            max_capacity = 5
+            max_capacity = 4
             min_capacity = 1
             seconds_until_auto_pause = 300
             timeout_action = "RollbackCapacityChange"
@@ -279,12 +279,12 @@ cluster_3 = {
     master_password = "WelliGuessUfoundit"
     engine_mode = "serverless"
     engine = "aurora-mysql"
-    engine_version = "2.03.02"
+    engine_version = "5.7.mysql_aurora.2.07.1"
     allow_major_version_upgrade = false
     db_cluster_parameter_group_name = ""
     deletion_protection = false
 
-    enabled_cloudwatch_logs_exports = []
+    enabled_cloudwatch_logs_exports = [] # Not Supported when engine_mode == "serverless"
 
     ## Cluster Network Settings ##
     port = 3306
@@ -315,15 +315,15 @@ cluster_3 = {
         ingress_ipv6_cidr_blocks = []
         egress_protocols_ports = [] # "protocol.fromport.toport"
         egress_security_groups = []
-        egress_ipv4_cidr_blocks = [module.VPC_VPC1.private_subnet_1.cidr_block, module.VPC_VPC1.private_subnet_2.cidr_block]
+        egress_ipv4_cidr_blocks = []
         egress_ipv6_cidr_blocks = []
         security_group_tags = { "severless_security_groups" = "serverless_3_security_group_1"}
     }
     iam_database_authentication_enabled = false
     iam_roles = []
-    storage_encrypted = false
+    storage_encrypted = true # Required when engine_mode == "serverless"
     kms_key_id = ""
-    create_new_kms_key = true
+    create_new_kms_key = true 
     new_kms_key = {
         description = "key1358"
         deletion_window_in_days = 7
@@ -335,7 +335,7 @@ cluster_3 = {
     ## Cluster Backup & Maintenance Settings ##
     preferred_backup_window = "05:00-06:00"
     backup_retention_period = 4
-    backtrack_window = 259200
+    backtrack_window = 0
     skip_final_snapshot = true
     final_snapshot_identifier = "snapyuh"
     preferred_maintenance_window = "sun:06:00-sun:07:00"
@@ -350,7 +350,7 @@ cluster_3 = {
     scaling_configuration = {
         values = {
             auto_pause = true
-            max_capacity = 5
+            max_capacity = 4
             min_capacity = 1
             seconds_until_auto_pause = 300
             timeout_action = "RollbackCapacityChange"
@@ -369,7 +369,7 @@ cluster_4 = {
 
     ## Cluster Settings ##
     global_cluster_member = false
-    cluster_identifier = "serverless3"
+    cluster_identifier = "serverless4"
     use_cluster_identifier_prefix = false
     replication_source_identifier = ""
     source_region = ""
@@ -388,15 +388,15 @@ cluster_4 = {
     ## Cluster System Settings ## 
     database_name = "serverless_4"
     master_username = "Serverless_Admin_Four"
-    master_password = "a"
+    master_password = "abcdefghijklmnop"
     engine_mode = "serverless"
     engine = "aurora-mysql"
-    engine_version = "2.03.02"
+    engine_version = "5.7.mysql_aurora.2.07.1"
     allow_major_version_upgrade = false
     db_cluster_parameter_group_name = ""
     deletion_protection = false
 
-    enabled_cloudwatch_logs_exports = []
+    enabled_cloudwatch_logs_exports = [] # Not Supported when engine_mode == "serverless"
 
     ## Cluster Network Settings ##
     port = 3306
@@ -427,13 +427,13 @@ cluster_4 = {
         ingress_ipv6_cidr_blocks = []
         egress_protocols_ports = [] # "protocol.fromport.toport"
         egress_security_groups = []
-        egress_ipv4_cidr_blocks = [module.VPC_VPC1.private_subnet_1.cidr_block, module.VPC_VPC1.private_subnet_2.cidr_block]
+        egress_ipv4_cidr_blocks = []
         egress_ipv6_cidr_blocks = []
         security_group_tags = { "severless_security_groups" = "serverless_4_security_group_1"}
     }
     iam_database_authentication_enabled = false
     iam_roles = []
-    storage_encrypted = false
+    storage_encrypted = true # Required when engine_mode == "serverless"
     kms_key_id = ""
     create_new_kms_key = true
     new_kms_key = {
@@ -447,7 +447,7 @@ cluster_4 = {
     ## Cluster Backup & Maintenance Settings ##
     preferred_backup_window = "06:00-07:00"
     backup_retention_period = 4
-    backtrack_window = 259200
+    backtrack_window = 0
     skip_final_snapshot = true
     final_snapshot_identifier = "snapyuh"
     preferred_maintenance_window = "sun:07:00-sun:08:00"
@@ -462,7 +462,7 @@ cluster_4 = {
     scaling_configuration = {
         values = {
             auto_pause = true
-            max_capacity = 5
+            max_capacity = 4
             min_capacity = 1
             seconds_until_auto_pause = 300
             timeout_action = "RollbackCapacityChange"

@@ -82,7 +82,7 @@ for_each = var.create_aurora_clusters == true ? var.aurora_clusters : {}
   iam_database_authentication_enabled = each.value.iam_database_authentication_enabled
   iam_roles = each.value.iam_roles
   storage_encrypted = each.value.storage_encrypted
-  kms_key_id = each.value.create_new_kms_key == true ? aws_kms_key.cluster_kms[each.value.new_kms_key["description"]].id : each.value.kms_key_id
+  kms_key_id = each.value.create_new_kms_key == true ? aws_kms_key.cluster_kms[each.value.new_kms_key["description"]].arn : each.value.kms_key_id
 
   ## Cluster Backup & Maintenance Settings ##
   preferred_backup_window = each.value.preferred_backup_window
