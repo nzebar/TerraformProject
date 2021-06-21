@@ -39,7 +39,7 @@
       ],
       "mountPoints": [
          {
-            "sourceVolume": "",
+            "sourceVolume": "TaskDef001RootMount",
             "containerPath": "",
             "readOnly": true
          }

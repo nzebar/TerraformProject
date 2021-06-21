@@ -182,11 +182,11 @@ listeners = {
           values = {
             target_groups = {
               target_group_1 = {
-                arn = module.AUTO_SCALING_GROUPS_1_VPC1.target_group_1.arn
+                arn = module.AUTO_SCALING_GROUPS.target_group_1.arn
                 weight = 50
               }
               target_group_2 = {
-                arn = module.AUTO_SCALING_GROUPS_1_VPC1.target_group_2.arn
+                arn = module.AUTO_SCALING_GROUPS.target_group_2.arn
                 weight = 50
               }
             } 
@@ -220,11 +220,11 @@ listener_rules = {
         values = {
           target_groups = {
             target_group_1 = {
-              arn = module.AUTO_SCALING_GROUPS_1_VPC1.target_group_1.arn
+              arn = module.AUTO_SCALING_GROUPS.target_group_1.arn
               weight = 50
             }
             target_group_2 = {
-              arn = module.AUTO_SCALING_GROUPS_1_VPC1.target_group_2.arn
+              arn = module.AUTO_SCALING_GROUPS.target_group_2.arn
               weight = 50
             }
           } 

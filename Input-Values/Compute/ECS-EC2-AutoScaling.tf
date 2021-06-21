@@ -1,4 +1,4 @@
-module "AUTO_SCALING_GROUPS_1_VPC1" {
+module "AUTO_SCALING_GROUPS" {
   source = "../../Modules/Compute-Modules/Default-Modules/ECS-EC2-AutoScaling-Modules"
 
 ##################
@@ -15,12 +15,12 @@ new_ecs_cluster_settings = {
 
       default_capacity_provider_strategies = {
         cap_1 = {
-          capacity_provider = module.AUTO_SCALING_GROUPS_1_VPC1.capacity_provider_001.name
+          capacity_provider = module.AUTO_SCALING_GROUPS.capacity_provider_001.name
           weight = 1
           base = 1
         }
         cap_2 = {
-          capacity_provider = module.AUTO_SCALING_GROUPS_1_VPC1.capacity_provider_002.name
+          capacity_provider = module.AUTO_SCALING_GROUPS.capacity_provider_002.name
           weight = 1
           base = 0
         }
@@ -43,7 +43,7 @@ capacity_providers = {
 
   capacity_provider_001 = {
     name = "Cluster_001_Capacity_Provider_001"
-    auto_scaling_group_arn = module.AUTO_SCALING_GROUPS_1_VPC1.asg_001.arn
+    auto_scaling_group_arn = module.AUTO_SCALING_GROUPS.asg_001.arn
     managed_termination_protection = "ENABLED"
     maximum_scaling_step_size = 100
     minimum_scaling_step_size = 1
@@ -53,7 +53,7 @@ capacity_providers = {
 
   capacity_provider_002 = {
     name = "Cluster_001_Capacity_Provider_002"
-    auto_scaling_group_arn = module.AUTO_SCALING_GROUPS_1_VPC1.asg_002.arn
+    auto_scaling_group_arn = module.AUTO_SCALING_GROUPS.asg_002.arn
     managed_termination_protection = "ENABLED"
     maximum_scaling_step_size = 100
     minimum_scaling_step_size = 1

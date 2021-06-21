@@ -1,3 +1,11 @@
+########################
+## ECS Cluster Output ##
+########################
+
+output "ecs_cluster" {
+  value = aws_ecs_cluster.new_ecs_cluster["settings"]
+}
+
 ###############################
 ## Capacity Providers Output ##
 ###############################
