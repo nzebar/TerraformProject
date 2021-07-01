@@ -11,3 +11,7 @@ output "LT_001" {
 # output "ebs_1" {
 #   value = aws_ebs_snapshot.new_ebs_snapshot["ebs_1"]
 # }
+
+output "launch_template_security_group" {
+  value = aws_security_group.launch_template_security_groups["Launch_Template_Security_Group_1"].id
+}

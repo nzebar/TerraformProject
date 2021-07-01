@@ -59,9 +59,9 @@ provider "aws" {
 # ## Compute Modules ##
 # #####################       
 
-module "GET_COMPUTE_MODULES" {
-source = "./Input-Values/Compute"
-}
+# module "GET_COMPUTE_MODULES" {
+# source = "./Input-Values/Compute"
+# }
 
 # ####################
 # # Network Modules ##
