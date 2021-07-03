@@ -1,7 +1,7 @@
 # Elasticache Module
 
 ```
-In this section of the module the user is able to create:
+In this module the user is able to create:
     1   -   Elasticache Global Replication Group.
     2   -   Create one or more Elasticache Replication Group.
     3   -   Create one or more Elasticache Clusters.
