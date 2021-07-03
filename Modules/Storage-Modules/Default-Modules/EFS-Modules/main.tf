@@ -5,24 +5,18 @@ locals {
         # Get EFS IDs #
         efs_id = [ for efs_key, efs_vals in var.efs_file_systems: aws_efs_file_system.efs[efs_key].id ]
 
-        # Get EFS Mount Targets to Iterate #
-        # mount_targets = flatten( [ for efs, efs_vals in var.efs_file_systems: 
-        #                             [ for target, target_vals in efs_vals.mount_targets:
-        #                               [ for get_efs_id in local.efs_id:  merge( { (target_vals.module_key) = get_efs_id }, target_vals) ] 
-        #                              ] 
-        #                         ] )
-
         mount_targets = flatten( [ for efs, efs_vals in var.efs_file_systems: 
                                     [ for target, target_vals in efs_vals.mount_targets: {
                                           module_key = target_vals.module_key
                                           file_system_id = aws_efs_file_system.efs[ efs ].id
                                           ip_address = target_vals.ip_address
                                           subnet_id = target_vals.subnet_id 
-                                          security_groups = target_vals.security_groups
                                           new_subnet = {
                                             enabled = target_vals.new_subnet.enabled
                                             cidr_block = target_vals.new_subnet.cidr_block
                                           }
+                                          security_groups = target_vals.security_groups
+                                          new_security_group = target_vals.new_security_group
                                       }
                                     ] 
                                 ] )
@@ -34,37 +28,6 @@ locals {
         # Get Mount Target New Security Group to Iterate #
         new_security_group = flatten( [ for efs, efs_vals in var.efs_file_systems: 
                                         [ for target, target_vals in efs_vals.mount_targets: target_vals.new_security_group if target_vals.new_security_group.enabled == true ] ] )
-
-    ## Get EFS Access Point Root Directory to iterate ##
-    # access_point = flatten( [ for efs, efs_vals in var.efs_file_systems: 
-    #                                     [ for access_point, access_point_vals in efs_vals.access_point: {
-    #                                         file_system_id = aws_efs_file_system.efs[ efs ].id
-    #                                         root_directory = {
-    #                                           module_key = efs_vals.access_point.root_directory.module_key
-    #                                           root_values = {
-    #                                             enabled = efs_vals.access_point.root_directory.root_values.enabled
-    #                                             path = efs_vals.access_point.root_directory.root_values.path
-    #                                             creation_info = {
-    #                                               owner_gid = efs_vals.access_point.root_directory.root_values.creation_info.owner_gid
-    #                                               owner_uid = efs_vals.access_point.root_directory.root_values.creation_info.owner_uid
-    #                                               permissions = efs_vals.access_point.root_directory.root_values.creation_info.permissions
-    #                                             }
-    #                                           } 
-    #                                         }
-    #                                         posix_user = {
-    #                                           module_key = efs_vals.access_point.posix_user.module_key
-    #                                           posix_values = {
-    #                                             enabled = efs_vals.access_point.posix_user.posix_values.enabled
-    #                                             gid = efs_vals.access_point.posix_user.posix_values.gid
-    #                                             secondary_gids = efs_vals.access_point.posix_user.posix_values.secondary_gids
-    #                                             uid = efs_vals.access_point.posix_user.posix_values.uid
-    #                                         } 
-    #                                       }
-    #                                     } 
-    #                                 ] if efs_vals.create_access_point == true && efs_vals.access_point.root_directory.enabled == true ] )
-
-    ## Get Access Point Posix User to Iterate ##
-    #access_point_posix_user = flatten( [ for efs, efs_vals in var.efs_file_systems: efs_vals.posix_user if efs_vals.create_access_point == true && efs_vals.posix_user.enabled == true ] )
 
     ## Get EFS new KMS key settings ##
     efs_kms = flatten( [ for efs, efs_vals in var.efs_file_systems: efs_vals.new_kms_key if efs_vals.encrypted == true && efs_vals.new_kms_key.enabled == true ] )
@@ -147,7 +110,7 @@ for_each = { for o in local.mount_targets: o.module_key => o }
   file_system_id = each.value.file_system_id
   ip_address = each.value.ip_address
   subnet_id      = each.value.new_subnet.enabled == true ? aws_subnet.efs_subnet[each.value.new_subnet.cidr_block].id : each.value.subnet_id
-  security_groups = each.value.security_groups
+  security_groups = concat( each.value.new_security_group.enabled == true ? [aws_security_group.efs_security_group[each.value.new_security_group.name].id] : [], each.value.security_groups )
 }
 
 ## New Subnet for EFS Mount Point ##
