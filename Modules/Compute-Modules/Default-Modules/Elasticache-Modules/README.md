@@ -3,7 +3,7 @@
 ```
 In this module the user is able to create:
     1   -   Elasticache Global Replication Group.
-    2   -   Create one or more Elasticache Replication Group.
+    2   -   Create one or more Elasticache Replication Groups.
     3   -   Create one or more Elasticache Clusters.
 ```
 
@@ -246,7 +246,7 @@ elasticache_clusters = {
         ## Placement Settings ##
         az_mode = "cross-az" # Availiability Zone mode for the Elasticache Cluster. Values: "cross-az" || "single-az"
         availability_zone = "" # For one-zone setup
-        preferred_availability_zones = ["us-east-1a", "us-east-1b"] # For multi-AZ setup
+        preferred_availability_zones = [] # For multi-AZ setup
         elasticache_subnet_group_name = "" # Existing name of Elasticache subnet group to apply to the Elasticache Cluster
         new_elasticache_subnet_group = {
             enabled = true # Whether a new Elasticache subnet group should be created
