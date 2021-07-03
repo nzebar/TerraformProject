@@ -4,30 +4,30 @@ module "ELASTICACHE" {
 ##########################################
 ## Elasticache Global Replication Group ##
 ##########################################
-create_global_replication_group = true
+create_global_replication_group = false
 
-global_replication_group_id_suffix = "yuh_id_suffix_yuh"
+global_replication_group_id_suffix = ""
 global_replication_group_description = ""
-primary_replication_group_id = "yuhrep"
+primary_replication_group_id = ""
 
 ###################################
 ## Elasticache Replication Group ##
 ###################################
-create_elasticache_replication_groups = true
+create_elasticache_replication_groups = false
 elasticache_replication_groups = {
     replication_group_1 = {
         ## Group Settings ##
         global_replication_group_reader = false
-        replication_group_id = "yuhrep"
+        replication_group_id = ""
         replication_group_description = ""
-        engine = "redis" # "redis is only supported value"
-        engine_version = "5.0.6"
+        engine = "" # "redis is only supported value"
+        engine_version = ""
         node_type = "" # Null if global_replication_group_reader == true
         auto_minor_version_upgrade = true
         port = 6379
         parameter_group_name = ""
         new_parameter_group = {
-            enabled = true
+            enabled = false
             name = ""
             family = ""
             parameters = [] # "Name.Value"
@@ -35,44 +35,41 @@ elasticache_replication_groups = {
         }
 
         ## Clustering & Placement Settings ##
-        multi_az_enabled = true
-        automatic_failover_enabled = true
+        multi_az_enabled = false
+        automatic_failover_enabled = false
         cluster_mode = {
           values = {
-            enabled = true 
-            num_node_groups = 2
-            replicas_per_node_group = 2
+            enabled = false 
+            num_node_groups = 0
+            replicas_per_node_group = 0
           }
         }
         number_cache_clusters = 0
         elasticache_subnet_group_name = ""
         new_elasticache_subnet_group = {
-            enabled = true
-            new_elasticache_subnet_group_name = "redis_subnet_group"
+            enabled = false
+            new_elasticache_subnet_group_name = ""
             description = ""
             existing_subnet_ids = []
             add_new_subnets = {
-                enabled = true
-                vpc_id = "test"
-                cidr_block_az = [
-                    "192.168.123.0/24:us-east-1a",
-                    "192.168.13.0/24:us-east-1b",
-                    ] # "CIDR_Block:AZ"
+                enabled = false
+                vpc_id = ""
+                cidr_block_az = [] # "CIDR_Block:AZ"
             }
         }
 
         ## Security Settings ##
-        at_rest_encryption_enabled = true
-        transit_encryption_enabled = true
+        at_rest_encryption_enabled = false
+        transit_encryption_enabled = false
         auth_token = ""
         kms_key_id = ""
         vpc_security_group_ids = []
-        create_security_group = true
+        create_security_group = false
         security_group = {
-            name = "Redis_Security_Group"
-            description = "Description YUH"
+            name = ""
+            description = ""
             vpc_id = ""
-            ingress_protocols_ports = ["tcp.6379.6379"] # "protocol.fromport.toport"
+            ingress_protocols_ports = [""] # "protocol.fromport.toport"
             ingress_security_groups = []
             ingress_ipv4_cidr_blocks = []
             ingress_ipv6_cidr_blocks = []
@@ -80,7 +77,7 @@ elasticache_replication_groups = {
             egress_security_groups = []
             egress_ipv4_cidr_blocks = []
             egress_ipv6_cidr_blocks = []
-            security_group_tags = { "severless_security_groups" = "serverless_1_security_group_1"}
+            security_group_tags = { "key" = "value"}
         }
 
         ## Backup & Maintenance Settings ##
@@ -116,23 +113,25 @@ elasticache_clusters = {
 
     cluster_1 = {
         ## Cluster Settings ##
-        cluster_id = "memcached001"
+        cluster_id = "memcached001cluster"
         engine = "memcached"
-        engine_version = ""
-        node_type = ""
+        engine_version = "1.6.6"
+        node_type = "cache.t2.micro"
         num_cache_nodes = 2
         port = 11211
         parameter_group_name = ""
         new_parameter_group = {
-            enabled = false
-            name = ""
-            family = ""
-            parameters = [] # "Name.Value"
-            tags = { "key" = "value" }
+            enabled = true
+            name = "memcached001parameters"
+            family = "memcached1.6"
+            parameters = [
+                "idle_timeout.3600"
+            ] # "Name.Value"
+            tags = { "elasticache_params" = "memcached001params" }
         }
 
         ## Redis Only Settings ##
-        member_of_replication_group = false
+        replication_group_id = "" # Leave "" if standalone cluster
         snapshot_name = ""
         snapshot_arns = [] # Single element list
         snapshot_window = ""
@@ -141,21 +140,18 @@ elasticache_clusters = {
         
         ## Placement Settings ##
         az_mode = "cross-az"
-        availability_zone = ""
-        preferred_availability_zones = ["us-east-1a", "us-east-1b"]
+        availability_zone = "" # For one-zone setup
+        preferred_availability_zones = ["us-east-1a", "us-east-1b"] # For multi-AZ setup
         elasticache_subnet_group_name = ""
         new_elasticache_subnet_group = {
             enabled = true
-            new_elasticache_subnet_group_name = "memcached_subnet_group"
-            description = "Subnet group for memcached"
-            existing_subnet_ids = [module.VPC_VPC1.database_subnet_1.id, module.VPC_VPC1.database_subnet_2.id]
+            new_elasticache_subnet_group_name = "memcached001subnetgroup"
+            description = "Subnet group for memcached001"
+            existing_subnet_ids = ["subnet-a48a3385","subnet-8cc577ea"]
             add_new_subnets = {
                 enabled = false
                 vpc_id = ""
-                cidr_block_az = [
-                    "192.168.123.0/24:us-east-1a",
-                    "192.168.13.0/24:us-east-1b",
-                    ] # "CIDR_Block:AZ"
+                cidr_block_az = [] # "CIDR_Block:AZ"
             }
         }
 
@@ -165,10 +161,10 @@ elasticache_clusters = {
         elasticache_security_group = {
             name = "memcached_security_group"
             description = "Security Group for Memcached"
-            vpc_id = module.VPC_VPC1.vpc.id
+            vpc_id = "vpc-b46da2c9"
             ingress_protocols_ports = ["tcp.11211.11211"] # "protocol.fromport.toport"
-            ingress_security_groups = [module.AMI_VPC1.launch_template_security_group]
-            ingress_ipv4_cidr_blocks = []
+            ingress_security_groups = []
+            ingress_ipv4_cidr_blocks = ["0.0.0.0/0"]
             ingress_ipv6_cidr_blocks = []
             egress_protocols_ports = [] # "protocol.fromport.toport"
             egress_security_groups = []

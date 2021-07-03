@@ -171,6 +171,7 @@ variable "elasticache_clusters" {
             egress_ipv6_cidr_blocks = list(string)
             security_group_tags = map(string)
         })
+        replication_group_id = string
         maintenance_window = string
         snapshot_name = string
         snapshot_arns = list(string)

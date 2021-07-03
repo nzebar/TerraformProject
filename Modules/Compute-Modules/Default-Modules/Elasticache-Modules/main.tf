@@ -156,10 +156,10 @@ for_each = { for o in local.new_replication_group_parameter_group: o.name => o }
   family = each.value.family
 
   dynamic "parameter" {
-    for_each = toset( [ for parameters in each.value.parameters: split(".", parameters ) ] )
+    for_each = each.value.parameters
     content {
-        name  = parameter.value[0]
-        value = parameter.value[1]
+        name  = element( split(".", parameter.value), 0)
+        value =  element( split(".", parameter.value), 1)
     }
   }
 
@@ -278,7 +278,7 @@ for_each = var.create_elasticache_clusters == true ? var.elasticache_clusters : 
   node_type            = each.value.node_type
   num_cache_nodes      = each.value.num_cache_nodes
   port = each.value.port
-  parameter_group_name = each.value.new_parameter_group["enabled"] == true ? each.value.new_parameter_group["name"]  : each.value.parameter_group_name
+  parameter_group_name = each.value.new_parameter_group["enabled"] == true ? aws_elasticache_parameter_group.elasticache_parameter_group[each.value.new_parameter_group.name].name  : each.value.parameter_group_name
 
   ## Placement Settings ##
   az_mode = each.value.az_mode
@@ -293,6 +293,7 @@ for_each = var.create_elasticache_clusters == true ? var.elasticache_clusters : 
   maintenance_window = each.value.maintenance_window
 
   ## Redis Only Settings ##
+  replication_group_id = each.value.engine == "redis" ? each.value.replication_group_id : null
   snapshot_name = each.value.engine == "redis" ? each.value.snapshot_name : null
   snapshot_arns = each.value.engine == "redis" ? each.value.snapshot_arns : null
   snapshot_window = each.value.engine == "redis" ? each.value.snapshot_window : null
@@ -318,11 +319,11 @@ for_each = { for o in local.new_elasticache_parameter_group: o.name => o }
   name   = each.value.name
   family = each.value.family
 
-  dynamic "parameter" {
-    for_each = toset( [ for parameters in each.value.parameters: split(".", parameters ) ] )
+ dynamic "parameter" {
+    for_each = each.value.parameters
     content {
-        name  = parameter.value[0]
-        value = parameter.value[1]
+        name  = element( split(".", parameter.value), 0)
+        value =  element( split(".", parameter.value), 1)
     }
   }
 
