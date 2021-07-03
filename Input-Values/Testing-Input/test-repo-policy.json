@@ -1,0 +1,14 @@
+{
+  "Version": "2008-10-17",
+  "Statement": [{
+    "Sid": "ECR Repository Policy",
+    "Effect": "Allow",
+    "Principal": {
+      "AWS": "arn:aws:iam::092968731555:user/nzebar1356"
+    },
+    "Action": [
+       "ecr:DescribeImages",
+       "ecr:DescribeRepositories"
+    ]
+  }]
+}

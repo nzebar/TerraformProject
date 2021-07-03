@@ -1,82 +1,59 @@
-#############################
-## ECR Repository Variable ##
-#############################
-
-variable "ecr_name" {
-    description = "Name of ECR repository"
-    type = string
-    default = ""
-}
-
-variable "image_tag_mutability" {
-    description = "Image tag mutability"
-    type = string
-    default = null
-}
-
-variable "scan_on_push" {
-    description = "Whether images are scanned or not when they are pushed to the repo"
-    type = bool
-    default = true
-}
-
-variable "encryption_type" {
-    description = "encryption type for the repo"
-    type = string
-    default = null
-}
-
-variable "kms_key" {
-    description = "Encryption key for the repo"
-    type = string
-    default = null
-}
-
-variable "ecr_tags" {
-    description = "Tags for the ECR Repo"
-    type = map(string)
-    default = {}
-}
-
-####################################
-## ECR Repository Policy Variable ##
-####################################
-
-variable "repository_policy" {
-    description = "String mapping where the value is the policy for the repo"
-    type = map(string)
-    default = {}
-}
-
-##############################################
-## ECR Repository Lifecycle Policy Variable ##
-##############################################
-
-variable "create_lifecycle_policy" {
-    description = "Whether to create a lifecycle policy for the repo or not"
-    type = bool
-    default = false
-}
-
-variable "lifecycle_policy" {
-    description = "String mapping where the value is the lifecycle policy for the repo"
-    type = map(string)
-    default = {}
-}
-
 #########################################
-## ECR Repository Replication Variable ##
+## Replication Configuration Variables ##
 #########################################
 
 variable "create_replication_configuration" {
-    description = "Whether to create a replication configuration for the repo"
-    type = bool
+    description = "Whether to create a replication configuration"
+    type = bool 
     default = false
 }
 
 variable "replication_configuration" {
-    description = "Replication configuration settings for the repo"
+    description = "Setting for replication configuration"
     type = map(map(map(string)))
+}
+
+#############################
+## ECR Repository Variable ##
+#############################
+
+variable "create_ecr_repositories" {
+    description = "Whether to create ECR repositories"
+    type = bool
+    default = false
+}
+
+variable "ecr_repositories" {
+    description = "Settings for creating ECR repositoires"
+    type = map(object({
+        ecr_name = string
+        image_tag_mutability = string
+        scan_on_push = bool
+        encryption_configuration = map(object({
+            enabled = bool
+            encryption_type = string
+            kms_key = string
+            new_kms_key = object({
+                enabled = bool
+                description = string
+                enable_key_rotation = bool
+                deletion_window_in_days = number
+                policy = string
+                kms_tags = map(string)
+            })
+        }))
+        repository_policy = object({
+            enabled = bool
+            module_key = string
+            ecr_repo_policy_local_path = string
+        })
+        lifecycle_policy = object({
+            enabled = bool
+            module_key = string
+            ecr_lifecycle_policy_local_path = string
+        })
+        ecr_tags = map(string)
+    }))
     default = null
 }
 

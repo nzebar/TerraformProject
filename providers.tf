@@ -99,6 +99,6 @@ provider "aws" {
 # Tesing Modules ##
 ###################
 
-# module "GET_TESTING_MODULES" {
-#   source = "./Input-Values/Testing-Input"
-# }
+module "GET_TESTING_MODULES" {
+  source = "./Input-Values/Testing-Input"
+}
