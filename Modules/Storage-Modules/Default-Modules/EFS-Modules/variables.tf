@@ -42,7 +42,7 @@ variable "efs_file_systems" {
         performance_mode = string
         throughput_mode = string
         provisioned_throughput_in_mibps = number
-        efs_policy_local_path = string
+        efs_policy = string
         encrypted = bool
         kms_key_id = string
         new_kms_key = object({

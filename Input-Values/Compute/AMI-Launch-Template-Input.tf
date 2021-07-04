@@ -1,4 +1,4 @@
-module "AMI_VPC1" {
+module "AMI_LT" {
     source = "../../Modules/Compute-Modules/Default-Modules/AMI-Launch-Template-Modules"
 
 ####################

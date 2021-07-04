@@ -1,0 +1,16 @@
+{
+    "Id": "access-point-example03",
+    "Statement": [
+        {
+            "Sid": "access-point-statement-Wordpress-EFS-001",
+            "Effect": "Allow",
+            "Principal": {"Service": "ec2.amazonaws.com"},
+            "Action": "elasticfilesystem:Client*",
+            "Resource": "${efs_1_arn}",
+            "Condition": { 
+                "StringEquals": {
+                    "elasticfilesystem:AccessPointArn":"${access_point_arn}" } 
+            }            
+        }
+    ]
+}

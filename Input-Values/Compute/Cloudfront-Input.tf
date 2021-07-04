@@ -160,7 +160,7 @@ default_cache_behavior_config = {
                 name = "22222" # Required
                 runtime = "cloudfront-js-1.0"
                 comment = "yuh"
-                function_local_path = "Input-Values\\Testing-Input\\test.py"
+                function_local_path = "Input-Values\\Testing-Input\\efs-test-policy.json"
         }}
     }
 }
@@ -213,7 +213,7 @@ ordered_cache_behaviors = {
                   role_arn = "/role"
                   handler = "handeler"
                   runtime = "python2.7"
-                  function_local_path = ""
+                  function_local_path = "Input-Values\\Testing-Input\\efs-test-policy.json"
                   tags = { "key" = "value" }
             } }
         }
@@ -228,7 +228,7 @@ ordered_cache_behaviors = {
                   name = "11111" # Required
                   runtime = "cloudfront-js-1.0"
                   comment = "yuh"
-                  function_local_path = "Input-Values\\Testing-Input\\test.py"
+                  function_local_path = "Input-Values\\Testing-Input\\efs-test-policy.json"
             }}
         }
     }

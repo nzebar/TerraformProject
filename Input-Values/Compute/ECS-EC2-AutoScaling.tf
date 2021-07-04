@@ -167,7 +167,7 @@ auto_scaling_groups = {
 
       # Launch Template
       use_launch_template = true
-      launch_template_id = module.AMI_VPC1.LT_001.id
+      launch_template_id = module.AMI_LT.LT_001.id
       version = "$Latest"
         
       create_launch_template_overrides = false
@@ -296,7 +296,7 @@ auto_scaling_groups = {
 
       # Launch Template
       use_launch_template = true
-      launch_template_id = module.AMI_VPC1.LT_001.id
+      launch_template_id = module.AMI_LT.LT_001.id
       version = "$Latest"
         
       create_launch_template_overrides = false

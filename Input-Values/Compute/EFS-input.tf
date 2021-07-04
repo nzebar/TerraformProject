@@ -15,50 +15,50 @@ efs_file_systems = {
         availability_zone_name = "" # Specify AZ for One-Zone EFS
         mount_targets = {
             target_1 = {
-                module_key = "subnet-us-east-1a"
+                module_key = "mount_target_001"
                 ip_address = ""
-                subnet_id = "subnet-8cc577ea"
+                subnet_id = module.VPC_VPC1.private_subnet_1.id
                 new_subnet = {
                     enabled = false
-                    vpc_id = "vpc-b46da2c9"
-                    cidr_block = "172.31.2.0/24"
-                    availability_zone = "us-east-1a"
+                    vpc_id = ""
+                    cidr_block = ""
+                    availability_zone = ""
                     subnet_tags = { "key" = "value" }
                 }
                 security_groups = []
                 new_security_group = {
                     enabled = true
-                    name = "Wordpress_EFS_Security_Group_001" # Required Must Be Unique
+                    name = "Wordpress_EFS_001_Security_Group_001" # Required Must Be Unique
                     description = "Security Group for Wordpress EFS 001"
-                    vpc_id = "vpc-b46da2c9"
+                    vpc_id = module.VPC_VPC1.vpc.id
                     ingress_protocol_ports = ["tcp.2049.2049"] # "protocol.fromport.toport"
-                    ingress_security_groups = []
-                    ingress_ipv4_cidr_blocks = ["0.0.0.0/0"]
+                    ingress_security_groups = [module.AMI_LT.launch_template_security_group]
+                    ingress_ipv4_cidr_blocks = []
                     ingress_ipv6_cidr_blocks = []
-                    security_group_tags = { "mount_point_security_group" = "subnet-us-east-1a"}
+                    security_group_tags = { "mount_target_security_group" = "mount_target_001"}
             }}
             target_2 = {
-                module_key = "subnet-us-east-1b"
+                module_key = "mount_target_002"
                 ip_address = ""
-                subnet_id = "subnet-a48a3385"
+                subnet_id = module.VPC_VPC1.private_subnet_1.id
                 new_subnet = {
                     enabled = false
-                    vpc_id = "vpc-b46da2c9"
-                    cidr_block = "172.31.3.0/24"
-                    availability_zone = "us-east-1a"
+                    vpc_id = ""
+                    cidr_block = ""
+                    availability_zone = ""
                     subnet_tags = { "key" = "value" }
                 }
                 security_groups = []
                 new_security_group = {
                     enabled = true
-                    name = "Wordpress_EFS_Security_Group_002" # Required Must Be Unique
-                    description = "Security Group for Wordpress EFS 002"
-                    vpc_id = "vpc-b46da2c9"
+                    name = "Wordpress_EFS_001_Security_Group_002" # Required Must Be Unique
+                    description = "Security Group for Wordpress EFS 001"
+                    vpc_id = module.VPC_VPC1.vpc.id
                     ingress_protocol_ports = ["tcp.2049.2049"] # "protocol.fromport.toport"
-                    ingress_security_groups = []
-                    ingress_ipv4_cidr_blocks = ["0.0.0.0/0"]
+                    ingress_security_groups = [module.AMI_LT.launch_template_security_group]
+                    ingress_ipv4_cidr_blocks = []
                     ingress_ipv6_cidr_blocks = []
-                    security_group_tags = { "mount_point_security_group" = "subnet-us-east-1b"}
+                    security_group_tags = { "mount_point_security_group" = "mount_target_002"}
             }}
         }
         ## Access Point ##
@@ -84,7 +84,25 @@ efs_file_systems = {
         throughput_mode = "bursting"
         provisioned_throughput_in_mibps = 0
         ## Security ##
-        efs_policy_local_path = "Input-Values\\Testing-Input\\efs-test-policy.json"
+        efs_policy = ""
+        # efs_policy = <<EOF
+        # {
+        #     "Id": "access-point-example03",
+        #     "Statement": [
+        #         {
+        #             "Sid": "access-point-statement-Wordpress-EFS-001",
+        #             "Effect": "Allow",
+        #             "Principal": {"Service": "ec2.amazonaws.com"},
+        #             "Action": "elasticfilesystem:Client*",
+        #             "Resource": "${module.EFS.EFS_1.arn}",
+        #             "Condition": { 
+        #                 "StringEquals": {
+        #                     "elasticfilesystem:AccessPointArn":"${module.EFS.EFS_1_Access_Point.arn}" } 
+        #             }            
+        #         }
+        #     ]
+        # }
+        # EOF
         encrypted = false
         kms_key_id = ""
         new_kms_key = {

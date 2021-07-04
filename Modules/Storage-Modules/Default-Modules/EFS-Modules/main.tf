@@ -158,6 +158,6 @@ for_each = var.efs_file_systems
 
   file_system_id = aws_efs_file_system.efs[each.key].id
 
-  policy = file(each.value.efs_policy_local_path)
+  policy =  each.value.efs_policy 
 
 }

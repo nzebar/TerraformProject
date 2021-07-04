@@ -47,13 +47,13 @@ ecr_repositories = {
         repository_policy = {
             enabled = true
             module_key = "repo_yuh" # Required, must be unique
-            ecr_repo_policy_local_path = "Input-Values\\Testing-Input\\test-repo-policy.json"
+            ecr_repo_policy_local_path = "Input-Values\\Testing-Input\\efs-test-policy.json"
         }
         ## Lifecycle Policy ##
         lifecycle_policy = {
             enabled = true
             module_key = "lifecycle_yuh" # Required, must be unique
-            ecr_lifecycle_policy_local_path = "Input-Values\\Testing-Input\\test-lifecycle-policy.json"
+            ecr_lifecycle_policy_local_path = "Input-Values\\Testing-Input\\efs-test-policy.json"
         }
         ## Tags ##
         ecr_tags = {
