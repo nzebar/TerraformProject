@@ -40,7 +40,7 @@ efs_file_systems = {
             target_2 = {
                 module_key = "mount_target_002"
                 ip_address = ""
-                subnet_id = module.VPC_VPC1.private_subnet_1.id
+                subnet_id = module.VPC_VPC1.private_subnet_2.id
                 new_subnet = {
                     enabled = false
                     vpc_id = ""
@@ -62,10 +62,11 @@ efs_file_systems = {
             }}
         }
         ## Access Point ##
-        create_access_point = false
         access_point = {
+            enabled = true
+            module_key = "EFS_1_Access_Point" # Reqired, must be unique
             root_directory = {
-                enabled = true
+                enabled = false
                 path = "/"
                 creation_info = {
                     owner_gid = 0
@@ -84,25 +85,11 @@ efs_file_systems = {
         throughput_mode = "bursting"
         provisioned_throughput_in_mibps = 0
         ## Security ##
-        efs_policy = ""
-        # efs_policy = <<EOF
-        # {
-        #     "Id": "access-point-example03",
-        #     "Statement": [
-        #         {
-        #             "Sid": "access-point-statement-Wordpress-EFS-001",
-        #             "Effect": "Allow",
-        #             "Principal": {"Service": "ec2.amazonaws.com"},
-        #             "Action": "elasticfilesystem:Client*",
-        #             "Resource": "${module.EFS.EFS_1.arn}",
-        #             "Condition": { 
-        #                 "StringEquals": {
-        #                     "elasticfilesystem:AccessPointArn":"${module.EFS.EFS_1_Access_Point.arn}" } 
-        #             }            
-        #         }
-        #     ]
-        # }
-        # EOF
+        efs_policy = {
+            enabled = true
+            module_key = "Wordress_EFS_Policy_001" # Required, must be unique
+            efs_policy_local_path = "Input-Values\\Compute\\Scripts\\EFS-Policy.json"
+        }
         encrypted = false
         kms_key_id = ""
         new_kms_key = {
@@ -114,15 +101,13 @@ efs_file_systems = {
             kms_tags = { "Key" = "Value" }
         }
         ## Lifecycle ##
-        enable_lifecycle_policy = true
+        enable_lifecycle_policy = false
         lifecycle_policy = { transition_to_ia = "" }
         ## Tags ##
         tags = {
             "Wordpress_EFS" = "Wordpress_EFS_001"
         }
     }
-
-    
 
 }
 

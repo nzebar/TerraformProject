@@ -81,8 +81,9 @@ efs_file_systems = {
             
         }
         ## Access Point ##
-        create_access_point = false # Whether to create an access point for the EFS file system
         access_point = {
+            enabled = "" # Whether to create an Access Point for this EFS File System
+            module_key = "" # Required, module key. Must be unique
             root_directory = {
                 enabled = true # Whether to secify a root directory for the access point
                 path = "/" # Path on the EFS file system to designate as access point. Maximum four subdirectories
@@ -103,7 +104,11 @@ efs_file_systems = {
         throughput_mode = "bursting" # Throughput mode: "bursting" || "provisioned"
         provisioned_throughput_in_mibps = 0 # WARNING, Very Expensive! Allocated throughput for EFS file systems with provisioned throughput mode
         ## Security ##
-        efs_policy_local_path = "" # Local file path to JSON file containing policy
+        efs_policy = {
+            enabled = true # Whether to create a policy for EFS access
+            module_key = "" # Required, must be unique
+            efs_policy_local_path = "" # Local path to JSON file containing the EFS policy
+        } 
         encrypted = false # Whether to encrypt the EFS file system
         kms_key_id = "" # ID of existing KMS Key to use for encrypting the EFS file system
         new_kms_key = {

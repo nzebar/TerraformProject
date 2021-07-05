@@ -119,12 +119,22 @@ create_task_definition = true
   execution_role_arn = ""
 
 ## System Settings ##
-  ecs_cpu = 0
-  ecs_memory = 0
+  ecs_cpu = 1
+  ecs_memory = 2
   ipc_mode = "task"
   pid_mode = "task"
   requires_compatibilities = ["EC2"]
-  container_definitions = "Input-Values\\CICD\\Source\\Container-Definitions\\task_def.json" # Local file path to file containing container definitions
+  container_definitions = "Input-Values\\Compute\\Scripts\\task_def.json" # Local file path to file containing container definitions
+  container_definitions_env_vars = {
+    image_url = module.ECR_VPC1.ecr_1.repository_url
+    image_tag = "$Latest"
+    WORDPRESS_DB_HOST = module.AURORA_CLUSTERS_VPC1.serverless1.endpoint
+    WORDPRESS_DB_NAME = module.AURORA_CLUSTERS_VPC1.serverless1.database_name
+    WORDPRESS_DB_USER = module.AURORA_CLUSTERS_VPC1.serverless1.master_username
+    WORDPRESS_DB_PASSWORD = "SuperSecretPassword123" 
+    WP_HOME = module.LOADBALANCER_VPC1.app_lb.dns_name
+    WP_SITEURL = module.LOADBALANCER_VPC1.app_lb.dns_name
+  }
 
 ## GPU Settings ##
   configure_inference_accelerator = false
@@ -135,40 +145,74 @@ create_task_definition = true
     }
   }
 
-## Storage Settings ##
-  volume_name = "TaskDef001RootMount"
-  volume_host_path = "/etc/ecs"
+## Volume Configurations ##
+volume_configurations = {
 
-  configure_docker_volume_configuration = true
-  docker_volume_configuration = {
+  config_1 = {
+    enabled = true
+    module_key = "docker_vol" # Required, must be unique
+    name = "testname"
+    host_path = "/"
+    volume_config_type = "docker_volume_configuration"
     config = {
-      autoprovision = false
+      autoprovision = null
       scope = "task"
-      driver_opts = {}
-      driver = ""
+      driver_opts = {
+        type = "nfs"
+        device = ":/"
+        o = ""
+      }
+      driver = "local"
       labels = {}
     }
   }
 
-  configure_efs_volume_configuration = false
-  efs_volume_configuration = {
+  config_2 = {
+    enabled = true
+    module_key = "docker_vol_2" # Required, must be unique
+    name = "testname222"
+    host_path = "/test"
+    volume_config_type = "docker_volume_configuration"
     config = {
-      file_system_id = ""
-      root_directory = ""
+      autoprovision = null
+      scope = "task"
+      driver_opts = {
+        type = "nfs"
+        device = ":/"
+        o = ""
+      }
+      driver = "local"
+      labels = {}
+    }
+  }
+
+  config_3 = {
+    enabled = true
+    module_key = "efs_vol" # Required, must be unique
+    name = "testname333"
+    host_path = "/test33"
+    volume_config_type = "efs_volume_configuration"
+    config = {
+      file_system_id = "sdfg333"
+      root_directory = "/"
       transit_encryption = "ENABLED"
       transit_encryption_port = 21
       authorization_config = {
           access_point_id = ""
-          iam = true
+          iam = "DISABLED"
       }
     }
   }
 
-  configure_fsx_windows_file_server_volume_configuration = false
-  fsx_windows_file_server_volume_configuration = {
+  config_4 = {
+    enabled = true
+    module_key = "FSx_Vol" # Required, must be unique
+    name = "testnaame444"
+    host_path = "/test5"
+    volume_config_type = "fsx_windows_file_server_volume_configuration"
     config = {
-      file_system_id = ""
-      root_directory = ""
+      file_system_id = "id_yuh"
+      root_directory = "/"
       authorization_config = {
           credentials_parameter = ""
           domain = ""
@@ -176,7 +220,9 @@ create_task_definition = true
     }
   }
 
-  configure_ephemeral_storage = false # AWS Fargate Only
+}
+
+configure_ephemeral_storage = false # AWS Fargate Only
   ephemeral_storage = {
     size_in_gib = 0
   }

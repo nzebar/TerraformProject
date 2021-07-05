@@ -1,3 +1,52 @@
+locals {
+
+  ## Get Docker Volume Configuration to Iterate ##
+  docker_volume_config = flatten( [ for volume_configs, config_vals in var.volume_configurations: {
+                      module_key = config_vals.module_key
+                      name = config_vals.name
+                      host_path = config_vals.host_path
+                      config = {
+                          autoprovision = config_vals.config.autoprovision
+                          scope = config_vals.config.scope
+                          driver_opts = config_vals.config.driver_opts
+                          driver = config_vals.config.driver
+                          labels = config_vals.config.labels
+                       }
+                      }
+                      if config_vals.enabled == true && config_vals.volume_config_type == "docker_volume_configuration" ] 
+                    )
+  
+
+  ## Get EFS Volume Configuration to Iterate ##
+  efs_volume_config = flatten( [ for volume_config, config_vals in var.volume_configurations: {
+                      module_key = config_vals.module_key
+                      name = config_vals.name
+                      host_path = config_vals.host_path
+                      config = {
+                          file_system_id = config_vals.config.file_system_id
+                          root_directory = config_vals.config.root_directory
+                          transit_encryption = config_vals.config.transit_encryption
+                          transit_encryption_port = config_vals.config.transit_encryption_port
+                          authorization_config = config_vals.config.authorization_config
+                        }
+                      }
+                      if config_vals.enabled == true && config_vals.volume_config_type == "efs_volume_configuration" ] 
+                    )
+
+  ## Get FSx Windows File Server Volume Configuration to Iterate ##
+  fsx_windows_volume_config = flatten( [ for volume_config, config_vals in var.volume_configurations: {
+                      module_key = config_vals.module_key
+                      name = config_vals.name
+                      host_path = config_vals.host_path
+                      config = {
+                          file_system_id = config_vals.config.file_system_id
+                          root_directory = config_vals.config.root_directory
+                          authorization_config = config_vals.config.authorization_config
+                        }
+                      }
+                      if config_vals.enabled == true && config_vals.volume_config_type == "fsx_windows_file_server_volume_configuration" ] 
+                      )
+}
 #################
 ## ECS Service ##
 #################
@@ -118,7 +167,7 @@ count = var.create_task_definition == true ? 1 : 0
   ipc_mode = var.ipc_mode == "" ? null : var.ipc_mode
   pid_mode = var.pid_mode == "" ? null : var.pid_mode
   requires_compatibilities = var.requires_compatibilities
-  container_definitions = file(var.container_definitions)
+  container_definitions = templatefile(var.container_definitions, var.container_definitions_env_vars)
 
 ## GPU Settings ##
   dynamic "inference_accelerator" {
@@ -130,40 +179,52 @@ count = var.create_task_definition == true ? 1 : 0
   }
 
 ## Storage Settings ##
-volume {
-  name = var.volume_name
-  host_path = var.volume_host_path
-    dynamic "docker_volume_configuration" {
-      for_each = var.configure_docker_volume_configuration == true ? var.docker_volume_configuration : {}
-      content {
-        autoprovision = docker_volume_configuration.value.autoprovision
-        scope = docker_volume_configuration.value.scope
-        driver_opts = docker_volume_configuration.value.driver_opts
-        driver = docker_volume_configuration.value.driver
-        labels = docker_volume_configuration.value.labels
-      }
+
+dynamic "volume" {
+  for_each = { for o in local.docker_volume_config: o.module_key => o }
+  content {
+    name = volume.value.name
+    host_path = volume.value.host_path
+    docker_volume_configuration {
+        autoprovision = volume.value.config.autoprovision
+        scope = volume.value.config.scope
+        driver_opts = volume.value.config.driver_opts
+        driver = volume.value.config.driver
+        labels = volume.value.config.labels
     }
-    dynamic "efs_volume_configuration" {
-      for_each = var.configure_efs_volume_configuration == true ? var.efs_volume_configuration : {}
-      content {
-        file_system_id = efs_volume_configuration.value.file_system_id
-        root_directory = efs_volume_configuration.value.root_directory
-        transit_encryption = efs_volume_configuration.value.transit_encryption
-        transit_encryption_port = efs_volume_configuration.value.transit_encryption_port
-        authorization_config {
-          access_point_id = efs_volume_configuration.value.authorization_config.access_point_id
-          iam = efs_volume_configuration.value.authorization_config.iam
+  }
+}
+
+dynamic "volume" {
+  for_each = { for o in local.efs_volume_config: o.module_key => o }
+  content {
+    name = volume.value.name
+    host_path = volume.value.host_path
+    efs_volume_configuration {
+      file_system_id = volume.value.config.file_system_id
+      root_directory = volume.value.config.root_directory
+      transit_encryption = volume.value.config.transit_encryption
+      transit_encryption_port = volume.value.config.transit_encryption_port
+      authorization_config {
+        access_point_id = volume.value.config.authorization_config.access_point_id
+        iam = volume.value.config.authorization_config.iam
       }
     }
   }
-    dynamic "fsx_windows_file_server_volume_configuration" {
-      for_each = var.configure_fsx_windows_file_server_volume_configuration == true ? var.fsx_windows_file_server_volume_configuration : {}
-      content {
-        file_system_id = fsx_windows_file_server_volume_configuration.value.file_system_id
-        root_directory = fsx_windows_file_server_volume_configuration.value.root_directory
-        authorization_config {
-          credentials_parameter = fsx_windows_file_server_volume_configuration.value.authorization_config.credentials_parameter
-          domain = fsx_windows_file_server_volume_configuration.value.authorization_config.domain
+}
+
+
+dynamic "volume" {
+  for_each = { for o in local.fsx_windows_volume_config: o.module_key => o }
+  content {
+    name = volume.value.name
+    host_path = volume.value.host_path
+    fsx_windows_file_server_volume_configuration {
+      file_system_id = volume.value.config.file_system_id
+      root_directory = volume.value.config.root_directory
+      authorization_config {
+        credentials_parameter = volume.value.config.authorization_config.credentials_parameter
+        domain = volume.value.config.authorization_config.domain
       }
     }
   }

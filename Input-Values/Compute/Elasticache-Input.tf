@@ -147,7 +147,7 @@ elasticache_clusters = {
             enabled = true
             new_elasticache_subnet_group_name = "memcached001subnetgroup"
             description = "Subnet group for memcached001"
-            existing_subnet_ids = ["subnet-a48a3385","subnet-8cc577ea"]
+            existing_subnet_ids = [module.VPC_VPC1.database_subnet_1.id, module.VPC_VPC1.database_subnet_2.id]
             add_new_subnets = {
                 enabled = false
                 vpc_id = ""
@@ -161,16 +161,16 @@ elasticache_clusters = {
         elasticache_security_group = {
             name = "memcached_security_group"
             description = "Security Group for Memcached"
-            vpc_id = "vpc-b46da2c9"
+            vpc_id = module.VPC_VPC1.vpc.id
             ingress_protocols_ports = ["tcp.11211.11211"] # "protocol.fromport.toport"
-            ingress_security_groups = []
-            ingress_ipv4_cidr_blocks = ["0.0.0.0/0"]
+            ingress_security_groups = [module.AMI_LT.launch_template_security_group]
+            ingress_ipv4_cidr_blocks = []
             ingress_ipv6_cidr_blocks = []
             egress_protocols_ports = [] # "protocol.fromport.toport"
             egress_security_groups = []
             egress_ipv4_cidr_blocks = []
             egress_ipv6_cidr_blocks = []
-            security_group_tags = { "elasticache_security_groups" = "memcached_security_group"}
+            security_group_tags = { "elasticache_security_groups" = "memcached_001_security_group"}
         }
 
         ## Maintenance Settings ##
@@ -180,7 +180,7 @@ elasticache_clusters = {
         notification_topic_arn = ""
         create_notification_topic = false
         new_notification_topic = {
-            name = "SNSyuh"
+            name = ""
             values = {}
             tags = { "key" = "value" }
         }

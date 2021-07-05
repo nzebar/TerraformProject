@@ -1,16 +1,18 @@
 {
-    "Id": "access-point-example03",
+    "Version": "2012-10-17",
+    "Id": "ExamplePolicy01",
     "Statement": [
         {
-            "Sid": "access-point-statement-Wordpress-EFS-001",
+            "Sid": "Wordpress_001_EFS_Policy",
             "Effect": "Allow",
-            "Principal": {"Service": "ec2.amazonaws.com"},
-            "Action": "elasticfilesystem:Client*",
-            "Resource": "${efs_1_arn}",
-            "Condition": { 
-                "StringEquals": {
-                    "elasticfilesystem:AccessPointArn":"${access_point_arn}" } 
-            }            
+            "Principal": {
+                "AWS": "arn:aws:iam::092968731555:user/nzebar1356"
+            },
+            "Action": [                
+                "elasticfilesystem:ClientMount",
+                "elasticfilesystem:ClientWrite"
+            ],
+            "Resource": "arn:aws:elasticfilesystem:us-east-1:092968731555:file-system/Wordpress_EFS_001"
         }
     ]
 }

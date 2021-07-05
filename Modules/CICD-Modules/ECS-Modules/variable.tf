@@ -310,6 +310,12 @@ variable "container_definitions" {
     default = null
 }
 
+variable "container_definitions_env_vars" {
+    description = "Environment Variables to be passed to container definitions file for automation"
+    type = any
+    default = {}
+}
+
 ## GPU Settings ##
 
 variable "configure_inference_accelerator" {
@@ -326,70 +332,10 @@ variable "inference_accelerator" {
 
 ## Storage Settings ##
 
-variable "volume_name" {
-    description = "Name for the Docker volume to mount to the host"
-    type = string
-    default = null
-}
-
-variable "volume_host_path" {
-    description =  "Path on the host instance that is presented to the ECS container"
-    type = string
-    default = null
-}
-
-variable "configure_docker_volume_configuration" {
-    description = "Whether to configure the volume docker"
-    type = bool
-    default = false
-}
-
-variable "docker_volume_configuration" {
-    description = "Settings for the Docker Volume Configuration"
-    type = map(object({
-        autoprovision = bool
-        scope = string
-        driver_opts = map(any)
-        driver = string
-        labels = map(any)
-    }))
+variable "volume_configurations" {
+    description = "Settings for the columes to specify for the task definition"
+    type = any
     default = {}
-}
-
-variable "configure_efs_volume_configuration" {
-    description = "Whether to configure the EFS volume configuration"
-    type = bool
-    default = false
-}
-
-variable "efs_volume_configuration" {
-    description = "Settings for configuring the EFS volume configuration"
-    type = map(object({
-        file_system_id = string
-        root_directory = string
-        transit_encryption = string
-        transit_encryption_port = number
-        authorization_config = object({
-            access_point_id = string
-            iam = bool
-        })
-    }))
-    default = {}
-}
-
-variable "configure_fsx_windows_file_server_volume_configuration" {
-    description = "Whether to configure the fsx_windows_file_server_volume_configuration"
-    type = bool
-    default = false
-}
-
-variable "fsx_windows_file_server_volume_configuration" {
-    description = "Settings for fsx_windows_file_server_volume_configuration"
-    type = map(object({
-        file_system_id = string
-        root_directory = string
-        authorization_config = map(string)
-    }))
 }
 
 variable "configure_ephemeral_storage" {
@@ -423,7 +369,7 @@ variable "proxy_configuration" {
     type = map(object({
         type = string
         container_name = string
-        properties = map(any)
+        properties = any
     }))
     default = {}
 }

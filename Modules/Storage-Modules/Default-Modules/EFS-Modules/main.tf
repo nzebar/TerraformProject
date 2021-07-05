@@ -29,8 +29,24 @@ locals {
         new_security_group = flatten( [ for efs, efs_vals in var.efs_file_systems: 
                                         [ for target, target_vals in efs_vals.mount_targets: target_vals.new_security_group if target_vals.new_security_group.enabled == true ] ] )
 
+    ## Get EFS Access Point to Iterate ##
+    efs_access_point = flatten( [ for efs, efs_vals in var.efs_file_systems: {
+      file_system_id = aws_efs_file_system.efs[ efs ].id
+      module_key = efs_vals.access_point.module_key
+      root_directory = efs_vals.access_point.root_directory
+      posix_user = efs_vals.access_point.posix_user
+    }
+    if efs_vals.access_point.enabled == true ] )
     ## Get EFS new KMS key settings ##
     efs_kms = flatten( [ for efs, efs_vals in var.efs_file_systems: efs_vals.new_kms_key if efs_vals.encrypted == true && efs_vals.new_kms_key.enabled == true ] )
+
+    ## Get EFS Policy if Enabled ##
+    efs_policy = flatten( [ for efs, efs_vals in var.efs_file_systems: {
+      file_system_id = aws_efs_file_system.efs[ efs ].id
+      module_key = efs_vals.efs_policy.module_key
+      efs_policy_local_path = efs_vals.efs_policy.efs_policy_local_path
+    } 
+    if efs_vals.efs_policy.enabled == true ] )
 
 }
 
@@ -75,12 +91,12 @@ for_each = { for o in local.efs_kms: o.description => o}
 ## EFS Access Point ##
 ######################
 resource "aws_efs_access_point" "efs_access_point" {
-for_each = var.efs_file_systems
+for_each = { for o in local.efs_access_point: o.module_key => o }
 
-  file_system_id = aws_efs_file_system.efs[each.key].id
+  file_system_id = each.value.file_system_id
 
   dynamic "root_directory" {
-      for_each = { for o in each.value.access_point: o.enabled => o if o == "root_directory" }
+      for_each = { for o in local.efs_access_point: o.module_key => o if o.root_directory.enabled == true }
       content {
           path = each.value.root_directory.path
           creation_info {
@@ -92,7 +108,7 @@ for_each = var.efs_file_systems
   }
 
   dynamic "posix_user" {
-      for_each = { for o in each.value.access_point: o.enabled => o if o == "posix_user" }
+      for_each = { for o in local.efs_access_point: o.module_key => o if o.posix_user.enabled == true }
       content {
           gid = each.value.access_point.posix_user.gid
           secondary_gids = each.value.access_point.posix_user.secondary_gids
@@ -154,10 +170,10 @@ for_each = { for o in local.new_security_group: o.name => o }
 ## EFS Policy ##
 ################
 resource "aws_efs_file_system_policy" "efs_policy" {
-for_each = var.efs_file_systems
+for_each = {for o in local.efs_policy: o.module_key => o }
 
-  file_system_id = aws_efs_file_system.efs[each.key].id
+  file_system_id = each.value.file_system_id
 
-  policy =  each.value.efs_policy 
+  policy =  file(each.value.efs_policy_local_path) 
 
 }

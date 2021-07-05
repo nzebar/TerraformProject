@@ -1,3 +1,11 @@
+#######################################
+## Application Load Balancer Outputs ##
+#######################################
+
+output "app_lb" {
+  value = aws_lb.load_balancer["application"]
+}
+
 ###############################################
 ## Application Load Balancer Security Groups ##
 ###############################################

@@ -37,12 +37,29 @@ variable "efs_file_systems" {
               security_group_tags = map(string)
           })
       }))
-        create_access_point = bool
-        access_point = any
+        access_point = object({
+            enabled = bool
+            module_key = string
+            root_directory = object({
+                enabled = bool
+                path = string
+                creation_info = map(number)
+            })
+            posix_user = object({
+                enabled = bool
+                gid = number
+                secondary_gids = list(number)
+                uid = number
+            })
+        })
         performance_mode = string
         throughput_mode = string
         provisioned_throughput_in_mibps = number
-        efs_policy = string
+        efs_policy = object({
+            enabled = bool
+            module_key = string
+            efs_policy_local_path = string
+        })
         encrypted = bool
         kms_key_id = string
         new_kms_key = object({
