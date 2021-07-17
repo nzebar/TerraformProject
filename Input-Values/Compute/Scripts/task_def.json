@@ -1,7 +1,7 @@
 [ 
    {
       "name": "Wordpress_001",
-      "image": "${image_url}/{image_tag}",
+      "image": "${image_url}/${image_name_tag}",
       "cpu": 512,
       "memory": 1000,
       "memoryReservation": 750,
@@ -31,140 +31,27 @@
          },
          {
             "name": "WORDPRESS_CONFIG_EXTRA",
-            "value": "define( 'WP_HOME', ${WP_HOME} ); define( 'WP_SITEURL', ${WP_SITEURL} ); define('CONCATENATE_SCRIPTS', false); define('WPINV_USE_PHP_SESSIONS', false);define('FS_METHOD', 'direct');"
+            "value": "define( 'WP_HOME', ${WP_HOME} ); define( 'WP_SITEURL', ${WP_SITEURL} ); define('CONCATENATE_SCRIPTS', false); define('FS_METHOD', 'direct');"
          }
       ],
       "mountPoints": [
          {
-            "sourceVolume": "TaskDef001RootMount",
-            "containerPath": "",
+            "sourceVolume": "wp_plugins",
+            "containerPath": "/var/www/html/wp-content/plugins",
             "readOnly": true
-         }
-      ],
-      "volumesFrom": [
-         {
-            "sourceContainer": "",
-            "readOnly": true
-         }
-      ],
-      "linuxParameters": {
-         "capabilities": {
-            "add": [
-                  ""
-            ],
-            "drop": [
-                  ""
-            ]
          },
-         "devices": [
-            {
-                  "hostPath": "",
-                  "containerPath": "",
-                  "permissions": [
-                     "mknod"
-                  ]
-            }
-         ],
-         "initProcessEnabled": true,
-         "sharedMemorySize": 0,
-         "tmpfs": [
-            {
-                  "containerPath": "",
-                  "size": 0,
-                  "mountOptions": [
-                     ""
-                  ]
-            }
-         ],
-         "maxSwap": 0,
-         "swappiness": 0
-      },
-      "secrets": [
          {
-            "name": "",
-            "valueFrom": ""
+            "sourceVolume": "wp_cache",
+            "containerPath": "/var/www/html/wp-content/cache",
+            "readOnly": true
          }
       ],
-      "dependsOn": [
-         {
-            "containerName": "",
-            "condition": "SUCCESS"
-         }
-      ],
-      "startTimeout": 0,
-      "stopTimeout": 0,
-      "hostname": "",
-      "user": "",
-      "workingDirectory": "",
-      "disableNetworking": true,
+      "entryPoint": [
+         "ping"
+       ],
+      "disableNetworking": false,
       "privileged": true,
-      "readonlyRootFilesystem": true,
-      "dnsServers": [
-         ""
-      ],
-      "dnsSearchDomains": [
-         ""
-      ],
-      "extraHosts": [
-         {
-            "hostname": "",
-            "ipAddress": ""
-         }
-      ],
-      "dockerSecurityOptions": [
-         ""
-      ],
-      "interactive": true,
-      "pseudoTerminal": true,
-      "dockerLabels": {
-         "KeyName": ""
-      },
-      "ulimits": [
-         {
-            "name": "rtprio",
-            "softLimit": 0,
-            "hardLimit": 0
-         }
-      ],
-      "logConfiguration": {
-         "logDriver": "splunk",
-         "options": {
-            "KeyName": ""
-         },
-         "secretOptions": [
-            {
-                  "name": "",
-                  "valueFrom": ""
-            }
-         ]
-      },
-      "healthCheck": {
-         "command": [
-            ""
-         ],
-         "interval": 0,
-         "timeout": 0,
-         "retries": 0,
-         "startPeriod": 0
-      },
-      "systemControls": [
-         {
-            "namespace": "",
-            "value": ""
-         }
-      ],
-      "resourceRequirements": [
-         {
-            "value": "",
-            "type": "GPU"
-         }
-      ],
-      "firelensConfiguration": {
-         "type": "fluentd",
-         "options": {
-            "KeyName": ""
-         }
-      }
+      "readonlyRootFilesystem": true
    }
 ]
 

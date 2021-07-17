@@ -121,13 +121,13 @@ create_task_definition = true
 ## System Settings ##
   ecs_cpu = 1
   ecs_memory = 2
-  ipc_mode = "task"
-  pid_mode = "task"
+  ipc_mode = "host"
+  pid_mode = "host"
   requires_compatibilities = ["EC2"]
   container_definitions = "Input-Values\\Compute\\Scripts\\task_def.json" # Local file path to file containing container definitions
   container_definitions_env_vars = {
     image_url = module.ECR_VPC1.ecr_1.repository_url
-    image_tag = "$Latest"
+    image_name_tag = "$Latest"
     WORDPRESS_DB_HOST = module.AURORA_CLUSTERS_VPC1.serverless1.endpoint
     WORDPRESS_DB_NAME = module.AURORA_CLUSTERS_VPC1.serverless1.database_name
     WORDPRESS_DB_USER = module.AURORA_CLUSTERS_VPC1.serverless1.master_username
@@ -150,9 +150,9 @@ volume_configurations = {
 
   config_1 = {
     enabled = true
-    module_key = "docker_vol" # Required, must be unique
-    name = "testname"
-    host_path = "/"
+    module_key = "wp_plugins" # Required, must be unique
+    name = "wp_plugins"
+    host_path = null
     volume_config_type = "docker_volume_configuration"
     config = {
       autoprovision = null
@@ -160,43 +160,43 @@ volume_configurations = {
       driver_opts = {
         type = "nfs"
         device = ":/"
-        o = ""
+        o = module.EFS.EFS_1.dns_name
       }
       driver = "local"
-      labels = {}
+      labels = null
     }
   }
 
   config_2 = {
     enabled = true
-    module_key = "docker_vol_2" # Required, must be unique
-    name = "testname222"
-    host_path = "/test"
+    module_key = "wp_cache" # Required, must be unique
+    name = "wp_cache"
+    host_path = null
     volume_config_type = "docker_volume_configuration"
     config = {
       autoprovision = null
       scope = "task"
       driver_opts = {
         type = "nfs"
-        device = ":/"
-        o = ""
+        device = ":/cache"
+        o = module.EFS.EFS_1.dns_name
       }
       driver = "local"
-      labels = {}
+      labels = null
     }
   }
 
   config_3 = {
-    enabled = true
-    module_key = "efs_vol" # Required, must be unique
-    name = "testname333"
-    host_path = "/test33"
+    enabled = false
+    module_key = "" # Required, must be unique
+    name = ""
+    host_path = ""
     volume_config_type = "efs_volume_configuration"
     config = {
-      file_system_id = "sdfg333"
-      root_directory = "/"
-      transit_encryption = "ENABLED"
-      transit_encryption_port = 21
+      file_system_id = ""
+      root_directory = ""
+      transit_encryption = ""
+      transit_encryption_port = null
       authorization_config = {
           access_point_id = ""
           iam = "DISABLED"
@@ -205,14 +205,14 @@ volume_configurations = {
   }
 
   config_4 = {
-    enabled = true
-    module_key = "FSx_Vol" # Required, must be unique
-    name = "testnaame444"
-    host_path = "/test5"
+    enabled = false
+    module_key = "" # Required, must be unique
+    name = ""
+    host_path = ""
     volume_config_type = "fsx_windows_file_server_volume_configuration"
     config = {
-      file_system_id = "id_yuh"
-      root_directory = "/"
+      file_system_id = ""
+      root_directory = ""
       authorization_config = {
           credentials_parameter = ""
           domain = ""
