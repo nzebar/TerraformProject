@@ -149,26 +149,22 @@ create_task_definition = true
 volume_configurations = {
 
   config_1 = {
-    enabled = true
-    module_key = "wp_plugins" # Required, must be unique
-    name = "wp_plugins"
-    host_path = null
-    volume_config_type = "docker_volume_configuration"
+    enabled = false
+    module_key = "" # Required, must be unique
+    name = ""
+    host_path = ""
+    volume_config_type = ""
     config = {
-      autoprovision = null
-      scope = "task"
-      driver_opts = {
-        type = "nfs"
-        device = ":/"
-        o = module.EFS.EFS_1.dns_name
-      }
-      driver = "local"
+      autoprovision = false
+      scope = ""
+      driver_opts = {}
+      driver = ""
       labels = null
     }
   }
 
   config_2 = {
-    enabled = true
+    enabled = false
     module_key = "wp_cache" # Required, must be unique
     name = "wp_cache"
     host_path = null
@@ -187,15 +183,15 @@ volume_configurations = {
   }
 
   config_3 = {
-    enabled = false
-    module_key = "" # Required, must be unique
-    name = ""
-    host_path = ""
+    enabled = true
+    module_key = "wp_plugins" # Required, must be unique
+    name = "wp_plugins"
+    host_path = "/etc/ecs/efsVols"
     volume_config_type = "efs_volume_configuration"
     config = {
-      file_system_id = ""
-      root_directory = ""
-      transit_encryption = ""
+      file_system_id = module.EFS.EFS_1.dns_name
+      root_directory = "/"
+      transit_encryption = "DISABLED"
       transit_encryption_port = null
       authorization_config = {
           access_point_id = ""

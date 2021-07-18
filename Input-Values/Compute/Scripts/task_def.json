@@ -46,9 +46,6 @@
             "readOnly": true
          }
       ],
-      "entryPoint": [
-         "ping"
-       ],
       "disableNetworking": false,
       "privileged": true,
       "readonlyRootFilesystem": true

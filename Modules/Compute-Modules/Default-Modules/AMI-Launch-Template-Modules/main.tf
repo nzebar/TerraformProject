@@ -190,7 +190,7 @@ resource "aws_launch_template" "this" {
   kernel_id                            = var.kernel_id == "" ? null : var.kernel_id
   ram_disk_id                          = var.ram_disk_id == "" ? null : var.ram_disk_id
 
-  user_data     = var.user_data_local_file_path == "" ? null : filebase64(var.user_data_local_file_path)
+  user_data     = var.user_data_local_file_path == "" ? null : base64encode(templatefile(var.user_data_local_file_path, var.user_data_env_vars))
 
   dynamic "metadata_options" {
     for_each = var.create_metadata_options == true ? var.metadata_options : {}

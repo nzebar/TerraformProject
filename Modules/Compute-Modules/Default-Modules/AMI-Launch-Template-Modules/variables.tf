@@ -252,6 +252,12 @@ variable "user_data_local_file_path" {
   sensitive = false
 }
 
+variable "user_data_env_vars" {
+  description = "Module values to input into user data file as environment variables"
+  type = map(string)
+  default = {}
+}
+
 variable "create_metadata_options" {
   description = "Create metadata options"
   type        = bool

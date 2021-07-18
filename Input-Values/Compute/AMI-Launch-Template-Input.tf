@@ -88,7 +88,7 @@ ami_tags = {
 
     # Use existing AMI id
     use_existing_ami_id = true 
-    existing_ami_id = "ami-0819ea31b8a98287d"
+    existing_ami_id = ""
 
     # Copy AMI from instance
     copy_instance_ami = { # Instance will experience downtime if running
@@ -154,7 +154,10 @@ ami_tags = {
   kernel_id                            = ""
   ram_disk_id                          = ""
 
-  user_data_local_file_path = "Input-Values\\Compute\\Scripts\\httpd-test.sh" /* "Input-Values\\Compute\\Scripts\\Docker-Agent-Install.sh" */ 
+  user_data_local_file_path = "Input-Values\\Compute\\Scripts\\ECS-UserData.sh" 
+  user_data_env_vars = {
+    WORDPRESS_EFS_ENDPOINT = module.EFS.EFS_1.dns_name
+  }
 
   create_metadata_options = false
   metadata_options = {
